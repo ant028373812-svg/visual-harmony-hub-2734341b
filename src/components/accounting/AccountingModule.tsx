@@ -4,27 +4,42 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Checkbox } from '@/components/ui/checkbox';
 import { StatusBadge } from '@/components/ui/status-badge';
 import { demoTransactions } from '@/lib/demo-data';
 import { cn } from '@/lib/utils';
-
-const statCards = [
-  { title: 'Загальна виручка', value: '370 000 грн', icon: TrendingUp, color: 'text-success' },
-  { title: 'Витрати на дроп', value: '83 000 грн', icon: Package, color: 'text-warning' },
-  { title: 'Витрати на перевізників', value: '12 000 грн', icon: Truck, color: 'text-info' },
-  { title: 'Офісні витрати', value: '8 500 грн', icon: BarChart3, color: 'text-muted-foreground' },
-  { title: 'Виплати команді', value: '35 000 грн', icon: Users, color: 'text-purple-500' },
-  { title: 'Статистика магазинів', value: '370 000 грн', icon: BarChart3, color: 'text-success' },
-];
-
+const statCards = [{
+  title: 'Загальна виручка',
+  value: '370 000 грн',
+  icon: TrendingUp,
+  color: 'text-success'
+}, {
+  title: 'Витрати на дроп',
+  value: '83 000 грн',
+  icon: Package,
+  color: 'text-warning'
+}, {
+  title: 'Витрати на перевізників',
+  value: '12 000 грн',
+  icon: Truck,
+  color: 'text-info'
+}, {
+  title: 'Офісні витрати',
+  value: '8 500 грн',
+  icon: BarChart3,
+  color: 'text-muted-foreground'
+}, {
+  title: 'Виплати команді',
+  value: '35 000 грн',
+  icon: Users,
+  color: 'text-purple-500'
+}, {
+  title: 'Статистика магазинів',
+  value: '370 000 грн',
+  icon: BarChart3,
+  color: 'text-success'
+}];
 interface DropPayment {
   id: string;
   name: string;
@@ -35,37 +50,63 @@ interface DropPayment {
   dropCard: string;
   carrierCard: string;
 }
-
-const dropPayments: DropPayment[] = [
-  { id: '1', name: 'Svitlana', dropExpense: 40500, carrierExpense: 13500, additionalExpense: 6750, status: 'Видав фактуру', dropCard: '', carrierCard: '' },
-  { id: '2', name: 'Oleksandr', dropExpense: 32000, carrierExpense: 10600, additionalExpense: 5300, status: 'Оплачено', dropCard: '', carrierCard: '' },
-  { id: '3', name: 'Maria', dropExpense: 25200, carrierExpense: 8400, additionalExpense: 4200, status: 'Видав фактуру', dropCard: '', carrierCard: '' },
-];
-
-const boxingExpenses = [
-  { id: '1', method: 'Ftid', amount: 15000 },
-  { id: '2', method: 'DNA', amount: 25500 },
-  { id: '3', method: 'EB', amount: 15000 },
-];
-
+const dropPayments: DropPayment[] = [{
+  id: '1',
+  name: 'Svitlana',
+  dropExpense: 40500,
+  carrierExpense: 13500,
+  additionalExpense: 6750,
+  status: 'Видав фактуру',
+  dropCard: '',
+  carrierCard: ''
+}, {
+  id: '2',
+  name: 'Oleksandr',
+  dropExpense: 32000,
+  carrierExpense: 10600,
+  additionalExpense: 5300,
+  status: 'Оплачено',
+  dropCard: '',
+  carrierCard: ''
+}, {
+  id: '3',
+  name: 'Maria',
+  dropExpense: 25200,
+  carrierExpense: 8400,
+  additionalExpense: 4200,
+  status: 'Видав фактуру',
+  dropCard: '',
+  carrierCard: ''
+}];
+const boxingExpenses = [{
+  id: '1',
+  method: 'Ftid',
+  amount: 15000
+}, {
+  id: '2',
+  method: 'DNA',
+  amount: 25500
+}, {
+  id: '3',
+  method: 'EB',
+  amount: 15000
+}];
 export function AccountingModule() {
   const [activeTab, setActiveTab] = useState('dashboard');
-  const [expandedDrops, setExpandedDrops] = useState<Record<string, boolean>>({ '1': true });
-
+  const [expandedDrops, setExpandedDrops] = useState<Record<string, boolean>>({
+    '1': true
+  });
   const formatCurrency = (value: number) => {
     return new Intl.NumberFormat('uk-UA').format(value) + ' грн';
   };
-
   const formatDate = (date: Date) => {
     return date.toLocaleDateString('uk-UA', {
       day: '2-digit',
       month: 'short',
-      year: 'numeric',
+      year: 'numeric'
     });
   };
-
-  return (
-    <div className="h-full flex flex-col bg-background">
+  return <div className="h-full flex flex-col bg-background">
       {/* Header */}
       <div className="border-b border-border bg-card px-6 py-4">
         <div className="flex items-center justify-between">
@@ -95,23 +136,17 @@ export function AccountingModule() {
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-3 pt-2">
-                {dropPayments.map(drop => (
-                  <div key={drop.id} className="p-3 border border-border rounded-lg space-y-3">
+                {dropPayments.map(drop => <div key={drop.id} className="p-3 border border-border rounded-lg space-y-3 bg-info-foreground mx-0 py-px">
                     {/* Drop Header */}
-                    <div 
-                      className="flex items-center justify-between cursor-pointer"
-                      onClick={() => setExpandedDrops(prev => ({ ...prev, [drop.id]: !prev[drop.id] }))}
-                    >
+                    <div className="flex items-center justify-between cursor-pointer" onClick={() => setExpandedDrops(prev => ({
+                  ...prev,
+                  [drop.id]: !prev[drop.id]
+                }))}>
                       <span className="font-medium text-sm">{drop.name}</span>
-                      {expandedDrops[drop.id] ? (
-                        <ChevronDown className="h-4 w-4 text-muted-foreground" />
-                      ) : (
-                        <ChevronRight className="h-4 w-4 text-muted-foreground" />
-                      )}
+                      {expandedDrops[drop.id] ? <ChevronDown className="h-4 w-4 text-muted-foreground" /> : <ChevronRight className="h-4 w-4 text-muted-foreground" />}
                     </div>
 
-                    {expandedDrops[drop.id] && (
-                      <>
+                    {expandedDrops[drop.id] && <>
                         {/* Status Selection */}
                         <Select defaultValue={drop.status}>
                           <SelectTrigger className="h-8 text-xs">
@@ -150,10 +185,8 @@ export function AccountingModule() {
                             <Input className="h-8 text-sm" placeholder="" />
                           </div>
                         </div>
-                      </>
-                    )}
-                  </div>
-                ))}
+                      </>}
+                  </div>)}
               </CardContent>
             </Card>
 
@@ -169,15 +202,13 @@ export function AccountingModule() {
                 </p>
               </CardHeader>
               <CardContent className="space-y-2 pt-2">
-                {boxingExpenses.map(expense => (
-                  <div key={expense.id} className="flex items-center justify-between p-2 border border-border rounded">
+                {boxingExpenses.map(expense => <div key={expense.id} className="flex items-center justify-between p-2 border border-border rounded">
                     <div className="flex items-center gap-2">
                       <Package className="h-4 w-4 text-muted-foreground" />
                       <span className="text-sm">{expense.method}</span>
                     </div>
                     <span className="font-medium">{formatCurrency(expense.amount)}</span>
-                  </div>
-                ))}
+                  </div>)}
               </CardContent>
             </Card>
           </div>
@@ -192,8 +223,7 @@ export function AccountingModule() {
 
             {/* Stats cards */}
             <div className="grid grid-cols-3 gap-4">
-              {statCards.map((stat, index) => (
-                <Card key={index}>
+              {statCards.map((stat, index) => <Card key={index}>
                   <CardContent className="p-4">
                     <div className="flex items-center justify-between">
                       <div>
@@ -203,8 +233,7 @@ export function AccountingModule() {
                       <stat.icon className={cn('h-6 w-6', stat.color)} />
                     </div>
                   </CardContent>
-                </Card>
-              ))}
+                </Card>)}
             </div>
 
             {/* Transactions table */}
@@ -250,14 +279,10 @@ export function AccountingModule() {
                     </tr>
                   </thead>
                   <tbody>
-                    {demoTransactions.map(tx => (
-                      <tr key={tx.id} className="border-b border-border">
+                    {demoTransactions.map(tx => <tr key={tx.id} className="border-b border-border">
                         <td className="py-3">{formatDate(tx.date)}</td>
                         <td className="py-3">
-                          <StatusBadge 
-                            status={tx.type} 
-                            type={tx.type === 'Прихід' ? 'completed' : 'waiting'} 
-                          />
+                          <StatusBadge status={tx.type} type={tx.type === 'Прихід' ? 'completed' : 'waiting'} />
                         </td>
                         <td className="py-3">{tx.category}</td>
                         <td className={cn('py-3 font-medium', tx.type === 'Прихід' ? 'text-success' : 'text-destructive')}>
@@ -266,13 +291,9 @@ export function AccountingModule() {
                         <td className="py-3 text-muted-foreground">{tx.description}</td>
                         <td className="py-3">{tx.store || '—'}</td>
                         <td className="py-3">
-                          <StatusBadge 
-                            status={tx.status} 
-                            type={tx.status === 'Оплачено' ? 'completed' : tx.status === 'Очікує' ? 'pending' : 'canceled'} 
-                          />
+                          <StatusBadge status={tx.status} type={tx.status === 'Оплачено' ? 'completed' : tx.status === 'Очікує' ? 'pending' : 'canceled'} />
                         </td>
-                      </tr>
-                    ))}
+                      </tr>)}
                   </tbody>
                 </table>
               </CardContent>
@@ -280,6 +301,5 @@ export function AccountingModule() {
           </div>
         </div>
       </div>
-    </div>
-  );
+    </div>;
 }
