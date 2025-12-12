@@ -10,7 +10,7 @@ import { StatusBadge } from '@/components/ui/status-badge';
 import { demoTransactions } from '@/lib/demo-data';
 import { cn } from '@/lib/utils';
 const statCards = [{
-  title: 'Загальна виручка',
+  title: 'Надходження',
   value: '370 000 грн',
   icon: TrendingUp,
   color: 'text-success'
