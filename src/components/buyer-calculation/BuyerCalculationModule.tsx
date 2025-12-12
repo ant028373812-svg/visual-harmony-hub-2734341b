@@ -1,8 +1,9 @@
 import { useState } from 'react';
-import { ChevronLeft, ChevronRight, Search, RefreshCw, DollarSign, AlertTriangle, ChevronDown } from 'lucide-react';
+import { RefreshCw, DollarSign, AlertTriangle, Info } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
+import { Checkbox } from '@/components/ui/checkbox';
 import {
   Select,
   SelectContent,
@@ -11,11 +12,11 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { StatusBadge } from '@/components/ui/status-badge';
-import { cn } from '@/lib/utils';
 
 interface PackCalculation {
   id: string;
   packId: string;
+  storeName: string;
   skup: string;
   date: string;
   amountEur: number;
@@ -25,9 +26,9 @@ interface PackCalculation {
 }
 
 const demoPackCalculations: PackCalculation[] = [
-  { id: '1', packId: '1V15', skup: 'Іван', date: '2025-01-04', amountEur: 147.99, amountUah: 6097.19, rate: 41.2, status: 'Очікує оплати' },
-  { id: '2', packId: '2M08', skup: 'Олег', date: '2025-01-03', amountEur: 201.45, amountUah: 8299.74, rate: 41.2, status: 'Оплачено' },
-  { id: '3', packId: '3K12', skup: 'Назар', date: '2025-01-02', amountEur: 89.50, amountUah: 3687.40, rate: 41.2, status: 'Очікує оплати' },
+  { id: '1', packId: '1V15', storeName: 'H&M', skup: 'Іван', date: '2025-01-04', amountEur: 147.99, amountUah: 6097.19, rate: 41.2, status: 'Очікує оплати' },
+  { id: '2', packId: '2M08', storeName: 'Zara', skup: 'Олег', date: '2025-01-03', amountEur: 201.45, amountUah: 8299.74, rate: 41.2, status: 'Оплачено' },
+  { id: '3', packId: '3K12', storeName: 'Mango', skup: 'Назар', date: '2025-01-02', amountEur: 89.50, amountUah: 3687.40, rate: 41.2, status: 'Очікує оплати' },
 ];
 
 export function BuyerCalculationModule() {
@@ -91,7 +92,7 @@ export function BuyerCalculationModule() {
             <CardTitle className="text-base">Фільтри</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="grid grid-cols-6 gap-4">
+            <div className="grid grid-cols-8 gap-4">
               <div>
                 <label className="text-xs text-muted-foreground mb-1 block">Скуп</label>
                 <Select defaultValue="all">
@@ -142,14 +143,39 @@ export function BuyerCalculationModule() {
                 <Input className="h-9" placeholder="1V15" />
               </div>
               <div>
+                <label className="text-xs text-muted-foreground mb-1 block">Гео</label>
+                <Select defaultValue="all">
+                  <SelectTrigger className="h-9">
+                    <SelectValue placeholder="Всі" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">Всі</SelectItem>
+                    <SelectItem value="de">Німеччина</SelectItem>
+                    <SelectItem value="pl">Польща</SelectItem>
+                    <SelectItem value="es">Іспанія</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div>
+                <label className="text-xs text-muted-foreground mb-1 block">Дроп</label>
+                <Select defaultValue="all">
+                  <SelectTrigger className="h-9">
+                    <SelectValue placeholder="Всі" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">Всі</SelectItem>
+                    <SelectItem value="drop1">Дроп 1</SelectItem>
+                    <SelectItem value="drop2">Дроп 2</SelectItem>
+                    <SelectItem value="drop3">Дроп 3</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div>
                 <label className="text-xs text-muted-foreground mb-1 block">Пошук</label>
                 <Input className="h-9" placeholder="SKU, магазин..." />
               </div>
             </div>
             <div className="flex gap-2 mt-4">
-              <Button size="sm" className="bg-info text-info-foreground hover:bg-info/90">
-                Порахувати усі відправлені паки
-              </Button>
               <Button size="sm" className="bg-success text-success-foreground hover:bg-success/90">
                 Сформувати розрахунок для скупа
               </Button>
@@ -164,26 +190,42 @@ export function BuyerCalculationModule() {
             {demoPackCalculations.map(pack => (
               <Card key={pack.id}>
                 <CardContent className="p-4">
-                  <div 
-                    className="flex items-center justify-between cursor-pointer"
-                    onClick={() => togglePack(pack.id)}
-                  >
+                  {/* Pack Header */}
+                  <div className="flex items-center justify-between">
                     <div className="flex items-center gap-4">
-                      <ChevronDown className={cn(
-                        'h-4 w-4 transition-transform',
-                        expandedPacks[pack.id] && 'rotate-180'
-                      )} />
-                      <div>
-                        <div className="flex items-center gap-2">
-                          <span className="font-semibold">Пак: {pack.packId}</span>
-                          <StatusBadge 
-                            status={pack.status} 
-                            type={pack.status === 'Оплачено' ? 'completed' : 'pending'} 
-                          />
+                      <Checkbox 
+                        checked={expandedPacks[pack.id] || false}
+                        onCheckedChange={() => togglePack(pack.id)}
+                        className="h-5 w-5"
+                      />
+                      <div className="flex items-center gap-6">
+                        <div>
+                          <div className="flex items-center gap-2">
+                            <span className="font-semibold">Пак: {pack.packId} {pack.storeName}</span>
+                            <StatusBadge 
+                              status={pack.status} 
+                              type={pack.status === 'Оплачено' ? 'completed' : 'pending'} 
+                            />
+                          </div>
+                          <p className="text-sm text-muted-foreground">
+                            Скуп: {pack.skup} • Дата: {pack.date}
+                          </p>
                         </div>
-                        <p className="text-sm text-muted-foreground">
-                          Скуп: {pack.skup} • Дата: {pack.date}
-                        </p>
+                        {/* Checklist items */}
+                        <div className="flex items-center gap-4">
+                          <div className="flex items-center gap-1.5">
+                            <Checkbox id={`vypyska-${pack.id}`} className="h-4 w-4" />
+                            <label htmlFor={`vypyska-${pack.id}`} className="text-xs text-muted-foreground cursor-pointer">
+                              Видав виписку
+                            </label>
+                          </div>
+                          <div className="flex items-center gap-1.5">
+                            <Checkbox id={`confirm-${pack.id}`} className="h-4 w-4" />
+                            <label htmlFor={`confirm-${pack.id}`} className="text-xs text-muted-foreground cursor-pointer">
+                              Підтверджено скупу
+                            </label>
+                          </div>
+                        </div>
                       </div>
                     </div>
                     <div className="text-right">
@@ -193,9 +235,54 @@ export function BuyerCalculationModule() {
                       </p>
                     </div>
                   </div>
+
+                  {/* Expanded Content */}
                   {expandedPacks[pack.id] && (
                     <div className="mt-4 pt-4 border-t border-border">
-                      <p className="text-sm text-muted-foreground">Деталі паку...</p>
+                      <div className="flex gap-8">
+                        {/* Left - Vertical list of inputs */}
+                        <div className="flex-1 space-y-3">
+                          <div className="flex items-center gap-4">
+                            <label className="text-sm text-muted-foreground w-52">Кількість</label>
+                            <Input className="h-9 max-w-xs" placeholder="" />
+                          </div>
+                          <div className="flex items-center gap-4">
+                            <label className="text-sm text-muted-foreground w-52">Сума без знижки</label>
+                            <Input className="h-9 max-w-xs" placeholder="" />
+                          </div>
+                          <div className="flex items-center gap-4">
+                            <label className="text-sm text-muted-foreground w-52">Сума із знижкою</label>
+                            <Input className="h-9 max-w-xs" placeholder="" />
+                          </div>
+                          <div className="flex items-center gap-4">
+                            <label className="text-sm text-muted-foreground w-52">Загальна сума розрахунку в €</label>
+                            <Input className="h-9 max-w-xs" placeholder="" />
+                          </div>
+                          <div className="flex items-center gap-4">
+                            <label className="text-sm text-muted-foreground w-52">Загальна сума розрахунку в ₴</label>
+                            <Input className="h-9 max-w-xs" placeholder="" />
+                          </div>
+                        </div>
+
+                        {/* Right - Rate block */}
+                        <div className="flex gap-6 items-start">
+                          <div className="space-y-3">
+                            <div>
+                              <label className="text-xs text-muted-foreground mb-1 block">Курс</label>
+                              <Input className="h-9 w-24" placeholder="" />
+                            </div>
+                            <div className="flex items-center gap-1.5">
+                              <Checkbox id={`fixed-rate-${pack.id}`} className="h-4 w-4" />
+                              <label htmlFor={`fixed-rate-${pack.id}`} className="text-xs text-muted-foreground cursor-pointer">
+                                Фіксований курс (для всіх)
+                              </label>
+                            </div>
+                          </div>
+                          <button className="p-2 rounded-md hover:bg-accent transition-colors" title="Інформація замовлення">
+                            <Info className="h-5 w-5 text-muted-foreground hover:text-foreground" />
+                          </button>
+                        </div>
+                      </div>
                     </div>
                   )}
                 </CardContent>
