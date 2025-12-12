@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -13,9 +13,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { useToast } from '@/hooks/use-toast';
 
-const currencies = ['Гривня', 'Євро', 'Долар'];
+const executors = ['Олег', 'Іван', 'Назар', 'Марія'];
 const sources = ['Рахунок', 'Каса', 'PayPal', 'Wise'];
 const destinations = ['Зарплата', 'Податки', 'Оренда', 'Логістика', 'Маркетинг'];
 
@@ -37,31 +36,41 @@ const demoRefChecks: RefCheck[] = [
 ];
 
 export function DropAccountingModule() {
-  const [currencyIndex, setCurrencyIndex] = useState(0);
-  const [amount, setAmount] = useState('0');
+  const [amount, setAmount] = useState('');
+  const [executor, setExecutor] = useState('');
+  const [expensePropiob, setExpensePropiob] = useState(false);
   const [source, setSource] = useState('');
   const [destination, setDestination] = useState('');
-  const [note, setNote] = useState('');
+  const [comment, setComment] = useState('');
   const [refChecks, setRefChecks] = useState(demoRefChecks);
-  const { toast } = useToast();
+  
+  // Add new items state
+  const [sourcesList, setSourcesList] = useState(sources);
+  const [destinationsList, setDestinationsList] = useState(destinations);
+  const [executorsList, setExecutorsList] = useState(executors);
+  const [newSource, setNewSource] = useState('');
+  const [newDestination, setNewDestination] = useState('');
+  const [newExecutor, setNewExecutor] = useState('');
 
-  const handleCurrencyChange = (direction: 'prev' | 'next') => {
-    if (direction === 'prev') {
-      setCurrencyIndex(prev => (prev === 0 ? currencies.length - 1 : prev - 1));
-    } else {
-      setCurrencyIndex(prev => (prev === currencies.length - 1 ? 0 : prev + 1));
+  const handleAddSource = () => {
+    if (newSource.trim() && !sourcesList.includes(newSource.trim())) {
+      setSourcesList(prev => [...prev, newSource.trim()]);
+      setNewSource('');
     }
   };
 
-  const handleSubmit = () => {
-    toast({
-      title: 'Транзакцію додано',
-      description: `${amount} ${currencies[currencyIndex]} додано до бухгалтерії`,
-    });
-    setAmount('0');
-    setSource('');
-    setDestination('');
-    setNote('');
+  const handleAddDestination = () => {
+    if (newDestination.trim() && !destinationsList.includes(newDestination.trim())) {
+      setDestinationsList(prev => [...prev, newDestination.trim()]);
+      setNewDestination('');
+    }
+  };
+
+  const handleAddExecutor = () => {
+    if (newExecutor.trim() && !executorsList.includes(newExecutor.trim())) {
+      setExecutorsList(prev => [...prev, newExecutor.trim()]);
+      setNewExecutor('');
+    }
   };
 
   const toggleRefCheck = (id: string, field: 'inProcess' | 'received' | 'erased') => {
@@ -77,92 +86,164 @@ export function DropAccountingModule() {
       <div className="grid grid-cols-2 gap-6 flex-1">
         {/* Left - Accounting Form */}
         <Card>
-          <CardHeader className="text-center pb-4">
-            <CardTitle className="text-2xl">Бухгалтерія</CardTitle>
+          <CardHeader className="pb-4">
+            <CardTitle className="text-xl">Бухгалтерія</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="space-y-2">
-              <Label>Сума:</Label>
-              <div className="flex items-center gap-2">
+            {/* Top Row: Сума, Хто виконав, Витрата пройоб */}
+            <div className="flex items-end gap-4">
+              <div className="space-y-1.5 flex-1">
+                <Label className="text-xs text-muted-foreground">Сума</Label>
                 <Input
                   type="number"
                   value={amount}
                   onChange={(e) => setAmount(e.target.value)}
-                  className="flex-1"
+                  placeholder="0"
+                  className="h-9"
                 />
-                <div className="flex items-center gap-1 border border-border rounded-md px-2 py-1.5">
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="h-6 w-6"
-                    onClick={() => handleCurrencyChange('prev')}
-                  >
-                    <ChevronLeft className="h-4 w-4" />
-                  </Button>
-                  <span className="w-16 text-center text-sm">{currencies[currencyIndex]}</span>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="h-6 w-6"
-                    onClick={() => handleCurrencyChange('next')}
-                  >
-                    <ChevronRight className="h-4 w-4" />
-                  </Button>
-                </div>
+              </div>
+              <div className="space-y-1.5 flex-1">
+                <Label className="text-xs text-muted-foreground">Хто виконав</Label>
+                <Select value={executor} onValueChange={setExecutor}>
+                  <SelectTrigger className="h-9">
+                    <SelectValue placeholder="Оберіть" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {executorsList.map(exec => (
+                      <SelectItem key={exec} value={exec}>{exec}</SelectItem>
+                    ))}
+                    <div className="p-2 border-t border-border">
+                      <div className="flex gap-2">
+                        <Input
+                          value={newExecutor}
+                          onChange={(e) => setNewExecutor(e.target.value)}
+                          placeholder="Новий виконавець"
+                          className="h-8 text-sm"
+                          onClick={(e) => e.stopPropagation()}
+                        />
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          className="h-8 px-2"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleAddExecutor();
+                          }}
+                        >
+                          <Plus className="h-3 w-3 mr-1" />
+                          Додати
+                        </Button>
+                      </div>
+                    </div>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="flex items-center gap-2 pb-2">
+                <Checkbox
+                  id="expense-propiob"
+                  checked={expensePropiob}
+                  onCheckedChange={(checked) => setExpensePropiob(checked as boolean)}
+                />
+                <Label htmlFor="expense-propiob" className="text-xs cursor-pointer">
+                  Витрата пройоб
+                </Label>
               </div>
             </div>
 
-            <div className="space-y-2">
-              <Label>Звідки:</Label>
+            {/* Second Row: Звідки */}
+            <div className="space-y-1.5">
+              <Label className="text-xs text-muted-foreground">Звідки</Label>
               <Select value={source} onValueChange={setSource}>
-                <SelectTrigger>
+                <SelectTrigger className="h-9">
                   <SelectValue placeholder="Оберіть джерело" />
                 </SelectTrigger>
                 <SelectContent>
-                  {sources.map(src => (
+                  {sourcesList.map(src => (
                     <SelectItem key={src} value={src}>{src}</SelectItem>
                   ))}
+                  <div className="p-2 border-t border-border">
+                    <div className="flex gap-2">
+                      <Input
+                        value={newSource}
+                        onChange={(e) => setNewSource(e.target.value)}
+                        placeholder="Нове джерело"
+                        className="h-8 text-sm"
+                        onClick={(e) => e.stopPropagation()}
+                      />
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        className="h-8 px-2"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleAddSource();
+                        }}
+                      >
+                        <Plus className="h-3 w-3 mr-1" />
+                        Додати
+                      </Button>
+                    </div>
+                  </div>
                 </SelectContent>
               </Select>
             </div>
 
-            <div className="space-y-2">
-              <Label>Куди:</Label>
+            {/* Third Row: Куди */}
+            <div className="space-y-1.5">
+              <Label className="text-xs text-muted-foreground">Куди</Label>
               <Select value={destination} onValueChange={setDestination}>
-                <SelectTrigger>
+                <SelectTrigger className="h-9">
                   <SelectValue placeholder="Оберіть призначення" />
                 </SelectTrigger>
                 <SelectContent>
-                  {destinations.map(dest => (
+                  {destinationsList.map(dest => (
                     <SelectItem key={dest} value={dest}>{dest}</SelectItem>
                   ))}
+                  <div className="p-2 border-t border-border">
+                    <div className="flex gap-2">
+                      <Input
+                        value={newDestination}
+                        onChange={(e) => setNewDestination(e.target.value)}
+                        placeholder="Нове призначення"
+                        className="h-8 text-sm"
+                        onClick={(e) => e.stopPropagation()}
+                      />
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        className="h-8 px-2"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleAddDestination();
+                        }}
+                      >
+                        <Plus className="h-3 w-3 mr-1" />
+                        Додати
+                      </Button>
+                    </div>
+                  </div>
                 </SelectContent>
               </Select>
             </div>
 
-            <div className="space-y-2">
-              <Label>Примітка:</Label>
+            {/* Fourth Row: Коментар */}
+            <div className="space-y-1.5">
+              <Label className="text-xs text-muted-foreground">Коментар</Label>
               <Textarea
-                value={note}
-                onChange={(e) => setNote(e.target.value)}
-                placeholder="Введіть примітку..."
-                rows={4}
+                value={comment}
+                onChange={(e) => setComment(e.target.value)}
+                placeholder="Введіть коментар..."
+                rows={3}
+                className="resize-none"
               />
             </div>
-
-            <Button 
-              className="w-full bg-primary text-primary-foreground"
-              onClick={handleSubmit}
-            >
-              Додати
-            </Button>
           </CardContent>
         </Card>
 
         {/* Right - Ref Check Table */}
         <Card>
-          <CardHeader className="text-center pb-4">
-            <CardTitle className="text-2xl">Перевірка реф</CardTitle>
+          <CardHeader className="pb-4">
+            <CardTitle className="text-xl">Перевірка реф</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-2">
