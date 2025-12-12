@@ -5,10 +5,10 @@ import { Dashboard } from '@/components/dashboard/Dashboard';
 import { OrdersModule } from '@/components/orders/OrdersModule';
 import { RefProcesModule } from '@/components/ref-proces/RefProcesModule';
 import { DeliveryModule } from '@/components/delivery/DeliveryModule';
-import { AccountingModule } from '@/components/accounting/AccountingModule';
+import { AccountingWorkspace } from '@/components/accounting/AccountingWorkspace';
 import { DropAccountingModule } from '@/components/accounting/DropAccountingModule';
 import { SkupTableModule } from '@/components/skup/SkupTableModule';
-import { BuyerCalculationModule } from '@/components/buyer-calculation/BuyerCalculationModule';
+import { ProgrevCenterModule } from '@/components/progrev/ProgrevCenterModule';
 
 const Index = () => {
   const [currentPage, setCurrentPage] = useState('dashboard');
@@ -18,11 +18,11 @@ const Index = () => {
       case 'ref-proces':
         return <RefProcesModule />;
       case 'accounting-admin':
-        return <AccountingModule />;
+        return <AccountingWorkspace />;
       case 'orders':
         return <OrdersModule />;
       case 'progrev-center':
-        return <BuyerCalculationModule />;
+        return <ProgrevCenterModule />;
       case 'accounting-worker':
         return <DropAccountingModule />;
       case 'skup-oleg':
