@@ -270,17 +270,25 @@ export function DropAccountingModule() {
               {refChecks.map((check, index) => (
                 <div
                   key={check.id}
-                  className="flex items-center gap-3 p-2 border border-border rounded-lg text-sm"
+                  className="flex items-center gap-2 p-2 border border-border rounded-lg text-sm"
                 >
-                  <span className="w-6 text-muted-foreground">{index + 1}</span>
-                  <span className="flex-1 truncate">{check.packName}</span>
-                  <span className="w-24 text-muted-foreground">{check.billing}</span>
-                  <span className="w-16 font-medium">€{check.amount.toLocaleString()}</span>
-                  <div className="flex items-center gap-3">
+                  <span className="w-5 text-muted-foreground text-xs">{index + 1}</span>
+                  <span className="flex-1 truncate min-w-0">{check.packName}</span>
+                  <span className="w-20 text-muted-foreground text-xs truncate">{check.billing}</span>
+                  <span className="w-14 font-medium text-xs">€{check.amount.toLocaleString()}</span>
+                  <Input
+                    type="text"
+                    maxLength={4}
+                    placeholder="Card"
+                    defaultValue={check.card}
+                    className="h-7 w-14 text-xs text-center px-1"
+                  />
+                  <div className="flex items-center gap-2">
                     <label className="flex items-center gap-1 text-xs">
                       <Checkbox
                         checked={check.inProcess}
                         onCheckedChange={() => toggleRefCheck(check.id, 'inProcess')}
+                        className="h-3.5 w-3.5"
                       />
                       <span className="text-info">В процесі</span>
                     </label>
@@ -288,6 +296,7 @@ export function DropAccountingModule() {
                       <Checkbox
                         checked={check.received}
                         onCheckedChange={() => toggleRefCheck(check.id, 'received')}
+                        className="h-3.5 w-3.5"
                       />
                       <span className="text-success">Отримано</span>
                     </label>
@@ -295,6 +304,7 @@ export function DropAccountingModule() {
                       <Checkbox
                         checked={check.erased}
                         onCheckedChange={() => toggleRefCheck(check.id, 'erased')}
+                        className="h-3.5 w-3.5"
                       />
                       <span className="text-muted-foreground">Затерте</span>
                     </label>
