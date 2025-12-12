@@ -112,8 +112,11 @@ export function AddTransactionModal({ trigger }: AddTransactionModalProps) {
         )}
       </DialogTrigger>
       <DialogContent className="sm:max-w-[700px]">
-        <DialogHeader>
+        <DialogHeader className="flex flex-row items-center justify-between pr-8">
           <DialogTitle>Додати транзакцію</DialogTitle>
+          <Button className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-lg px-4 py-2 text-sm font-medium">
+            Додати транзакцію +
+          </Button>
         </DialogHeader>
 
         <div className="space-y-6 py-4">
