@@ -131,9 +131,9 @@ export function OrdersModule() {
               <th className="px-3 py-2 w-[18%]">Трек номери</th>
               <th className="px-3 py-2 w-[10%]">Дроп</th>
               <th className="px-3 py-2 w-[12%]">Адреса</th>
-              <th className="px-3 py-2 w-[8%] text-center">Інфо</th>
-              <th className="px-3 py-2 w-[8%] text-center">Реф</th>
-              <th className="px-3 py-2 w-[8%] text-center">Бух.</th>
+              <th className="px-3 py-2 w-[8%] text-center">Інфо зам.</th>
+              <th className="px-3 py-2 w-[8%] text-center">Реф стат.</th>
+              <th className="px-3 py-2 w-[8%] text-center">Бух. пак</th>
               <th className="px-3 py-2 w-[4%]"></th>
             </tr>
           </thead>
