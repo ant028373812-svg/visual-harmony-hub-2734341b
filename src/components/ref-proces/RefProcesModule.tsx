@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Search, ChevronDown, ChevronUp, Info, MessageCircle, Trash2, Copy } from 'lucide-react';
+import { Search, ChevronDown, ChevronUp, Info, MessageCircle, Trash2, Copy, Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { StatusBadge } from '@/components/ui/status-badge';
@@ -122,21 +122,21 @@ export function RefProcesModule() {
         <table className="w-full text-sm">
           <thead className="bg-muted/50 sticky top-0">
             <tr className="text-left text-xs text-muted-foreground">
-              <th className="px-4 py-2 w-24">Статус</th>
-              <th className="px-4 py-2">Назва паку</th>
-              <th className="px-4 py-2 w-40">Трек номер</th>
-              <th className="px-4 py-2 w-24">Метод реф</th>
-              <th className="px-4 py-2 w-36">Дата написання</th>
-              <th className="px-4 py-2 w-20 text-center">Інфо зам.</th>
-              <th className="px-4 py-2 w-20 text-center">Реф стат.</th>
-              <th className="px-4 py-2 w-20 text-center">Бух. пак</th>
-              <th className="px-4 py-2 w-10"></th>
+              <th className="px-3 py-2 w-24">Статус</th>
+              <th className="px-2 py-2 min-w-[200px]">Назва паку</th>
+              <th className="px-2 py-2 w-32">Трек номер</th>
+              <th className="px-2 py-2 w-20">Метод реф</th>
+              <th className="px-3 py-2 w-44">Дата написання</th>
+              <th className="px-2 py-2 w-16 text-center">Інфо зам.</th>
+              <th className="px-2 py-2 w-16 text-center">Реф стат.</th>
+              <th className="px-2 py-2 w-20 text-center">Бух. пак</th>
+              <th className="px-2 py-2 w-8"></th>
             </tr>
           </thead>
           <tbody>
             {demoRefProcesses.map(ref => (
               <tr key={ref.id} className="border-b border-border hover:bg-muted/30 transition-colors">
-                <td className="px-4 py-2">
+                <td className="px-3 py-1.5">
                   <Select defaultValue={ref.status}>
                     <SelectTrigger className="h-7 text-xs w-20">
                       <SelectValue />
@@ -146,80 +146,110 @@ export function RefProcesModule() {
                       <SelectItem value="Очіку">Очіку</SelectItem>
                       <SelectItem value="Чекає">Чекає</SelectItem>
                       <SelectItem value="Рефнуто">Рефнуто</SelectItem>
+                      <div className="border-t border-border mt-1 pt-1">
+                        <Button 
+                          variant="ghost" 
+                          size="sm" 
+                          className="w-full h-6 text-xs text-muted-foreground hover:text-foreground gap-1 justify-start"
+                        >
+                          <Plus className="h-3 w-3" />
+                          Додати статус
+                        </Button>
+                      </div>
                     </SelectContent>
                   </Select>
                 </td>
-                <td className="px-4 py-2">
-                  <div className="flex items-center gap-2">
+                <td className="px-2 py-1.5">
+                  <div className="flex items-center gap-1.5">
                     <span className="font-medium">{ref.packId} {ref.storeName}</span>
-                    <Button variant="ghost" size="icon" className="h-5 w-5">
-                      <Copy className="h-3 w-3" />
-                    </Button>
-                    <Button variant="ghost" size="icon" className="h-5 w-5">
-                      <MessageCircle className="h-3 w-3" />
-                    </Button>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Button variant="ghost" size="icon" className="h-5 w-5 hover:bg-muted">
+                          <Copy className="h-3 w-3" />
+                        </Button>
+                      </TooltipTrigger>
+                      <TooltipContent>Копіювати</TooltipContent>
+                    </Tooltip>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Button variant="ghost" size="icon" className="h-5 w-5 hover:bg-muted">
+                          <MessageCircle className="h-3 w-3" />
+                        </Button>
+                      </TooltipTrigger>
+                      <TooltipContent>Коментар</TooltipContent>
+                    </Tooltip>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Button variant="ghost" size="icon" className="h-5 w-5 hover:bg-muted text-info">
+                          <Info className="h-3 w-3" />
+                        </Button>
+                      </TooltipTrigger>
+                      <TooltipContent>Інформація паку</TooltipContent>
+                    </Tooltip>
                   </div>
                 </td>
-                <td className="px-4 py-2">
+                <td className="px-2 py-1.5">
                   <div className="flex items-center gap-1">
-                    <span className="font-mono text-xs text-info">{ref.trackNumber}</span>
-                    <Button variant="ghost" size="icon" className="h-5 w-5">
-                      <Copy className="h-3 w-3" />
+                    <span className="font-mono text-[10px] text-info">{ref.trackNumber}</span>
+                    <Button variant="ghost" size="icon" className="h-4 w-4 hover:bg-muted">
+                      <Copy className="h-2.5 w-2.5" />
                     </Button>
                   </div>
                 </td>
-                <td className="px-4 py-2">
+                <td className="px-2 py-1.5">
                   {ref.refMethod && (
                     <span className={cn(
-                      'inline-flex items-center px-2 py-0.5 rounded text-xs font-medium border',
+                      'inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-medium border',
                       getRefMethodColor(ref.refMethod)
                     )}>
                       {ref.refMethod}
                     </span>
                   )}
                 </td>
-                <td className="px-4 py-2">
-                  <div className="space-y-0.5 text-xs">
-                    <div className="flex items-center gap-1">
-                      <span className="text-muted-foreground">📅</span>
-                      <span className={getDateColor(ref.deliveryDate)}>
+                <td className="px-3 py-1.5">
+                  <div className="space-y-1">
+                    <div className="flex items-center gap-1.5">
+                      <span className="text-muted-foreground text-xs">📅</span>
+                      <span className={cn('text-sm font-medium', getDateColor(ref.deliveryDate))}>
                         Дост: {formatDate(ref.deliveryDate)}
                       </span>
                     </div>
-                    <div className="flex items-center gap-1">
-                      <span className="text-muted-foreground">⏰</span>
-                      <span className={cn('text-warning', getDateColor(ref.writeDate))}>
+                    <div className="flex items-center gap-1.5">
+                      <span className="text-muted-foreground text-xs">⏰</span>
+                      <span className={cn('text-sm font-semibold', getDateColor(ref.writeDate))}>
                         Нагад: {formatDate(ref.writeDate)}
                       </span>
                     </div>
                   </div>
                 </td>
-                <td className="px-4 py-2 text-center">
-                  <div className="flex items-center justify-center gap-1">
-                    <Button variant="ghost" size="icon" className="h-6 w-6 text-info">
-                      <Info className="h-3.5 w-3.5" />
+                <td className="px-2 py-1.5 text-center">
+                  <Button variant="ghost" size="icon" className="h-5 w-5 text-info hover:bg-muted">
+                    <Info className="h-3 w-3" />
+                  </Button>
+                </td>
+                <td className="px-2 py-1.5 text-center">
+                  <Button variant="ghost" size="icon" className="h-5 w-5 text-info hover:bg-muted">
+                    <Info className="h-3 w-3" />
+                  </Button>
+                </td>
+                <td className="px-2 py-1.5 text-center">
+                  <div className="flex items-center justify-center gap-0.5">
+                    <Button variant="ghost" size="icon" className="h-5 w-5 text-info hover:bg-muted">
+                      <Info className="h-3 w-3" />
                     </Button>
-                    <MessageCircle className="h-3.5 w-3.5 text-muted-foreground" />
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Button variant="ghost" size="icon" className="h-5 w-5 hover:bg-muted text-muted-foreground">
+                          <MessageCircle className="h-3 w-3" />
+                        </Button>
+                      </TooltipTrigger>
+                      <TooltipContent>Коментар бухгалтерії</TooltipContent>
+                    </Tooltip>
                   </div>
                 </td>
-                <td className="px-4 py-2 text-center">
-                  <div className="flex items-center justify-center gap-1">
-                    <Button variant="ghost" size="icon" className="h-6 w-6 text-info">
-                      <Info className="h-3.5 w-3.5" />
-                    </Button>
-                    <MessageCircle className="h-3.5 w-3.5 text-muted-foreground" />
-                  </div>
-                </td>
-                <td className="px-4 py-2 text-center">
-                  <div className="flex items-center justify-center gap-1">
-                    <Button variant="ghost" size="icon" className="h-6 w-6 text-info">
-                      <Info className="h-3.5 w-3.5" />
-                    </Button>
-                  </div>
-                </td>
-                <td className="px-4 py-2">
-                  <Button variant="ghost" size="icon" className="h-6 w-6 text-destructive">
-                    <Trash2 className="h-3.5 w-3.5" />
+                <td className="px-2 py-1.5">
+                  <Button variant="ghost" size="icon" className="h-5 w-5 text-destructive hover:bg-destructive/10">
+                    <Trash2 className="h-3 w-3" />
                   </Button>
                 </td>
               </tr>
