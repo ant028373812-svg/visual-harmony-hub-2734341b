@@ -119,12 +119,12 @@ export function RefProcesModule() {
 
       {/* Table */}
       <div className="flex-1 overflow-auto">
-        <table className="w-full text-sm">
+        <table className="text-sm table-auto">
           <thead className="bg-muted/50 sticky top-0">
             <tr className="text-left text-xs text-muted-foreground">
               <th className="px-2 py-2 w-24">Статус</th>
-              <th className="py-2 pl-1 pr-0">Назва паку</th>
-              <th className="py-2 px-1 w-28">Трек номер</th>
+              <th className="py-2 pl-1 pr-1 whitespace-nowrap">Назва паку</th>
+              <th className="py-2 pl-0 pr-1 whitespace-nowrap">Трек номер</th>
               <th className="py-2 px-1 w-16">Метод реф</th>
               <th className="py-2 px-2 w-40">Дата написання</th>
               <th className="py-2 px-1 w-14 text-center">Інфо зам.</th>
@@ -159,9 +159,9 @@ export function RefProcesModule() {
                     </SelectContent>
                   </Select>
                 </td>
-                <td className="py-1.5 pl-1 pr-0">
-                  <div className="flex items-center gap-1">
-                    <span className="font-medium">{ref.packId} {ref.storeName}</span>
+                <td className="py-1.5 pl-1 pr-1">
+                  <div className="flex items-center gap-0.5">
+                    <span className="font-medium whitespace-nowrap">{ref.packId} {ref.storeName}</span>
                     <Tooltip>
                       <TooltipTrigger asChild>
                         <Button variant="ghost" size="icon" className="h-5 w-5 hover:bg-muted">
@@ -188,9 +188,9 @@ export function RefProcesModule() {
                     </Tooltip>
                   </div>
                 </td>
-                <td className="py-1.5 px-1">
+                <td className="py-1.5 pl-0 pr-1">
                   <div className="flex items-center gap-0.5">
-                    <span className="font-mono text-[10px] text-info">{ref.trackNumber}</span>
+                    <span className="font-mono text-[10px] text-info whitespace-nowrap">{ref.trackNumber}</span>
                     <Button variant="ghost" size="icon" className="h-4 w-4 hover:bg-muted">
                       <Copy className="h-2.5 w-2.5" />
                     </Button>
