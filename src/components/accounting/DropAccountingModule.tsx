@@ -96,21 +96,21 @@ export function DropAccountingModule() {
             <div className="flex items-end gap-4">
               <div className="space-y-1.5">
                 <Label className="text-xs text-muted-foreground">Сума</Label>
-                <div className="flex">
+                <div className="flex items-center gap-2">
                   <Input
                     type="number"
                     value={amount}
                     onChange={(e) => setAmount(e.target.value)}
                     placeholder="0"
-                    className="h-9 w-24 rounded-r-none border-r-0"
+                    className="h-9 w-24"
                   />
-                  <div className="flex border border-input rounded-r-md overflow-hidden">
+                  <div className="flex border border-input rounded-md overflow-hidden">
                     {currencies.map((cur, idx) => (
                       <button
                         key={cur}
                         type="button"
                         onClick={() => setCurrency(cur)}
-                        className={`h-9 px-2 text-xs font-medium transition-colors ${
+                        className={`h-9 px-3 text-xs font-medium transition-colors ${
                           currency === cur
                             ? 'bg-primary text-primary-foreground'
                             : 'bg-background text-muted-foreground hover:bg-muted'
