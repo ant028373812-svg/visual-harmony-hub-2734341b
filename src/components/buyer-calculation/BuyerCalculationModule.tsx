@@ -11,8 +11,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { StatusBadge } from '@/components/ui/status-badge';
-
 interface PackCalculation {
   id: string;
   packId: string;
@@ -202,10 +200,6 @@ export function BuyerCalculationModule() {
                         <div>
                           <div className="flex items-center gap-2">
                             <span className="font-semibold">Пак: {pack.packId} {pack.storeName}</span>
-                            <StatusBadge 
-                              status={pack.status} 
-                              type={pack.status === 'Оплачено' ? 'completed' : 'pending'} 
-                            />
                           </div>
                           <p className="text-sm text-muted-foreground">
                             Скуп: {pack.skup} • Дата: {pack.date}
