@@ -126,15 +126,15 @@ export function OrdersModule() {
         <table className="w-full text-sm">
           <thead className="bg-muted/50 sticky top-0">
             <tr className="text-left text-xs text-muted-foreground uppercase tracking-wider">
-              <th className="px-4 py-2 w-24">Статус</th>
-              <th className="px-4 py-2 flex-1">Назва паку</th>
-              <th className="px-4 py-2 w-40">Трек номери</th>
-              <th className="px-4 py-2 w-20">Дроп</th>
-              <th className="px-4 py-2 w-24">Адреса</th>
-              <th className="px-4 py-2 w-16 text-center">Інфо</th>
-              <th className="px-4 py-2 w-16 text-center">Реф</th>
-              <th className="px-4 py-2 w-16 text-center">Бух.</th>
-              <th className="px-4 py-2 w-10"></th>
+              <th className="px-3 py-2 w-[10%]">Статус</th>
+              <th className="px-3 py-2 w-[22%]">Назва паку</th>
+              <th className="px-3 py-2 w-[18%]">Трек номери</th>
+              <th className="px-3 py-2 w-[10%]">Дроп</th>
+              <th className="px-3 py-2 w-[12%]">Адреса</th>
+              <th className="px-3 py-2 w-[8%] text-center">Інфо</th>
+              <th className="px-3 py-2 w-[8%] text-center">Реф</th>
+              <th className="px-3 py-2 w-[8%] text-center">Бух.</th>
+              <th className="px-3 py-2 w-[4%]"></th>
             </tr>
           </thead>
           <tbody>
@@ -142,10 +142,10 @@ export function OrdersModule() {
               const drop = demoDrops.find(d => d.id === pack.dropId);
               return (
                 <tr key={pack.id} className="border-b border-border hover:bg-muted/30 transition-colors">
-                  <td className="px-4 py-2">
+                  <td className="px-3 py-2">
                     <StatusBadge status={pack.status} type={getStatusType(pack.status) as any} />
                   </td>
-                  <td className="px-4 py-2">
+                  <td className="px-3 py-2">
                     <div className="flex items-center gap-2">
                       <span className="text-muted-foreground">🏪</span>
                       <span className="font-medium">{pack.packId} {pack.storeName}</span>
@@ -169,16 +169,16 @@ export function OrdersModule() {
                       </Button>
                     </div>
                   </td>
-                  <td className="px-4 py-2">
+                  <td className="px-3 py-2">
                     <div className="space-y-0.5">
                       {pack.trackNumbers.map((track, i) => (
                         <p key={i} className="font-mono text-xs text-info">{track}</p>
                       ))}
                     </div>
                   </td>
-                  <td className="px-4 py-2 text-sm">{drop?.name}</td>
-                  <td className="px-4 py-2 text-sm">Kyiv</td>
-                  <td className="px-4 py-2 text-center">
+                  <td className="px-3 py-2 text-sm">{drop?.name}</td>
+                  <td className="px-3 py-2 text-sm">Kyiv</td>
+                  <td className="px-3 py-2 text-center">
                     <div className="flex items-center justify-center gap-1">
                       <Button 
                         variant="ghost" 
@@ -191,7 +191,7 @@ export function OrdersModule() {
                       <MessageCircle className="h-3.5 w-3.5 text-muted-foreground" />
                     </div>
                   </td>
-                  <td className="px-4 py-2 text-center">
+                  <td className="px-3 py-2 text-center">
                     <div className="flex items-center justify-center gap-1">
                       <Button 
                         variant="ghost" 
@@ -204,7 +204,7 @@ export function OrdersModule() {
                       <MessageCircle className="h-3.5 w-3.5 text-muted-foreground" />
                     </div>
                   </td>
-                  <td className="px-4 py-2 text-center">
+                  <td className="px-3 py-2 text-center">
                     <div className="flex items-center justify-center gap-1">
                       <Button 
                         variant="ghost" 
@@ -217,7 +217,7 @@ export function OrdersModule() {
                       <MessageCircle className="h-3.5 w-3.5 text-muted-foreground" />
                     </div>
                   </td>
-                  <td className="px-4 py-2">
+                  <td className="px-3 py-2">
                     <Button variant="ghost" size="icon" className="h-6 w-6 text-destructive">
                       <Trash2 className="h-3.5 w-3.5" />
                     </Button>
