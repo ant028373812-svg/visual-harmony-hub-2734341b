@@ -25,18 +25,21 @@ const statCards = [
   { title: 'Статистика магазинів', value: '370 000 грн', icon: BarChart3, color: 'text-success' },
 ];
 
-interface CarrierPayment {
+interface DropPayment {
   id: string;
-  drop: string;
-  amount: number;
-  status: 'Чекає на оплату' | 'Оплачено';
-  dueDate: string;
+  name: string;
+  dropExpense: number;
+  carrierExpense: number;
+  additionalExpense: number;
+  status: 'Видав фактуру' | 'Оплачено';
+  dropCard: string;
+  carrierCard: string;
 }
 
-const carrierPayments: CarrierPayment[] = [
-  { id: '1', drop: 'Львів', amount: 67500, status: 'Чекає на оплату', dueDate: '20 січ.' },
-  { id: '2', drop: 'Харків', amount: 53000, status: 'Чекає на оплату', dueDate: '18 січ.' },
-  { id: '3', drop: 'Дніпро', amount: 42000, status: 'Чекає на оплату', dueDate: '25 січ.' },
+const dropPayments: DropPayment[] = [
+  { id: '1', name: 'Svitlana', dropExpense: 40500, carrierExpense: 13500, additionalExpense: 6750, status: 'Видав фактуру', dropCard: '', carrierCard: '' },
+  { id: '2', name: 'Oleksandr', dropExpense: 32000, carrierExpense: 10600, additionalExpense: 5300, status: 'Оплачено', dropCard: '', carrierCard: '' },
+  { id: '3', name: 'Maria', dropExpense: 25200, carrierExpense: 8400, additionalExpense: 4200, status: 'Видав фактуру', dropCard: '', carrierCard: '' },
 ];
 
 const boxingExpenses = [
@@ -47,7 +50,7 @@ const boxingExpenses = [
 
 export function AccountingModule() {
   const [activeTab, setActiveTab] = useState('dashboard');
-  const [expandedCarrier, setExpandedCarrier] = useState(true);
+  const [expandedDrops, setExpandedDrops] = useState<Record<string, boolean>>({ '1': true });
 
   const formatCurrency = (value: number) => {
     return new Intl.NumberFormat('uk-UA').format(value) + ' грн';
@@ -86,64 +89,72 @@ export function AccountingModule() {
             {/* Carrier Payments */}
             <Card>
               <CardHeader className="pb-2">
-                <div className="flex items-center justify-between">
-                  <CardTitle className="text-sm flex items-center gap-2">
-                    <AlertCircle className="h-4 w-4 text-warning" />
-                    Виплати перевізник
-                  </CardTitle>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="h-6 w-6"
-                    onClick={() => setExpandedCarrier(!expandedCarrier)}
-                  >
-                    {expandedCarrier ? <ChevronDown className="h-4 w-4" /> : <ChevronRight className="h-4 w-4" />}
-                  </Button>
-                </div>
-                <p className="text-xs text-muted-foreground">
-                  Загальна сума: <span className="font-semibold">162 500 грн</span>
-                </p>
+                <CardTitle className="text-sm flex items-center gap-2">
+                  <AlertCircle className="h-4 w-4 text-warning" />
+                  Виплати перевізник
+                </CardTitle>
               </CardHeader>
-              {expandedCarrier && (
-                <CardContent className="space-y-3 pt-2">
-                  {carrierPayments.map(payment => (
-                    <div key={payment.id} className="p-2 border border-border rounded-lg space-y-2">
-                      <div className="flex items-center justify-between">
-                        <span className="font-medium text-sm">Дроп {payment.drop}</span>
-                        <StatusBadge 
-                          status={payment.status} 
-                          type={payment.status === 'Оплачено' ? 'completed' : 'pending'} 
-                        />
-                      </div>
-                      <p className="text-xs text-muted-foreground">{payment.dueDate}</p>
-                      <p className="font-semibold text-right">{formatCurrency(payment.amount)}</p>
-                      <div className="space-y-1 text-xs">
-                        <div className="flex justify-between">
-                          <span className="text-success">● Оплата дропу</span>
-                          <span>{formatCurrency(payment.amount * 0.6)}</span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span className="text-muted-foreground">Іванов І.І.</span>
-                          <StatusBadge status="Чекає на оплату" type="pending" className="text-[10px]" />
-                        </div>
-                        <div className="flex justify-between">
-                          <span className="text-info">● Оплата перевізнику</span>
-                          <span>{formatCurrency(payment.amount * 0.2)}</span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span className="text-muted-foreground">УкрПошта</span>
-                          <StatusBadge status="Чекає на оплату" type="pending" className="text-[10px]" />
-                        </div>
-                        <div className="flex justify-between">
-                          <span className="text-muted-foreground">+ Додаткові витрати</span>
-                          <span>{formatCurrency(payment.amount * 0.1)}</span>
-                        </div>
-                        <StatusBadge status="Оплачено" type="completed" className="text-[10px]" />
-                      </div>
+              <CardContent className="space-y-3 pt-2">
+                {dropPayments.map(drop => (
+                  <div key={drop.id} className="p-3 border border-border rounded-lg space-y-3">
+                    {/* Drop Header */}
+                    <div 
+                      className="flex items-center justify-between cursor-pointer"
+                      onClick={() => setExpandedDrops(prev => ({ ...prev, [drop.id]: !prev[drop.id] }))}
+                    >
+                      <span className="font-medium text-sm">{drop.name}</span>
+                      {expandedDrops[drop.id] ? (
+                        <ChevronDown className="h-4 w-4 text-muted-foreground" />
+                      ) : (
+                        <ChevronRight className="h-4 w-4 text-muted-foreground" />
+                      )}
                     </div>
-                  ))}
-                </CardContent>
-              )}
+
+                    {expandedDrops[drop.id] && (
+                      <>
+                        {/* Status Selection */}
+                        <Select defaultValue={drop.status}>
+                          <SelectTrigger className="h-8 text-xs">
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="Видав фактуру">Видав фактуру</SelectItem>
+                            <SelectItem value="Оплачено">Оплачено</SelectItem>
+                          </SelectContent>
+                        </Select>
+
+                        {/* Expenses Section */}
+                        <div className="space-y-2 text-sm">
+                          <div className="flex justify-between items-center">
+                            <span className="text-muted-foreground">Витрата Дроп</span>
+                            <span className="font-medium">{formatCurrency(drop.dropExpense)}</span>
+                          </div>
+                          <div className="flex justify-between items-center">
+                            <span className="text-muted-foreground">Витрати перевізника</span>
+                            <span className="font-medium">{formatCurrency(drop.carrierExpense)}</span>
+                          </div>
+                          <div className="flex justify-between items-center">
+                            <span className="text-muted-foreground">Додаткові витрати Дроп</span>
+                            <span className="font-medium">{formatCurrency(drop.additionalExpense)}</span>
+                          </div>
+                        </div>
+
+                        {/* Cards Section */}
+                        <div className="space-y-3 pt-2 border-t border-border">
+                          <div className="space-y-1">
+                            <label className="text-xs text-muted-foreground">Дроп карта</label>
+                            <Input className="h-8 text-sm" placeholder="" />
+                          </div>
+                          <div className="space-y-1">
+                            <label className="text-xs text-muted-foreground">Перевізник карта</label>
+                            <Input className="h-8 text-sm" placeholder="" />
+                          </div>
+                        </div>
+                      </>
+                    )}
+                  </div>
+                ))}
+              </CardContent>
             </Card>
 
             {/* Boxing Expenses */}
