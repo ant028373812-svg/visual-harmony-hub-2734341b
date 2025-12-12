@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Info, MessageCircle } from 'lucide-react';
 import {
   Dialog,
   DialogContent,
@@ -213,6 +214,31 @@ export function CreatePackModal({ open, onOpenChange }: CreatePackModalProps) {
               Скасувати
             </Button>
             <Button onClick={handleCreate}>Створити</Button>
+          </div>
+
+          {/* Informational block */}
+          <div className="flex justify-center gap-8 pt-4 border-t border-border">
+            <div className="flex flex-col items-center gap-1">
+              <span className="text-xs text-muted-foreground">Інфо зам.</span>
+              <div className="flex items-center gap-1">
+                <Info className="h-4 w-4 text-info" />
+                <MessageCircle className="h-4 w-4 text-muted-foreground" />
+              </div>
+            </div>
+            <div className="flex flex-col items-center gap-1">
+              <span className="text-xs text-muted-foreground">Реф стат.</span>
+              <div className="flex items-center gap-1">
+                <Info className="h-4 w-4 text-info" />
+                <MessageCircle className="h-4 w-4 text-muted-foreground" />
+              </div>
+            </div>
+            <div className="flex flex-col items-center gap-1">
+              <span className="text-xs text-muted-foreground">Бух. пак</span>
+              <div className="flex items-center gap-1">
+                <Info className="h-4 w-4 text-info" />
+                <MessageCircle className="h-4 w-4 text-muted-foreground" />
+              </div>
+            </div>
           </div>
         </div>
       </DialogContent>
