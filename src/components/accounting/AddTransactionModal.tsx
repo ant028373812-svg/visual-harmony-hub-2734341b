@@ -91,6 +91,12 @@ function DropdownWithAdd({ placeholder, items, inputPlaceholder, value, onSelect
   );
 }
 
+interface ExpenseRow {
+  id: number;
+  amount: string;
+  source: string;
+}
+
 export function AddTransactionModal({ trigger }: AddTransactionModalProps) {
   const [open, setOpen] = useState(false);
   const [transactionType, setTransactionType] = useState<'income' | 'expense'>('income');
@@ -99,8 +105,21 @@ export function AddTransactionModal({ trigger }: AddTransactionModalProps) {
   // Dropdown values
   const [skupValue, setSkupValue] = useState('');
   const [destinationValue, setDestinationValue] = useState('');
-  const [expenseDestValue, setExpenseDestValue] = useState('');
-  const [sourceValue, setSourceValue] = useState('');
+  
+  // Multiple expense rows
+  const [expenseRows, setExpenseRows] = useState<ExpenseRow[]>([
+    { id: 1, amount: '', source: '' }
+  ]);
+
+  const addExpenseRow = () => {
+    setExpenseRows([...expenseRows, { id: Date.now(), amount: '', source: '' }]);
+  };
+
+  const updateExpenseRow = (id: number, field: 'amount' | 'source', value: string) => {
+    setExpenseRows(expenseRows.map(row => 
+      row.id === id ? { ...row, [field]: value } : row
+    ));
+  };
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -208,30 +227,50 @@ export function AddTransactionModal({ trigger }: AddTransactionModalProps) {
               </div>
             </div>
 
-            {/* Expanded Expense Fields - Only 2 fields */}
+            {/* Expanded Expense Rows */}
             {showExpenseSection && (
               <div className="mt-4 space-y-4">
-                <div className="grid grid-cols-2 gap-4">
-                  {/* Left - Amount */}
-                  <div className="space-y-2">
-                    <label className="text-sm font-medium">Сума</label>
-                    <Input type="text" placeholder="0" className="h-10" />
-                  </div>
+                {/* Expense Rows */}
+                <div className="space-y-3">
+                  {expenseRows.map((row, index) => (
+                    <div key={row.id} className="grid grid-cols-2 gap-4">
+                      {/* Left - Amount */}
+                      <div className="space-y-2">
+                        {index === 0 && <label className="text-sm font-medium">Сума</label>}
+                        <Input 
+                          type="text" 
+                          placeholder="0" 
+                          className="h-10"
+                          value={row.amount}
+                          onChange={(e) => updateExpenseRow(row.id, 'amount', e.target.value)}
+                        />
+                      </div>
 
-                  {/* Right - Source */}
-                  <div className="space-y-2">
-                    <label className="text-sm font-medium">Джерело вит.</label>
-                    <DropdownWithAdd
-                      placeholder="Обрати"
-                      items={['Дроп', 'Boxing']}
-                      inputPlaceholder="Назва"
-                      value={sourceValue}
-                      onSelect={setSourceValue}
-                    />
-                  </div>
+                      {/* Right - Source */}
+                      <div className="space-y-2">
+                        {index === 0 && <label className="text-sm font-medium">Джерело вит.</label>}
+                        <DropdownWithAdd
+                          placeholder="Обрати"
+                          items={['Дроп', 'Boxing']}
+                          inputPlaceholder="Назва"
+                          value={row.source}
+                          onSelect={(value) => updateExpenseRow(row.id, 'source', value)}
+                        />
+                      </div>
+                    </div>
+                  ))}
                 </div>
 
-                {/* Comment Section - Only visible when expense section is expanded */}
+                {/* Add Row Button */}
+                <button
+                  type="button"
+                  onClick={addExpenseRow}
+                  className="w-8 h-8 rounded-full bg-muted hover:bg-muted/80 flex items-center justify-center transition-colors"
+                >
+                  <Plus className="h-4 w-4 text-muted-foreground" />
+                </button>
+
+                {/* Comment Section */}
                 <div className="border-t border-border pt-4 space-y-2">
                   <label className="text-sm font-medium">Коментар</label>
                   <Textarea placeholder="" className="min-h-[100px] resize-none" />
