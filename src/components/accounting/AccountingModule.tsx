@@ -8,6 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Checkbox } from '@/components/ui/checkbox';
 import { StatusBadge } from '@/components/ui/status-badge';
 import { demoTransactions } from '@/lib/demo-data';
+import { AddTransactionModal } from './AddTransactionModal';
 import { cn } from '@/lib/utils';
 const statCards = [{
   title: 'Надходження',
@@ -115,9 +116,7 @@ export function AccountingModule() {
             <p className="text-sm text-muted-foreground mt-1">Статистика</p>
           </div>
           <div className="flex gap-2">
-            <Button className="bg-primary text-primary-foreground">
-              Додати транзакцію
-            </Button>
+            <AddTransactionModal />
             <Button variant="outline">Статистика</Button>
           </div>
         </div>
