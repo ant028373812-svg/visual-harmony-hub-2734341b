@@ -215,14 +215,14 @@ export const demoRefProcesses: RefProcess[] = [
 ];
 
 export const demoTransactions: Transaction[] = [
-  { id: '1', date: new Date('2025-01-15'), type: 'Прихід', category: 'Виручка магазину', amount: 125000, description: 'Продаж товарів', store: 'Магазин Київ', status: 'Оплачено' },
-  { id: '2', date: new Date('2025-01-14'), type: 'Витрата', category: 'Оплата дропу', amount: 45000, description: 'Оплата дропу', status: 'Не оплачено' },
-  { id: '3', date: new Date('2025-01-14'), type: 'Витрата', category: 'Оплата перевізнику', amount: 12000, description: 'Доставка товарів', status: 'Оплачено' },
-  { id: '4', date: new Date('2025-01-13'), type: 'Прихід', category: 'Виручка магазину', amount: 89000, description: 'Онлайн замовлення', store: 'Магазин Одеса', status: 'Оплачено' },
-  { id: '5', date: new Date('2025-01-12'), type: 'Витрата', category: 'Офісні витрати', amount: 8500, description: 'Оренда офісу', status: 'Очікує' },
-  { id: '6', date: new Date('2025-01-11'), type: 'Витрата', category: 'Виплати команді', amount: 35000, description: 'Зарплата співробітників', status: 'Оплачено' },
-  { id: '7', date: new Date('2025-01-10'), type: 'Прихід', category: 'Виручка магазину', amount: 156000, description: 'Роздрібні продажі', store: 'Магазин Київ', status: 'Оплачено' },
-  { id: '8', date: new Date('2025-01-09'), type: 'Витрата', category: 'Оплата дропу', amount: 38000, description: 'Оплата дропу', status: 'Не оплачено' },
+  { id: '1', date: new Date('2025-01-15'), type: 'Прихід', skup: 'Oleg', amount: 125000, source: 'Binance', destination: 'Mono', propiob: true, executor: 'Олег', comment: 'Продаж товарів' },
+  { id: '2', date: new Date('2025-01-14'), type: 'Витрата', skup: 'Ivan', amount: 45000, source: 'Mono', destination: 'Дроп', propiob: false, executor: 'Іван', comment: 'Оплата дропу' },
+  { id: '3', date: new Date('2025-01-14'), type: 'Витрата', skup: 'Oleg', amount: 12000, source: 'Privat', destination: 'Перевізник', propiob: true, executor: 'Олег', comment: 'Доставка товарів' },
+  { id: '4', date: new Date('2025-01-13'), type: 'Прихід', skup: 'Nazar', amount: 89000, source: 'Binance', destination: 'Privat', propiob: true, executor: 'Назар', comment: 'Онлайн замовлення' },
+  { id: '5', date: new Date('2025-01-12'), type: 'Витрата', skup: 'Ivan', amount: 8500, source: 'Mono', destination: 'Офіс', propiob: false, executor: 'Іван', comment: 'Оренда офісу' },
+  { id: '6', date: new Date('2025-01-11'), type: 'Витрата', skup: 'Oleg', amount: 35000, source: 'Privat', destination: 'Команда', propiob: true, executor: 'Олег', comment: 'Зарплата' },
+  { id: '7', date: new Date('2025-01-10'), type: 'Прихід', skup: 'Nazar', amount: 156000, source: 'Binance', destination: 'Mono', propiob: true, executor: 'Назар', comment: 'Роздрібні продажі' },
+  { id: '8', date: new Date('2025-01-09'), type: 'Витрата', skup: 'Ivan', amount: 38000, source: 'Mono', destination: 'Дроп', propiob: false, executor: 'Іван', comment: 'Оплата дропу' },
 ];
 
 export const demoStores: Store[] = [

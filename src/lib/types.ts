@@ -99,11 +99,13 @@ export interface Transaction {
   id: string;
   date: Date;
   type: 'Прихід' | 'Витрата';
-  category: string;
+  skup: string;
   amount: number;
-  description: string;
-  store?: string;
-  status: 'Оплачено' | 'Не оплачено' | 'Очікує';
+  source: string; // Звідки
+  destination: string; // Куди
+  propiob: boolean; // Пройоб
+  executor: string; // Хто виконав
+  comment: string; // Коментар
 }
 
 export interface StoreItem {

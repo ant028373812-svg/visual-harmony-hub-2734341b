@@ -1,5 +1,7 @@
 import { useState } from 'react';
-import { TrendingUp, Truck, Users, BarChart3, ChevronDown, ChevronRight, AlertCircle, Package } from 'lucide-react';
+import { TrendingUp, Truck, Users, BarChart3, ChevronDown, ChevronRight, AlertCircle, Package, CalendarIcon, Check } from 'lucide-react';
+import { format } from 'date-fns';
+import { uk } from 'date-fns/locale';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -7,6 +9,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Checkbox } from '@/components/ui/checkbox';
 import { StatusBadge } from '@/components/ui/status-badge';
+import { Calendar } from '@/components/ui/calendar';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { demoTransactions } from '@/lib/demo-data';
 import { AddTransactionModal } from './AddTransactionModal';
 import { cn } from '@/lib/utils';
@@ -237,62 +241,131 @@ export function AccountingModule() {
 
             {/* Transactions table */}
             <Card>
-              <CardHeader>
+              <CardHeader className="pb-3">
                 <CardTitle className="text-lg">Таблиця транзакцій</CardTitle>
-                <div className="flex items-center gap-4 mt-2">
-                  <Input placeholder="Пошук транзакцій..." className="max-w-sm" />
-                  <Select defaultValue="all">
-                    <SelectTrigger className="w-32">
-                      <SelectValue placeholder="Всі типи" />
+                {/* Filters Row */}
+                <div className="flex items-center gap-2 mt-3 flex-wrap">
+                  {/* Дата */}
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button variant="outline" size="sm" className="h-8 w-28 justify-start text-left font-normal">
+                        <CalendarIcon className="mr-1 h-3 w-3" />
+                        <span className="text-xs">Дата</span>
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0" align="start">
+                      <Calendar mode="single" className="pointer-events-auto" />
+                    </PopoverContent>
+                  </Popover>
+                  
+                  {/* Сума */}
+                  <Input placeholder="Сума" className="h-8 w-24 text-xs" />
+                  
+                  {/* Тип */}
+                  <Select>
+                    <SelectTrigger className="h-8 w-24 text-xs">
+                      <SelectValue placeholder="Тип" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="all">Всі типи</SelectItem>
                       <SelectItem value="income">Прихід</SelectItem>
-                      <SelectItem value="expense">Витрата</SelectItem>
+                      <SelectItem value="expense">Вихід</SelectItem>
                     </SelectContent>
                   </Select>
-                  <Select defaultValue="all">
-                    <SelectTrigger className="w-40">
-                      <SelectValue placeholder="Всі категорії" />
+                  
+                  {/* Скуп */}
+                  <Select>
+                    <SelectTrigger className="h-8 w-24 text-xs">
+                      <SelectValue placeholder="Скуп" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="all">Всі категорії</SelectItem>
-                      <SelectItem value="revenue">Виручка магазину</SelectItem>
-                      <SelectItem value="drop">Оплата дропу</SelectItem>
-                      <SelectItem value="carrier">Оплата перевізнику</SelectItem>
+                      <SelectItem value="oleg">Oleg</SelectItem>
+                      <SelectItem value="ivan">Ivan</SelectItem>
+                      <SelectItem value="nazar">Nazar</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  
+                  {/* Звідки */}
+                  <Select>
+                    <SelectTrigger className="h-8 w-24 text-xs">
+                      <SelectValue placeholder="Звідки" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="binance">Binance</SelectItem>
+                      <SelectItem value="mono">Mono</SelectItem>
+                      <SelectItem value="privat">Privat</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  
+                  {/* Куди */}
+                  <Select>
+                    <SelectTrigger className="h-8 w-24 text-xs">
+                      <SelectValue placeholder="Куди" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="drop">Дроп</SelectItem>
+                      <SelectItem value="carrier">Перевізник</SelectItem>
+                      <SelectItem value="team">Команда</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  
+                  {/* Пройоб */}
+                  <div className="flex items-center gap-1 h-8 px-2 border border-input rounded-md bg-background">
+                    <Checkbox id="propiob" className="h-3 w-3" />
+                    <label htmlFor="propiob" className="text-xs">Пройоб</label>
+                  </div>
+                  
+                  {/* Хто виконав */}
+                  <Select>
+                    <SelectTrigger className="h-8 w-28 text-xs">
+                      <SelectValue placeholder="Хто виконав" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="oleg">Олег</SelectItem>
+                      <SelectItem value="ivan">Іван</SelectItem>
+                      <SelectItem value="nazar">Назар</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
               </CardHeader>
-              <CardContent>
+              <CardContent className="pt-0">
                 <table className="w-full text-sm">
                   <thead className="border-b border-border">
                     <tr className="text-left text-muted-foreground">
-                      <th className="py-3 font-medium">Дата</th>
-                      <th className="py-3 font-medium">Тип</th>
-                      <th className="py-3 font-medium">Категорія</th>
-                      <th className="py-3 font-medium">Сума</th>
-                      <th className="py-3 font-medium">Опис</th>
-                      <th className="py-3 font-medium">Магазин</th>
-                      <th className="py-3 font-medium">Статус оплати</th>
+                      <th className="py-2 px-2 font-medium text-xs">Дата</th>
+                      <th className="py-2 px-2 font-medium text-xs">Тип</th>
+                      <th className="py-2 px-2 font-medium text-xs">Скуп</th>
+                      <th className="py-2 px-2 font-medium text-xs">Сума</th>
+                      <th className="py-2 px-2 font-medium text-xs">Звідки</th>
+                      <th className="py-2 px-2 font-medium text-xs">Куди</th>
+                      <th className="py-2 px-2 font-medium text-xs">Пройоб</th>
+                      <th className="py-2 px-2 font-medium text-xs">Хто виконав</th>
+                      <th className="py-2 px-2 font-medium text-xs">Коментар</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {demoTransactions.map(tx => <tr key={tx.id} className="border-b border-border">
-                        <td className="py-3">{formatDate(tx.date)}</td>
-                        <td className="py-3">
+                    {demoTransactions.map(tx => (
+                      <tr key={tx.id} className="border-b border-border">
+                        <td className="py-2 px-2 text-xs">{formatDate(tx.date)}</td>
+                        <td className="py-2 px-2">
                           <StatusBadge status={tx.type} type={tx.type === 'Прихід' ? 'completed' : 'waiting'} />
                         </td>
-                        <td className="py-3">{tx.category}</td>
-                        <td className={cn('py-3 font-medium', tx.type === 'Прихід' ? 'text-success' : 'text-destructive')}>
+                        <td className="py-2 px-2 text-xs">{tx.skup}</td>
+                        <td className={cn('py-2 px-2 text-xs font-medium', tx.type === 'Прихід' ? 'text-success' : 'text-destructive')}>
                           {tx.type === 'Прихід' ? '+' : '-'}{formatCurrency(tx.amount)}
                         </td>
-                        <td className="py-3 text-muted-foreground">{tx.description}</td>
-                        <td className="py-3">{tx.store || '—'}</td>
-                        <td className="py-3">
-                          <StatusBadge status={tx.status} type={tx.status === 'Оплачено' ? 'completed' : tx.status === 'Очікує' ? 'pending' : 'canceled'} />
+                        <td className="py-2 px-2 text-xs">{tx.source}</td>
+                        <td className="py-2 px-2 text-xs">{tx.destination}</td>
+                        <td className="py-2 px-2">
+                          {tx.propiob ? (
+                            <Check className="h-4 w-4 text-success" />
+                          ) : (
+                            <span className="text-muted-foreground">—</span>
+                          )}
                         </td>
-                      </tr>)}
+                        <td className="py-2 px-2 text-xs">{tx.executor}</td>
+                        <td className="py-2 px-2 text-xs text-muted-foreground">{tx.comment}</td>
+                      </tr>
+                    ))}
                   </tbody>
                 </table>
               </CardContent>
