@@ -14,6 +14,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 
+const currencies = ['Євро', 'Гривня', 'Долар'];
 const executors = ['Олег', 'Іван', 'Назар', 'Марія'];
 const sources = ['Рахунок', 'Каса', 'PayPal', 'Wise'];
 const destinations = ['Зарплата', 'Податки', 'Оренда', 'Логістика', 'Маркетинг'];
@@ -37,6 +38,7 @@ const demoRefChecks: RefCheck[] = [
 
 export function DropAccountingModule() {
   const [amount, setAmount] = useState('');
+  const [currency, setCurrency] = useState('Гривня');
   const [executor, setExecutor] = useState('');
   const [expensePropiob, setExpensePropiob] = useState(false);
   const [source, setSource] = useState('');
@@ -90,17 +92,35 @@ export function DropAccountingModule() {
             <CardTitle className="text-xl">Бухгалтерія</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            {/* Top Row: Сума, Хто виконав, Витрата пройоб */}
+            {/* Top Row: Сума + Currency, Хто виконав, Витрата пройоб */}
             <div className="flex items-end gap-4">
-              <div className="space-y-1.5 flex-1">
+              <div className="space-y-1.5">
                 <Label className="text-xs text-muted-foreground">Сума</Label>
-                <Input
-                  type="number"
-                  value={amount}
-                  onChange={(e) => setAmount(e.target.value)}
-                  placeholder="0"
-                  className="h-9"
-                />
+                <div className="flex">
+                  <Input
+                    type="number"
+                    value={amount}
+                    onChange={(e) => setAmount(e.target.value)}
+                    placeholder="0"
+                    className="h-9 w-24 rounded-r-none border-r-0"
+                  />
+                  <div className="flex border border-input rounded-r-md overflow-hidden">
+                    {currencies.map((cur, idx) => (
+                      <button
+                        key={cur}
+                        type="button"
+                        onClick={() => setCurrency(cur)}
+                        className={`h-9 px-2 text-xs font-medium transition-colors ${
+                          currency === cur
+                            ? 'bg-primary text-primary-foreground'
+                            : 'bg-background text-muted-foreground hover:bg-muted'
+                        } ${idx !== currencies.length - 1 ? 'border-r border-input' : ''}`}
+                      >
+                        {cur}
+                      </button>
+                    ))}
+                  </div>
+                </div>
               </div>
               <div className="space-y-1.5 flex-1">
                 <Label className="text-xs text-muted-foreground">Хто виконав</Label>
