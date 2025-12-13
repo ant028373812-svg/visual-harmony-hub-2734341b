@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ChevronDown, ChevronRight, Plus, Info, Euro, X } from 'lucide-react';
+import { ChevronDown, ChevronRight, Plus, Info, Euro, X, Check } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import {
@@ -15,6 +15,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { cn } from '@/lib/utils';
@@ -349,7 +354,7 @@ export function DeliveryModule() {
 
       {/* Drop/Address Panel - Sliding side panel */}
       <Sheet open={isDropPanelOpen} onOpenChange={setIsDropPanelOpen}>
-        <SheetContent className="w-[65vw] max-w-4xl overflow-y-auto" side="right">
+        <SheetContent className="w-[75vw] max-w-5xl overflow-y-auto" side="right">
           <SheetHeader className="flex flex-row items-center justify-between pb-4 border-b border-border">
             <SheetTitle className="text-sm font-medium">Дроп/Адрес</SheetTitle>
           </SheetHeader>
@@ -414,93 +419,147 @@ export function DeliveryModule() {
                   {drop.expanded && (
                     <div className="border-t border-border p-3 space-y-3">
                       {drop.addresses.map(addr => (
-                        <div key={addr.id} className="flex items-start gap-6 p-4 bg-muted/20 rounded border border-border/50 w-full">
-                          {/* Geo checklist */}
-                          <div className="space-y-1 w-[160px] shrink-0">
-                            <span className="text-[10px] text-muted-foreground uppercase">Гео</span>
-                            <div className="space-y-1">
-                              {geoOptions.map(geo => (
-                                <label key={geo} className="flex items-center gap-2 cursor-pointer">
-                                  <Checkbox
-                                    checked={addr.geoList.includes(geo)}
-                                    onCheckedChange={() => toggleGeoInAddress(drop.id, addr.id, geo)}
-                                    className="h-3 w-3"
-                                  />
-                                  <span className="text-xs">{geo}</span>
-                                </label>
-                              ))}
-                            </div>
-                            {addingGeoToAddress === addr.id ? (
-                              <div className="flex items-center gap-1 mt-1">
-                                <Input
-                                  value={newGeoName}
-                                  onChange={e => setNewGeoName(e.target.value)}
-                                  placeholder="Нове гео..."
-                                  className="h-6 text-[10px] flex-1"
-                                  autoFocus
-                                  onKeyDown={e => e.key === 'Enter' && addNewGeoOption()}
-                                />
-                                <Button size="sm" className="h-6 text-[10px] px-2" onClick={addNewGeoOption}>
-                                  OK
+                        <div key={addr.id} className="flex items-center gap-4 p-3 bg-muted/20 rounded border border-border/50 w-full">
+                          {/* Geo dropdown */}
+                          <div className="w-[180px] shrink-0">
+                            <span className="text-[10px] text-muted-foreground uppercase block mb-1">Гео</span>
+                            <Popover>
+                              <PopoverTrigger asChild>
+                                <Button
+                                  variant="outline"
+                                  className="w-full h-9 justify-between text-xs font-normal bg-background"
+                                >
+                                  <span className="truncate">
+                                    {addr.geoList.length > 0 
+                                      ? addr.geoList.join(', ')
+                                      : 'Обрати...'}
+                                  </span>
+                                  <ChevronDown className="h-3.5 w-3.5 shrink-0 opacity-50" />
                                 </Button>
-                              </div>
-                            ) : (
-                              <Button
-                                variant="ghost"
-                                size="sm"
-                                className="h-6 text-[10px] text-muted-foreground p-0"
-                                onClick={() => setAddingGeoToAddress(addr.id)}
-                              >
-                                <Plus className="h-2.5 w-2.5 mr-1" />
-                                Додати
-                              </Button>
-                            )}
+                              </PopoverTrigger>
+                              <PopoverContent className="w-[200px] p-0 bg-popover z-50" align="start">
+                                <div className="p-2 space-y-1 max-h-[200px] overflow-y-auto">
+                                  {geoOptions.map(geo => (
+                                    <div
+                                      key={geo}
+                                      className={`flex items-center gap-2 px-2 py-1.5 rounded cursor-pointer hover:bg-muted/50 text-xs ${
+                                        addr.geoList.includes(geo) ? 'bg-muted' : ''
+                                      }`}
+                                      onClick={() => toggleGeoInAddress(drop.id, addr.id, geo)}
+                                    >
+                                      <div className={`h-3 w-3 rounded border flex items-center justify-center ${
+                                        addr.geoList.includes(geo) ? 'bg-primary border-primary' : 'border-input'
+                                      }`}>
+                                        {addr.geoList.includes(geo) && (
+                                          <Check className="h-2 w-2 text-primary-foreground" />
+                                        )}
+                                      </div>
+                                      <span>{geo}</span>
+                                    </div>
+                                  ))}
+                                </div>
+                                <div className="border-t border-border p-2">
+                                  {addingGeoToAddress === addr.id ? (
+                                    <div className="flex items-center gap-1">
+                                      <Input
+                                        value={newGeoName}
+                                        onChange={e => setNewGeoName(e.target.value)}
+                                        placeholder="Нове гео..."
+                                        className="h-7 text-xs flex-1"
+                                        autoFocus
+                                        onKeyDown={e => e.key === 'Enter' && addNewGeoOption()}
+                                      />
+                                      <Button size="sm" className="h-7 text-xs px-2" onClick={addNewGeoOption}>
+                                        OK
+                                      </Button>
+                                    </div>
+                                  ) : (
+                                    <Button
+                                      variant="ghost"
+                                      size="sm"
+                                      className="w-full h-7 text-xs text-muted-foreground justify-start"
+                                      onClick={() => setAddingGeoToAddress(addr.id)}
+                                    >
+                                      <Plus className="h-3 w-3 mr-1" />
+                                      Додати
+                                    </Button>
+                                  )}
+                                </div>
+                              </PopoverContent>
+                            </Popover>
                           </div>
 
-                          {/* Carrier checklist */}
-                          <div className="space-y-1 w-[160px] shrink-0 border-l border-border/50 pl-4">
-                            <span className="text-[10px] text-muted-foreground uppercase">Служба доставки</span>
-                            <div className="space-y-1">
-                              {carrierOptions.map(carrier => (
-                                <label key={carrier} className="flex items-center gap-2 cursor-pointer">
-                                  <Checkbox
-                                    checked={addr.carrierList.includes(carrier)}
-                                    onCheckedChange={() => toggleCarrierInAddress(drop.id, addr.id, carrier)}
-                                    className="h-3 w-3"
-                                  />
-                                  <span className="text-xs">{carrier}</span>
-                                </label>
-                              ))}
-                            </div>
-                            {addingCarrierToAddress === addr.id ? (
-                              <div className="flex items-center gap-1 mt-1">
-                                <Input
-                                  value={newCarrierName}
-                                  onChange={e => setNewCarrierName(e.target.value)}
-                                  placeholder="Нова служба..."
-                                  className="h-6 text-[10px] flex-1"
-                                  autoFocus
-                                  onKeyDown={e => e.key === 'Enter' && addNewCarrierOption()}
-                                />
-                                <Button size="sm" className="h-6 text-[10px] px-2" onClick={addNewCarrierOption}>
-                                  OK
+                          {/* Carrier dropdown */}
+                          <div className="w-[180px] shrink-0">
+                            <span className="text-[10px] text-muted-foreground uppercase block mb-1">Служба доставки</span>
+                            <Popover>
+                              <PopoverTrigger asChild>
+                                <Button
+                                  variant="outline"
+                                  className="w-full h-9 justify-between text-xs font-normal bg-background"
+                                >
+                                  <span className="truncate">
+                                    {addr.carrierList.length > 0 
+                                      ? addr.carrierList.join(', ')
+                                      : 'Обрати...'}
+                                  </span>
+                                  <ChevronDown className="h-3.5 w-3.5 shrink-0 opacity-50" />
                                 </Button>
-                              </div>
-                            ) : (
-                              <Button
-                                variant="ghost"
-                                size="sm"
-                                className="h-6 text-[10px] text-muted-foreground p-0"
-                                onClick={() => setAddingCarrierToAddress(addr.id)}
-                              >
-                                <Plus className="h-2.5 w-2.5 mr-1" />
-                                Додати
-                              </Button>
-                            )}
+                              </PopoverTrigger>
+                              <PopoverContent className="w-[200px] p-0 bg-popover z-50" align="start">
+                                <div className="p-2 space-y-1 max-h-[200px] overflow-y-auto">
+                                  {carrierOptions.map(carrier => (
+                                    <div
+                                      key={carrier}
+                                      className={`flex items-center gap-2 px-2 py-1.5 rounded cursor-pointer hover:bg-muted/50 text-xs ${
+                                        addr.carrierList.includes(carrier) ? 'bg-muted' : ''
+                                      }`}
+                                      onClick={() => toggleCarrierInAddress(drop.id, addr.id, carrier)}
+                                    >
+                                      <div className={`h-3 w-3 rounded border flex items-center justify-center ${
+                                        addr.carrierList.includes(carrier) ? 'bg-primary border-primary' : 'border-input'
+                                      }`}>
+                                        {addr.carrierList.includes(carrier) && (
+                                          <Check className="h-2 w-2 text-primary-foreground" />
+                                        )}
+                                      </div>
+                                      <span>{carrier}</span>
+                                    </div>
+                                  ))}
+                                </div>
+                                <div className="border-t border-border p-2">
+                                  {addingCarrierToAddress === addr.id ? (
+                                    <div className="flex items-center gap-1">
+                                      <Input
+                                        value={newCarrierName}
+                                        onChange={e => setNewCarrierName(e.target.value)}
+                                        placeholder="Нова служба..."
+                                        className="h-7 text-xs flex-1"
+                                        autoFocus
+                                        onKeyDown={e => e.key === 'Enter' && addNewCarrierOption()}
+                                      />
+                                      <Button size="sm" className="h-7 text-xs px-2" onClick={addNewCarrierOption}>
+                                        OK
+                                      </Button>
+                                    </div>
+                                  ) : (
+                                    <Button
+                                      variant="ghost"
+                                      size="sm"
+                                      className="w-full h-7 text-xs text-muted-foreground justify-start"
+                                      onClick={() => setAddingCarrierToAddress(addr.id)}
+                                    >
+                                      <Plus className="h-3 w-3 mr-1" />
+                                      Додати
+                                    </Button>
+                                  )}
+                                </div>
+                              </PopoverContent>
+                            </Popover>
                           </div>
 
-                          {/* Address input - Primary field, must be wider */}
-                          <div className="flex-1 min-w-[280px] border-l border-border/50 pl-4">
+                          {/* Address input - Primary field, widest */}
+                          <div className="flex-1 min-w-[300px]">
                             <span className="text-[10px] text-muted-foreground uppercase block mb-1">Адреса</span>
                             <Input
                               value={addr.address}
@@ -508,6 +567,18 @@ export function DeliveryModule() {
                               placeholder="Введіть адресу..."
                               className="h-9 text-sm w-full bg-background border-input"
                             />
+                          </div>
+
+                          {/* Add new row button */}
+                          <div className="shrink-0 pt-5">
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              className="h-9 w-9 text-muted-foreground hover:text-foreground"
+                              onClick={() => addAddressToDrop(drop.id)}
+                            >
+                              <Plus className="h-4 w-4" />
+                            </Button>
                           </div>
                         </div>
                       ))}
