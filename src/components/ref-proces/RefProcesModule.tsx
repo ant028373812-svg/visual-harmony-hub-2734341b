@@ -18,6 +18,9 @@ import {
 import { useTheme } from 'next-themes';
 import { demoRefProcesses } from '@/lib/demo-data';
 import { cn } from '@/lib/utils';
+import { OrderInfoModal } from '@/components/orders/modals/OrderInfoModal';
+import { RefStatusModal } from '@/components/orders/modals/RefStatusModal';
+import { PackAccountingModal } from '@/components/orders/modals/PackAccountingModal';
 
 // Demo date entries
 interface DateEntry {
@@ -51,6 +54,11 @@ export function RefProcesModule() {
   const [searchQuery, setSearchQuery] = useState('');
   const [showDateInput, setShowDateInput] = useState(false);
   const [dateEntries, setDateEntries] = useState<DateEntry[]>(initialDateEntries);
+  
+  // Modal states
+  const [isOrderInfoOpen, setIsOrderInfoOpen] = useState(false);
+  const [isRefStatusOpen, setIsRefStatusOpen] = useState(false);
+  const [isPackAccountingOpen, setIsPackAccountingOpen] = useState(false);
 
   const handleAddDateEntry = () => {
     const newEntry: DateEntry = {
@@ -326,7 +334,12 @@ export function RefProcesModule() {
                       </Tooltip>
                       <Tooltip>
                         <TooltipTrigger asChild>
-                          <Button variant="ghost" size="icon" className="h-5 w-5 hover:bg-muted text-info">
+                          <Button 
+                            variant="ghost" 
+                            size="icon" 
+                            className="h-5 w-5 hover:bg-muted text-info"
+                            onClick={() => setIsOrderInfoOpen(true)}
+                          >
                             <Info className="h-3 w-3" />
                           </Button>
                         </TooltipTrigger>
@@ -373,7 +386,12 @@ export function RefProcesModule() {
                   <div className="flex items-center justify-center gap-1">
                     <Tooltip>
                       <TooltipTrigger asChild>
-                        <Button variant="ghost" size="icon" className="h-5 w-5 text-info hover:bg-muted">
+                        <Button 
+                          variant="ghost" 
+                          size="icon" 
+                          className="h-5 w-5 text-info hover:bg-muted"
+                          onClick={() => setIsOrderInfoOpen(true)}
+                        >
                           <Info className="h-3 w-3" />
                         </Button>
                       </TooltipTrigger>
@@ -393,7 +411,12 @@ export function RefProcesModule() {
                   <div className="flex items-center justify-center gap-1">
                     <Tooltip>
                       <TooltipTrigger asChild>
-                        <Button variant="ghost" size="icon" className="h-5 w-5 text-info hover:bg-muted">
+                        <Button 
+                          variant="ghost" 
+                          size="icon" 
+                          className="h-5 w-5 text-info hover:bg-muted"
+                          onClick={() => setIsRefStatusOpen(true)}
+                        >
                           <Info className="h-3 w-3" />
                         </Button>
                       </TooltipTrigger>
@@ -413,7 +436,12 @@ export function RefProcesModule() {
                   <div className="flex items-center justify-center gap-1">
                     <Tooltip>
                       <TooltipTrigger asChild>
-                        <Button variant="ghost" size="icon" className="h-5 w-5 text-info hover:bg-muted">
+                        <Button 
+                          variant="ghost" 
+                          size="icon" 
+                          className="h-5 w-5 text-info hover:bg-muted"
+                          onClick={() => setIsPackAccountingOpen(true)}
+                        >
                           <Info className="h-3 w-3" />
                         </Button>
                       </TooltipTrigger>
@@ -439,6 +467,11 @@ export function RefProcesModule() {
           </tbody>
         </table>
       </div>
+
+      {/* Modals */}
+      <OrderInfoModal open={isOrderInfoOpen} onOpenChange={setIsOrderInfoOpen} />
+      <RefStatusModal open={isRefStatusOpen} onOpenChange={setIsRefStatusOpen} />
+      <PackAccountingModal open={isPackAccountingOpen} onOpenChange={setIsPackAccountingOpen} />
     </div>
   );
 }
