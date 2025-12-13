@@ -9,6 +9,7 @@ import { PackInfoModal } from '@/components/orders/modals/PackInfoModal';
 import { OrderInfoModal } from '@/components/orders/modals/OrderInfoModal';
 import { RefStatusModal } from '@/components/orders/modals/RefStatusModal';
 import { PackAccountingModal } from '@/components/orders/modals/PackAccountingModal';
+import { CommentModal } from '@/components/ui/comment-modal';
 
 const storesData = [
   { id: '1', name: 'Zara', refunds: 2, total: 187.50, average: 93.75 },
@@ -38,6 +39,7 @@ export function StoresRefModule() {
   const [isOrderInfoOpen, setIsOrderInfoOpen] = useState(false);
   const [isRefStatusOpen, setIsRefStatusOpen] = useState(false);
   const [isPackAccountingOpen, setIsPackAccountingOpen] = useState(false);
+  const [isCommentOpen, setIsCommentOpen] = useState(false);
 
   if (selectedStore) {
     const store = storesData.find(s => s.id === selectedStore);
@@ -149,7 +151,19 @@ export function StoresRefModule() {
                           </TooltipTrigger>
                           <TooltipContent>Інформація замовлення</TooltipContent>
                         </Tooltip>
-                        <MessageCircle className="h-3.5 w-3.5 text-muted-foreground" />
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <Button 
+                              variant="ghost" 
+                              size="icon" 
+                              className="h-5 w-5 text-muted-foreground hover:text-foreground cursor-pointer"
+                              onClick={() => setIsCommentOpen(true)}
+                            >
+                              <MessageCircle className="h-3.5 w-3.5" />
+                            </Button>
+                          </TooltipTrigger>
+                          <TooltipContent>Коментар</TooltipContent>
+                        </Tooltip>
                       </div>
                     </td>
                     <td className="px-4 py-3 text-center">
@@ -167,7 +181,19 @@ export function StoresRefModule() {
                           </TooltipTrigger>
                           <TooltipContent>Реф статус</TooltipContent>
                         </Tooltip>
-                        <MessageCircle className="h-3.5 w-3.5 text-muted-foreground" />
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <Button 
+                              variant="ghost" 
+                              size="icon" 
+                              className="h-5 w-5 text-muted-foreground hover:text-foreground cursor-pointer"
+                              onClick={() => setIsCommentOpen(true)}
+                            >
+                              <MessageCircle className="h-3.5 w-3.5" />
+                            </Button>
+                          </TooltipTrigger>
+                          <TooltipContent>Коментар</TooltipContent>
+                        </Tooltip>
                       </div>
                     </td>
                     <td className="px-4 py-3 text-center">
@@ -185,7 +211,19 @@ export function StoresRefModule() {
                           </TooltipTrigger>
                           <TooltipContent>Бухгалтерія паку</TooltipContent>
                         </Tooltip>
-                        <MessageCircle className="h-3.5 w-3.5 text-muted-foreground" />
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <Button 
+                              variant="ghost" 
+                              size="icon" 
+                              className="h-5 w-5 text-muted-foreground hover:text-foreground cursor-pointer"
+                              onClick={() => setIsCommentOpen(true)}
+                            >
+                              <MessageCircle className="h-3.5 w-3.5" />
+                            </Button>
+                          </TooltipTrigger>
+                          <TooltipContent>Коментар</TooltipContent>
+                        </Tooltip>
                       </div>
                     </td>
                   </tr>
@@ -205,6 +243,7 @@ export function StoresRefModule() {
         <OrderInfoModal open={isOrderInfoOpen} onOpenChange={setIsOrderInfoOpen} />
         <RefStatusModal open={isRefStatusOpen} onOpenChange={setIsRefStatusOpen} />
         <PackAccountingModal open={isPackAccountingOpen} onOpenChange={setIsPackAccountingOpen} />
+        <CommentModal open={isCommentOpen} onOpenChange={setIsCommentOpen} />
       </div>
     );
   }
