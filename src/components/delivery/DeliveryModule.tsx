@@ -354,19 +354,19 @@ export function DeliveryModule() {
 
       {/* Drop/Address Panel - Sliding side panel */}
       <Sheet open={isDropPanelOpen} onOpenChange={setIsDropPanelOpen}>
-        <SheetContent className="w-[80vw] max-w-none overflow-y-auto bg-background/98 backdrop-blur-sm shadow-2xl" side="right">
-          <SheetHeader className="flex flex-row items-center justify-between pb-5 mb-2 border-b border-border/60">
-            <SheetTitle className="text-base font-semibold tracking-tight text-foreground">Дроп/Адрес</SheetTitle>
+        <SheetContent className="w-[80vw] max-w-none overflow-y-auto bg-background" side="right">
+          <SheetHeader className="flex flex-row items-center justify-between pb-4 border-b border-border">
+            <SheetTitle className="text-sm font-medium">Дроп/Адрес</SheetTitle>
           </SheetHeader>
 
-          <div className="py-5 space-y-5">
+          <div className="py-4 space-y-4">
             {/* Drop selector header */}
-            <div className="flex items-center justify-between px-1">
-              <span className="text-xs font-medium text-muted-foreground/80 uppercase tracking-wider">Дроп</span>
+            <div className="flex items-center justify-between">
+              <span className="text-xs text-muted-foreground">Дроп</span>
               <Button
                 variant="ghost"
                 size="icon"
-                className="h-7 w-7 rounded-full hover:bg-muted/60 transition-colors duration-200"
+                className="h-6 w-6"
                 onClick={() => setIsAddingDrop(true)}
               >
                 <Plus className="h-3.5 w-3.5" />
@@ -375,101 +375,101 @@ export function DeliveryModule() {
 
             {/* Add new drop input */}
             {isAddingDrop && (
-              <div className="flex items-center gap-3 p-3 bg-muted/30 border border-border/50 rounded-lg shadow-sm">
+              <div className="flex items-center gap-2 p-2 border border-border rounded">
                 <Input
                   value={newDropName}
                   onChange={e => setNewDropName(e.target.value)}
                   placeholder="Назва дропа..."
-                  className="h-8 text-sm flex-1 bg-background/80 border-border/60 rounded-md focus:ring-2 focus:ring-primary/20"
+                  className="h-7 text-xs flex-1"
                   autoFocus
                   onKeyDown={e => e.key === 'Enter' && addNewDrop()}
                 />
-                <Button size="sm" className="h-8 text-xs px-4 rounded-md shadow-sm" onClick={addNewDrop}>
+                <Button size="sm" className="h-7 text-xs" onClick={addNewDrop}>
                   Додати
                 </Button>
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="h-7 w-7 rounded-full hover:bg-muted/60"
+                  className="h-6 w-6"
                   onClick={() => { setIsAddingDrop(false); setNewDropName(''); }}
                 >
-                  <X className="h-3.5 w-3.5" />
+                  <X className="h-3 w-3" />
                 </Button>
               </div>
             )}
 
             {/* Drops list */}
-            <div className="space-y-3">
+            <div className="space-y-2">
               {dropConfigs.map(drop => (
-                <div key={drop.id} className="border border-border/50 rounded-lg bg-card/50 shadow-sm overflow-hidden transition-shadow duration-200 hover:shadow-md">
+                <div key={drop.id} className="border border-border rounded-lg bg-card">
                   {/* Drop header */}
                   <div
-                    className="flex items-center justify-between px-4 py-3 cursor-pointer hover:bg-muted/40 transition-colors duration-150"
+                    className="flex items-center justify-between px-4 py-3 cursor-pointer hover:bg-muted/30"
                     onClick={() => toggleDropConfig(drop.id)}
                   >
-                    <span className="text-sm font-medium text-foreground">{drop.name}</span>
+                    <span className="font-medium">{drop.name}</span>
                     {drop.expanded ? (
-                      <ChevronDown className="h-4 w-4 text-muted-foreground/70 transition-transform duration-200" />
+                      <ChevronDown className="h-4 w-4 text-muted-foreground" />
                     ) : (
-                      <ChevronRight className="h-4 w-4 text-muted-foreground/70 transition-transform duration-200" />
+                      <ChevronRight className="h-4 w-4 text-muted-foreground" />
                     )}
                   </div>
 
                   {/* Expanded content - Addresses */}
                   {drop.expanded && (
-                    <div className="border-t border-border/40 p-4 space-y-4 bg-muted/10">
+                    <div className="border-t border-border p-4 space-y-3">
                       {drop.addresses.map(addr => (
-                        <div key={addr.id} className="flex items-center gap-5 p-4 bg-background/80 rounded-lg border border-border/40 shadow-sm w-full transition-all duration-200 hover:shadow-md hover:border-border/60">
+                        <div key={addr.id} className="flex items-center gap-4 p-3 bg-muted/20 rounded border border-border w-full">
                           {/* Geo dropdown */}
                           <div className="w-[180px] shrink-0">
-                            <span className="text-[10px] font-medium text-muted-foreground/70 uppercase tracking-wider block mb-1.5">Гео</span>
+                            <span className="text-[10px] text-muted-foreground uppercase block mb-1">Гео</span>
                             <Popover>
                               <PopoverTrigger asChild>
                                 <Button
                                   variant="outline"
-                                  className="w-full h-9 justify-between text-xs font-normal bg-background/90 border-border/50 rounded-md hover:bg-muted/30 hover:border-border transition-all duration-150"
+                                  className="w-full h-8 justify-between text-xs font-normal bg-background"
                                 >
-                                  <span className="truncate text-foreground/90">
+                                  <span className="truncate">
                                     {addr.geoList.length > 0 
                                       ? addr.geoList.join(', ')
                                       : 'Обрати...'}
                                   </span>
-                                  <ChevronDown className="h-3.5 w-3.5 shrink-0 opacity-40" />
+                                  <ChevronDown className="h-3.5 w-3.5 shrink-0 opacity-50" />
                                 </Button>
                               </PopoverTrigger>
-                              <PopoverContent className="w-[220px] p-0 bg-popover/98 backdrop-blur-sm z-50 rounded-lg shadow-lg border-border/50" align="start">
-                                <div className="p-2 space-y-0.5 max-h-[200px] overflow-y-auto">
+                              <PopoverContent className="w-[200px] p-0 bg-popover z-50" align="start">
+                                <div className="p-2 space-y-1 max-h-[200px] overflow-y-auto">
                                   {geoOptions.map(geo => (
                                     <div
                                       key={geo}
-                                      className={`flex items-center gap-2.5 px-2.5 py-2 rounded-md cursor-pointer transition-colors duration-150 text-xs ${
-                                        addr.geoList.includes(geo) ? 'bg-primary/10 text-primary' : 'hover:bg-muted/60'
+                                      className={`flex items-center gap-2 px-2 py-1.5 rounded cursor-pointer hover:bg-muted/50 text-xs ${
+                                        addr.geoList.includes(geo) ? 'bg-muted' : ''
                                       }`}
                                       onClick={() => toggleGeoInAddress(drop.id, addr.id, geo)}
                                     >
-                                      <div className={`h-3.5 w-3.5 rounded-sm border-2 flex items-center justify-center transition-colors duration-150 ${
-                                        addr.geoList.includes(geo) ? 'bg-primary border-primary' : 'border-muted-foreground/30'
+                                      <div className={`h-3 w-3 rounded border flex items-center justify-center ${
+                                        addr.geoList.includes(geo) ? 'bg-primary border-primary' : 'border-input'
                                       }`}>
                                         {addr.geoList.includes(geo) && (
-                                          <Check className="h-2.5 w-2.5 text-primary-foreground" />
+                                          <Check className="h-2 w-2 text-primary-foreground" />
                                         )}
                                       </div>
-                                      <span className="font-medium">{geo}</span>
+                                      <span>{geo}</span>
                                     </div>
                                   ))}
                                 </div>
-                                <div className="border-t border-border/40 p-2.5">
+                                <div className="border-t border-border p-2">
                                   {addingGeoToAddress === addr.id ? (
-                                    <div className="flex items-center gap-2">
+                                    <div className="flex items-center gap-1">
                                       <Input
                                         value={newGeoName}
                                         onChange={e => setNewGeoName(e.target.value)}
                                         placeholder="Нове гео..."
-                                        className="h-8 text-xs flex-1 rounded-md"
+                                        className="h-7 text-xs flex-1"
                                         autoFocus
                                         onKeyDown={e => e.key === 'Enter' && addNewGeoOption()}
                                       />
-                                      <Button size="sm" className="h-8 text-xs px-3 rounded-md" onClick={addNewGeoOption}>
+                                      <Button size="sm" className="h-7 text-xs px-2" onClick={addNewGeoOption}>
                                         OK
                                       </Button>
                                     </div>
@@ -477,10 +477,10 @@ export function DeliveryModule() {
                                     <Button
                                       variant="ghost"
                                       size="sm"
-                                      className="w-full h-8 text-xs text-muted-foreground/70 justify-start hover:text-foreground hover:bg-muted/40 rounded-md transition-colors duration-150"
+                                      className="w-full h-7 text-xs text-muted-foreground justify-start"
                                       onClick={() => setAddingGeoToAddress(addr.id)}
                                     >
-                                      <Plus className="h-3.5 w-3.5 mr-1.5" />
+                                      <Plus className="h-3 w-3 mr-1" />
                                       Додати
                                     </Button>
                                   )}
@@ -491,54 +491,54 @@ export function DeliveryModule() {
 
                           {/* Carrier dropdown */}
                           <div className="w-[180px] shrink-0">
-                            <span className="text-[10px] font-medium text-muted-foreground/70 uppercase tracking-wider block mb-1.5">Служба доставки</span>
+                            <span className="text-[10px] text-muted-foreground uppercase block mb-1">Служба доставки</span>
                             <Popover>
                               <PopoverTrigger asChild>
                                 <Button
                                   variant="outline"
-                                  className="w-full h-9 justify-between text-xs font-normal bg-background/90 border-border/50 rounded-md hover:bg-muted/30 hover:border-border transition-all duration-150"
+                                  className="w-full h-8 justify-between text-xs font-normal bg-background"
                                 >
-                                  <span className="truncate text-foreground/90">
+                                  <span className="truncate">
                                     {addr.carrierList.length > 0 
                                       ? addr.carrierList.join(', ')
                                       : 'Обрати...'}
                                   </span>
-                                  <ChevronDown className="h-3.5 w-3.5 shrink-0 opacity-40" />
+                                  <ChevronDown className="h-3.5 w-3.5 shrink-0 opacity-50" />
                                 </Button>
                               </PopoverTrigger>
-                              <PopoverContent className="w-[220px] p-0 bg-popover/98 backdrop-blur-sm z-50 rounded-lg shadow-lg border-border/50" align="start">
-                                <div className="p-2 space-y-0.5 max-h-[200px] overflow-y-auto">
+                              <PopoverContent className="w-[200px] p-0 bg-popover z-50" align="start">
+                                <div className="p-2 space-y-1 max-h-[200px] overflow-y-auto">
                                   {carrierOptions.map(carrier => (
                                     <div
                                       key={carrier}
-                                      className={`flex items-center gap-2.5 px-2.5 py-2 rounded-md cursor-pointer transition-colors duration-150 text-xs ${
-                                        addr.carrierList.includes(carrier) ? 'bg-primary/10 text-primary' : 'hover:bg-muted/60'
+                                      className={`flex items-center gap-2 px-2 py-1.5 rounded cursor-pointer hover:bg-muted/50 text-xs ${
+                                        addr.carrierList.includes(carrier) ? 'bg-muted' : ''
                                       }`}
                                       onClick={() => toggleCarrierInAddress(drop.id, addr.id, carrier)}
                                     >
-                                      <div className={`h-3.5 w-3.5 rounded-sm border-2 flex items-center justify-center transition-colors duration-150 ${
-                                        addr.carrierList.includes(carrier) ? 'bg-primary border-primary' : 'border-muted-foreground/30'
+                                      <div className={`h-3 w-3 rounded border flex items-center justify-center ${
+                                        addr.carrierList.includes(carrier) ? 'bg-primary border-primary' : 'border-input'
                                       }`}>
                                         {addr.carrierList.includes(carrier) && (
-                                          <Check className="h-2.5 w-2.5 text-primary-foreground" />
+                                          <Check className="h-2 w-2 text-primary-foreground" />
                                         )}
                                       </div>
-                                      <span className="font-medium">{carrier}</span>
+                                      <span>{carrier}</span>
                                     </div>
                                   ))}
                                 </div>
-                                <div className="border-t border-border/40 p-2.5">
+                                <div className="border-t border-border p-2">
                                   {addingCarrierToAddress === addr.id ? (
-                                    <div className="flex items-center gap-2">
+                                    <div className="flex items-center gap-1">
                                       <Input
                                         value={newCarrierName}
                                         onChange={e => setNewCarrierName(e.target.value)}
                                         placeholder="Нова служба..."
-                                        className="h-8 text-xs flex-1 rounded-md"
+                                        className="h-7 text-xs flex-1"
                                         autoFocus
                                         onKeyDown={e => e.key === 'Enter' && addNewCarrierOption()}
                                       />
-                                      <Button size="sm" className="h-8 text-xs px-3 rounded-md" onClick={addNewCarrierOption}>
+                                      <Button size="sm" className="h-7 text-xs px-2" onClick={addNewCarrierOption}>
                                         OK
                                       </Button>
                                     </div>
@@ -546,10 +546,10 @@ export function DeliveryModule() {
                                     <Button
                                       variant="ghost"
                                       size="sm"
-                                      className="w-full h-8 text-xs text-muted-foreground/70 justify-start hover:text-foreground hover:bg-muted/40 rounded-md transition-colors duration-150"
+                                      className="w-full h-7 text-xs text-muted-foreground justify-start"
                                       onClick={() => setAddingCarrierToAddress(addr.id)}
                                     >
-                                      <Plus className="h-3.5 w-3.5 mr-1.5" />
+                                      <Plus className="h-3 w-3 mr-1" />
                                       Додати
                                     </Button>
                                   )}
@@ -560,12 +560,12 @@ export function DeliveryModule() {
 
                           {/* Address input - Primary field, widest */}
                           <div className="flex-1 min-w-[300px]">
-                            <span className="text-[10px] font-medium text-muted-foreground/70 uppercase tracking-wider block mb-1.5">Адреса</span>
+                            <span className="text-[10px] text-muted-foreground uppercase block mb-1">Адреса</span>
                             <Input
                               value={addr.address}
                               onChange={e => updateAddressText(drop.id, addr.id, e.target.value)}
                               placeholder="Введіть адресу..."
-                              className="h-9 text-sm w-full bg-background/90 border-border/50 rounded-md focus:ring-2 focus:ring-primary/20 focus:border-primary/50 transition-all duration-150"
+                              className="h-8 text-xs w-full bg-background"
                             />
                           </div>
 
@@ -574,7 +574,7 @@ export function DeliveryModule() {
                             <Button
                               variant="ghost"
                               size="icon"
-                              className="h-9 w-9 rounded-full text-muted-foreground/60 hover:text-foreground hover:bg-muted/50 transition-all duration-150"
+                              className="h-8 w-8 text-muted-foreground hover:text-foreground"
                               onClick={() => addAddressToDrop(drop.id)}
                             >
                               <Plus className="h-4 w-4" />
@@ -587,10 +587,10 @@ export function DeliveryModule() {
                       <Button
                         variant="ghost"
                         size="sm"
-                        className="w-full h-9 text-xs text-muted-foreground/70 justify-start rounded-lg border border-dashed border-border/40 hover:border-border/60 hover:bg-muted/30 hover:text-foreground transition-all duration-150"
+                        className="w-full h-7 text-xs text-muted-foreground justify-start"
                         onClick={() => addAddressToDrop(drop.id)}
                       >
-                        <Plus className="h-3.5 w-3.5 mr-1.5" />
+                        <Plus className="h-3 w-3 mr-1" />
                         Додати адресу
                       </Button>
                     </div>
