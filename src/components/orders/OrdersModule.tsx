@@ -3,14 +3,7 @@ import { Search, Sun, Moon, ChevronDown, ChevronUp, Plus, Info, MessageCircle, T
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { StatusBadge } from '@/components/ui/status-badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import {
   Tooltip,
   TooltipContent,
@@ -23,6 +16,7 @@ import { RefStatusModal } from './modals/RefStatusModal';
 import { PackAccountingModal } from './modals/PackAccountingModal';
 import { CreatePackModal } from './modals/CreatePackModal';
 import { AddressPanel } from './AddressPanel';
+import { DeliveryModule } from '@/components/delivery/DeliveryModule';
 
 const filters = ['Дроп', 'Гео', 'Сума', 'Адреса', 'Білінг', 'Статус', 'Статус', 'Скуп', 'Магазин'];
 
@@ -49,6 +43,43 @@ export function OrdersModule() {
       default: return 'pending';
     }
   };
+
+  // If delivery tab is active, show DeliveryModule
+  if (activeTab === 'delivery') {
+    return (
+      <div className="h-full flex flex-col">
+        {/* Top tabs */}
+        <div className="border-b border-border bg-card">
+          <div className="flex items-center justify-between px-4 py-2">
+            <Tabs value={activeTab} onValueChange={setActiveTab}>
+              <TabsList className="bg-muted/50">
+                <TabsTrigger value="orders" className="data-[state=active]:bg-foreground data-[state=active]:text-background">
+                  Замовлення
+                </TabsTrigger>
+                <TabsTrigger value="delivery" className="data-[state=active]:bg-foreground data-[state=active]:text-background">
+                  Доставка
+                </TabsTrigger>
+              </TabsList>
+            </Tabs>
+            
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-8 w-8"
+              onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+            >
+              {theme === 'dark' ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+            </Button>
+          </div>
+        </div>
+        
+        {/* Delivery content */}
+        <div className="flex-1 overflow-hidden">
+          <DeliveryModule />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="h-full flex flex-col">
