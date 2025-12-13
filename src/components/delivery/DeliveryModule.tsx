@@ -414,9 +414,9 @@ export function DeliveryModule() {
                   {drop.expanded && (
                     <div className="border-t border-border p-3 space-y-3">
                       {drop.addresses.map(addr => (
-                        <div key={addr.id} className="flex items-start gap-4 p-3 bg-muted/20 rounded border border-border/50">
+                        <div key={addr.id} className="flex items-start gap-6 p-4 bg-muted/20 rounded border border-border/50 w-full">
                           {/* Geo checklist */}
-                          <div className="space-y-1 min-w-[140px]">
+                          <div className="space-y-1 w-[160px] shrink-0">
                             <span className="text-[10px] text-muted-foreground uppercase">Гео</span>
                             <div className="space-y-1">
                               {geoOptions.map(geo => (
@@ -458,7 +458,7 @@ export function DeliveryModule() {
                           </div>
 
                           {/* Carrier checklist */}
-                          <div className="space-y-1 min-w-[140px] border-l border-border/50 pl-4">
+                          <div className="space-y-1 w-[160px] shrink-0 border-l border-border/50 pl-4">
                             <span className="text-[10px] text-muted-foreground uppercase">Служба доставки</span>
                             <div className="space-y-1">
                               {carrierOptions.map(carrier => (
@@ -499,14 +499,14 @@ export function DeliveryModule() {
                             )}
                           </div>
 
-                          {/* Address input */}
-                          <div className="space-y-1 flex-1 border-l border-border/50 pl-4">
-                            <span className="text-[10px] text-muted-foreground uppercase">Адреса</span>
+                          {/* Address input - Primary field, must be wider */}
+                          <div className="flex-1 min-w-[280px] border-l border-border/50 pl-4">
+                            <span className="text-[10px] text-muted-foreground uppercase block mb-1">Адреса</span>
                             <Input
                               value={addr.address}
                               onChange={e => updateAddressText(drop.id, addr.id, e.target.value)}
                               placeholder="Введіть адресу..."
-                              className="h-7 text-xs"
+                              className="h-9 text-sm w-full bg-background border-input"
                             />
                           </div>
                         </div>
