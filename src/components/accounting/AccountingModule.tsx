@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { TrendingUp, Truck, Users, BarChart3, ChevronDown, ChevronRight, AlertCircle, Package, CalendarIcon, Check } from 'lucide-react';
+import { TrendingUp, Truck, Users, BarChart3, ChevronDown, ChevronRight, AlertCircle, Package, CalendarIcon, Check, Copy } from 'lucide-react';
 import { format } from 'date-fns';
 import { uk } from 'date-fns/locale';
 import { Button } from '@/components/ui/button';
@@ -139,57 +139,119 @@ export function AccountingModule() {
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-3 pt-2">
-                {dropPayments.map(drop => <div key={drop.id} className="p-3 border border-border rounded-lg space-y-3 bg-info-foreground mx-0 py-px">
+                {dropPayments.map(drop => (
+                  <div key={drop.id} className="p-3 border border-border rounded-lg space-y-3 bg-muted/30">
                     {/* Drop Header */}
-                    <div className="flex items-center justify-between cursor-pointer" onClick={() => setExpandedDrops(prev => ({
-                  ...prev,
-                  [drop.id]: !prev[drop.id]
-                }))}>
+                    <div 
+                      className="flex items-center justify-between cursor-pointer" 
+                      onClick={() => setExpandedDrops(prev => ({
+                        ...prev,
+                        [drop.id]: !prev[drop.id]
+                      }))}
+                    >
                       <span className="font-medium text-sm">{drop.name}</span>
-                      {expandedDrops[drop.id] ? <ChevronDown className="h-4 w-4 text-muted-foreground" /> : <ChevronRight className="h-4 w-4 text-muted-foreground" />}
+                      {expandedDrops[drop.id] ? (
+                        <ChevronDown className="h-4 w-4 text-muted-foreground" />
+                      ) : (
+                        <ChevronRight className="h-4 w-4 text-muted-foreground" />
+                      )}
                     </div>
 
-                    {expandedDrops[drop.id] && <>
-                        {/* Status Selection */}
-                        <Select defaultValue={drop.status}>
-                          <SelectTrigger className="h-8 text-xs">
-                            <SelectValue />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="Видав фактуру">Видав фактуру</SelectItem>
-                            <SelectItem value="Оплачено">Оплачено</SelectItem>
-                          </SelectContent>
-                        </Select>
-
-                        {/* Expenses Section */}
-                        <div className="space-y-2 text-sm">
-                          <div className="flex justify-between items-center">
-                            <span className="text-muted-foreground">Витрата Дроп</span>
-                            <span className="font-medium">{formatCurrency(drop.dropExpense)}</span>
+                    {expandedDrops[drop.id] && (
+                      <div className="space-y-4">
+                        {/* Row 1: Витрата дроп with Status and Skup */}
+                        <div className="flex gap-2">
+                          {/* Left: Витрата дроп */}
+                          <div className="flex-1 space-y-1">
+                            <label className="text-xs text-muted-foreground">Витрата дроп</label>
+                            <Input 
+                              className="h-7 text-xs" 
+                              type="number"
+                              defaultValue={drop.dropExpense} 
+                            />
                           </div>
-                          <div className="flex justify-between items-center">
-                            <span className="text-muted-foreground">Витрати перевізника</span>
-                            <span className="font-medium">{formatCurrency(drop.carrierExpense)}</span>
-                          </div>
-                          <div className="flex justify-between items-center">
-                            <span className="text-muted-foreground">Додаткові витрати Дроп</span>
-                            <span className="font-medium">{formatCurrency(drop.additionalExpense)}</span>
+                          {/* Right: Status + Skup selectors */}
+                          <div className="space-y-1">
+                            <Select defaultValue={drop.status}>
+                              <SelectTrigger className="h-7 text-xs w-28">
+                                <SelectValue />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="Оплачено">Оплачено</SelectItem>
+                                <SelectItem value="Видав фактуру">Видав фактуру</SelectItem>
+                              </SelectContent>
+                            </Select>
+                            <Select defaultValue="oleg">
+                              <SelectTrigger className="h-7 text-xs w-28">
+                                <SelectValue />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="oleg">Олег</SelectItem>
+                                <SelectItem value="ivan">Іван</SelectItem>
+                                <SelectItem value="mono">Моно</SelectItem>
+                                <SelectItem value="ya">Я</SelectItem>
+                              </SelectContent>
+                            </Select>
                           </div>
                         </div>
 
-                        {/* Cards Section */}
-                        <div className="space-y-3 pt-2 border-t border-border">
-                          <div className="space-y-1">
-                            <label className="text-xs text-muted-foreground">Дроп карта</label>
-                            <Input className="h-8 text-sm" placeholder="" />
+                        {/* Row 2: Додат. вит. дроп */}
+                        <div className="space-y-1">
+                          <label className="text-xs text-muted-foreground">Додат. вит. дроп</label>
+                          <Input 
+                            className="h-7 text-xs" 
+                            type="number"
+                            defaultValue={drop.additionalExpense} 
+                          />
+                        </div>
+
+                        {/* Row 3: Витрата перевізник */}
+                        <div className="space-y-1">
+                          <label className="text-xs text-muted-foreground">Витрата перевізник</label>
+                          <Input 
+                            className="h-7 text-xs" 
+                            type="number"
+                            defaultValue={drop.carrierExpense} 
+                          />
+                        </div>
+
+                        {/* Row 4: Drop Card */}
+                        <div className="flex gap-2 items-end pt-2 border-t border-border">
+                          <div className="flex-1 space-y-1">
+                            <label className="text-xs text-muted-foreground">Карта</label>
+                            <Input className="h-7 text-xs" placeholder="" />
                           </div>
-                          <div className="space-y-1">
-                            <label className="text-xs text-muted-foreground">Перевізник карта</label>
-                            <Input className="h-8 text-sm" placeholder="" />
+                          <div className="w-24 space-y-1">
+                            <label className="text-xs text-muted-foreground">Сума грн</label>
+                            <div className="flex items-center gap-1">
+                              <Input className="h-7 text-xs" type="number" />
+                              <button className="h-7 w-7 flex items-center justify-center text-muted-foreground hover:text-foreground transition-colors">
+                                <Copy className="h-3 w-3" />
+                              </button>
+                            </div>
                           </div>
                         </div>
-                      </>}
-                  </div>)}
+
+                        {/* Row 5: Carrier Card */}
+                        <div className="flex gap-2 items-end">
+                          <div className="flex-1 space-y-1">
+                            <label className="text-xs text-muted-foreground">Карта перевізник</label>
+                            <Input className="h-7 text-xs" placeholder="" />
+                          </div>
+                          <div className="w-24 space-y-1">
+                            <label className="text-xs text-muted-foreground">Сума грн</label>
+                            <div className="flex items-center gap-1">
+                              <Input className="h-7 text-xs" type="number" />
+                              <button className="h-7 w-7 flex items-center justify-center text-muted-foreground hover:text-foreground transition-colors">
+                                <Copy className="h-3 w-3" />
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                ))}
               </CardContent>
             </Card>
 
