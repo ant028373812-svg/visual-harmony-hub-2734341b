@@ -16,6 +16,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
+import { OrderInfoModal } from './OrderInfoModal';
+import { RefStatusModal } from './RefStatusModal';
+import { PackAccountingModal } from './PackAccountingModal';
 
 interface CreatePackModalProps {
   open: boolean;
@@ -38,6 +42,11 @@ export function CreatePackModal({ open, onOpenChange }: CreatePackModalProps) {
     skup: '',
     productType: '',
   });
+
+  // Modal states for bottom icons
+  const [isOrderInfoOpen, setIsOrderInfoOpen] = useState(false);
+  const [isRefStatusOpen, setIsRefStatusOpen] = useState(false);
+  const [isPackAccountingOpen, setIsPackAccountingOpen] = useState(false);
 
   const handleCreate = () => {
     // Create logic here
@@ -221,26 +230,67 @@ export function CreatePackModal({ open, onOpenChange }: CreatePackModalProps) {
             <div className="flex flex-col items-center gap-1">
               <span className="text-xs text-muted-foreground">Інфо зам.</span>
               <div className="flex items-center gap-1">
-                <Info className="h-4 w-4 text-info" />
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button 
+                      variant="ghost" 
+                      size="icon" 
+                      className="h-6 w-6 text-info hover:bg-muted cursor-pointer"
+                      onClick={() => setIsOrderInfoOpen(true)}
+                    >
+                      <Info className="h-4 w-4" />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>Інформація замовлення</TooltipContent>
+                </Tooltip>
                 <MessageCircle className="h-4 w-4 text-muted-foreground" />
               </div>
             </div>
             <div className="flex flex-col items-center gap-1">
               <span className="text-xs text-muted-foreground">Реф стат.</span>
               <div className="flex items-center gap-1">
-                <Info className="h-4 w-4 text-info" />
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button 
+                      variant="ghost" 
+                      size="icon" 
+                      className="h-6 w-6 text-info hover:bg-muted cursor-pointer"
+                      onClick={() => setIsRefStatusOpen(true)}
+                    >
+                      <Info className="h-4 w-4" />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>Реф статус</TooltipContent>
+                </Tooltip>
                 <MessageCircle className="h-4 w-4 text-muted-foreground" />
               </div>
             </div>
             <div className="flex flex-col items-center gap-1">
               <span className="text-xs text-muted-foreground">Бух. пак</span>
               <div className="flex items-center gap-1">
-                <Info className="h-4 w-4 text-info" />
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button 
+                      variant="ghost" 
+                      size="icon" 
+                      className="h-6 w-6 text-info hover:bg-muted cursor-pointer"
+                      onClick={() => setIsPackAccountingOpen(true)}
+                    >
+                      <Info className="h-4 w-4" />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>Бухгалтерія паку</TooltipContent>
+                </Tooltip>
                 <MessageCircle className="h-4 w-4 text-muted-foreground" />
               </div>
             </div>
           </div>
         </div>
+
+        {/* Nested Modals */}
+        <OrderInfoModal open={isOrderInfoOpen} onOpenChange={setIsOrderInfoOpen} />
+        <RefStatusModal open={isRefStatusOpen} onOpenChange={setIsRefStatusOpen} />
+        <PackAccountingModal open={isPackAccountingOpen} onOpenChange={setIsPackAccountingOpen} />
       </DialogContent>
     </Dialog>
   );
