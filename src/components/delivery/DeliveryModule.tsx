@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ChevronDown, ChevronRight, Plus, Info, Euro, X, Check } from 'lucide-react';
+import { ChevronDown, ChevronRight, Plus, Info, Euro, X, Check, Search } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import {
@@ -270,15 +270,24 @@ export function DeliveryModule() {
             </Select>
           </div>
 
-          {/* Right side - Drop/Address button */}
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => setIsDropPanelOpen(true)}
-          >
-            <Plus className="h-4 w-4 mr-1" />
-            Дроп/Адрес
-          </Button>
+          {/* Right side - Search icon and Drop/Address button */}
+          <div className="flex items-center gap-2">
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-8 w-8 text-muted-foreground hover:text-foreground"
+            >
+              <Search className="h-4 w-4" />
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setIsDropPanelOpen(true)}
+            >
+              <Plus className="h-4 w-4 mr-1" />
+              Дроп/Адрес
+            </Button>
+          </div>
         </div>
       </div>
 
