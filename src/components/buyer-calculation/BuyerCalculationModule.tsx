@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { RefreshCw, DollarSign, AlertTriangle, Info } from 'lucide-react';
+import { RefreshCw, DollarSign, AlertTriangle, Info, Copy } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -31,6 +31,7 @@ const demoPackCalculations: PackCalculation[] = [
 
 export function BuyerCalculationModule() {
   const [expandedPacks, setExpandedPacks] = useState<Record<string, boolean>>({});
+  const [showCalculation, setShowCalculation] = useState(false);
 
   const togglePack = (packId: string) => {
     setExpandedPacks(prev => ({ ...prev, [packId]: !prev[packId] }));
@@ -174,12 +175,68 @@ export function BuyerCalculationModule() {
               </div>
             </div>
             <div className="flex gap-2 mt-4">
-              <Button size="sm" className="bg-success text-success-foreground hover:bg-success/90">
+              <Button 
+                size="sm" 
+                className="bg-success text-success-foreground hover:bg-success/90"
+                onClick={() => setShowCalculation(!showCalculation)}
+              >
                 Сформувати розрахунок для скупа
               </Button>
             </div>
           </CardContent>
         </Card>
+
+        {/* Calculation Result Block */}
+        {showCalculation && (
+          <Card className="border border-border">
+            <CardContent className="p-6 space-y-5">
+              {/* Product Title */}
+              <h2 className="text-xl font-semibold">
+                Zara Leichte wasserabweisende Steppjacke
+              </h2>
+
+              {/* Main Calculation Line */}
+              <div className="font-mono text-base bg-muted/30 rounded-md px-4 py-3">
+                <span>(49,95 € × 24) = </span>
+                <span className="font-semibold">1 198,80 €</span>
+                <span> – 50% = </span>
+                <span className="font-bold text-primary">599,40 €</span>
+              </div>
+
+              {/* Summary Block */}
+              <div className="space-y-1.5 text-sm">
+                <p>Загальна кількість: <span className="font-medium">24</span></p>
+                <p>Загальна сума без знижки: <span className="font-medium">1 198,80 €</span></p>
+                <p>Загальна сума зі знижкою: <span className="font-medium">599,40 €</span></p>
+              </div>
+
+              {/* Exchange Rate Input */}
+              <div className="flex items-center gap-3 pt-2 border-t border-border">
+                <label className="text-sm text-muted-foreground">Курс:</label>
+                <Input 
+                  className="h-8 w-24 text-sm" 
+                  placeholder="48,8" 
+                  defaultValue="48,8"
+                />
+              </div>
+
+              {/* Final Total (UAH) */}
+              <div className="bg-primary/10 rounded-md px-4 py-3">
+                <p className="text-lg font-bold">
+                  Разом в грн: <span className="text-primary">29 275 грн</span>
+                </p>
+              </div>
+
+              {/* Copy Action */}
+              <div className="flex justify-end pt-2 border-t border-border">
+                <Button variant="ghost" size="sm" className="gap-2 text-muted-foreground hover:text-foreground">
+                  <Copy className="h-4 w-4" />
+                  Скопіювати
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        )}
 
         {/* Packs list */}
         <div>
