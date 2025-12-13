@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { RefreshCw, DollarSign, AlertTriangle, Info, Copy, X, MessageSquare, ExternalLink, Trash2 } from 'lucide-react';
+import { RefreshCw, DollarSign, AlertTriangle, Info, Copy, X, ExternalLink, Truck, Plus, Check } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -37,24 +37,38 @@ const demoPackCalculations: PackCalculation[] = [
   { id: '3', packId: '3K12', storeName: 'Mango', skup: 'Назар', date: '2025-01-02', amountEur: 89.50, amountUah: 3687.40, rate: 41.2, status: 'Очікує оплати' },
 ];
 
+// Demo saved templates data
+const demoSavedTemplates = [
+  { id: '1', buyerName: 'Oleg' },
+  { id: '2', buyerName: 'Ivan' },
+  { id: '3', buyerName: 'Mono' },
+];
+
 export function BuyerCalculationModule() {
   const [expandedPacks, setExpandedPacks] = useState<Record<string, boolean>>({});
   const [showCalculationModal, setShowCalculationModal] = useState(false);
-  const [savedTemplatesCount, setSavedTemplatesCount] = useState(0);
+  const [savedTemplates, setSavedTemplates] = useState<typeof demoSavedTemplates>([]);
   const [showSavedTemplate, setShowSavedTemplate] = useState(false);
+  const [selectedTemplateBuyer, setSelectedTemplateBuyer] = useState('');
+  const [ttnFields, setTtnFields] = useState<string[]>([]);
 
   const togglePack = (packId: string) => {
     setExpandedPacks(prev => ({ ...prev, [packId]: !prev[packId] }));
   };
 
   const handleSave = () => {
-    setSavedTemplatesCount(prev => prev + 1);
+    setSavedTemplates(prev => [...prev, { id: String(Date.now()), buyerName: 'Oleg' }]);
     setShowCalculationModal(false);
+    setTtnFields([]);
   };
 
-  const handleDeleteTemplate = () => {
-    setSavedTemplatesCount(prev => Math.max(0, prev - 1));
-    setShowSavedTemplate(false);
+  const handleAddTtn = () => {
+    setTtnFields(prev => [...prev, '']);
+  };
+
+  const handleOpenSavedTemplate = (buyerName: string) => {
+    setSelectedTemplateBuyer(buyerName);
+    setShowSavedTemplate(true);
   };
 
   const totalEur = demoPackCalculations.reduce((sum, p) => sum + p.amountEur, 0);
@@ -203,19 +217,20 @@ export function BuyerCalculationModule() {
                 Сформувати розрахунок для скупа
               </Button>
               
-              {/* Saved templates indicator */}
-              {savedTemplatesCount > 0 && (
+              {/* Saved templates as horizontal badges */}
+              {savedTemplates.length > 0 && (
                 <div className="flex items-center gap-2">
-                  <span className="inline-flex items-center justify-center h-6 min-w-6 px-1.5 rounded-full bg-warning/20 text-warning text-xs font-medium">
-                    {savedTemplatesCount}
-                  </span>
-                  <button
-                    onClick={() => setShowSavedTemplate(true)}
-                    className="p-1.5 rounded-md hover:bg-accent transition-colors"
-                    title="Переглянути збережені шаблони"
-                  >
-                    <MessageSquare className="h-4 w-4 text-muted-foreground hover:text-foreground" />
-                  </button>
+                  {savedTemplates.map((template) => (
+                    <button
+                      key={template.id}
+                      onClick={() => handleOpenSavedTemplate(template.buyerName)}
+                      className="flex flex-col items-center gap-0.5 px-3 py-1.5 rounded-md border border-border bg-card hover:bg-accent transition-colors"
+                      title={`Переглянути розрахунок: ${template.buyerName}`}
+                    >
+                      <span className="text-xs font-medium text-foreground">{template.buyerName}</span>
+                      <Truck className="h-4 w-4 text-muted-foreground" />
+                    </button>
+                  ))}
                 </div>
               )}
             </div>
@@ -223,7 +238,10 @@ export function BuyerCalculationModule() {
         </Card>
 
         {/* Calculation Modal */}
-        <Dialog open={showCalculationModal} onOpenChange={setShowCalculationModal}>
+        <Dialog open={showCalculationModal} onOpenChange={(open) => {
+          setShowCalculationModal(open);
+          if (!open) setTtnFields([]);
+        }}>
           <DialogContent className="max-w-lg">
             <DialogHeader>
               <DialogTitle className="text-xl font-semibold">
@@ -232,6 +250,11 @@ export function BuyerCalculationModule() {
             </DialogHeader>
             
             <div className="space-y-5">
+              {/* Buyer Label */}
+              <div className="text-sm text-muted-foreground">
+                Скуп: <span className="font-medium text-foreground">Oleg</span>
+              </div>
+
               {/* Product Link */}
               <a 
                 href="https://www.zara.com/de/" 
@@ -275,6 +298,32 @@ export function BuyerCalculationModule() {
                 </p>
               </div>
 
+              {/* TTN Section */}
+              <div className="space-y-2 pt-3 border-t border-border">
+                <div className="flex items-center gap-2">
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    className="gap-1.5 h-7 text-xs"
+                    onClick={handleAddTtn}
+                  >
+                    <Plus className="h-3.5 w-3.5" />
+                    ТТН
+                  </Button>
+                </div>
+                {ttnFields.length > 0 && (
+                  <div className="space-y-2">
+                    {ttnFields.map((_, index) => (
+                      <Input 
+                        key={index}
+                        className="h-8 text-sm" 
+                        placeholder="Введіть номер ТТН..."
+                      />
+                    ))}
+                  </div>
+                )}
+              </div>
+
               {/* Comment Field */}
               <div className="space-y-2">
                 <label className="text-sm text-muted-foreground">Коментар</label>
@@ -308,6 +357,11 @@ export function BuyerCalculationModule() {
             </DialogHeader>
             
             <div className="space-y-5">
+              {/* Buyer Label */}
+              <div className="text-sm text-muted-foreground">
+                Скуп: <span className="font-medium text-foreground">{selectedTemplateBuyer}</span>
+              </div>
+
               {/* Product Link */}
               <a 
                 href="https://www.zara.com/de/" 
@@ -355,20 +409,19 @@ export function BuyerCalculationModule() {
                 </p>
               </div>
 
-              {/* Delete Button */}
+              {/* Action Buttons */}
               <div className="flex justify-between items-center pt-3 border-t border-border">
-                <Button 
-                  variant="ghost" 
-                  size="sm" 
-                  className="gap-2 text-destructive hover:text-destructive hover:bg-destructive/10"
-                  onClick={handleDeleteTemplate}
-                >
-                  <Trash2 className="h-4 w-4" />
-                  Видалити
-                </Button>
                 <Button variant="ghost" size="sm" className="gap-2">
                   <Copy className="h-4 w-4" />
                   Скопіювати
+                </Button>
+                <Button 
+                  size="sm" 
+                  className="gap-2 bg-success text-success-foreground hover:bg-success/90"
+                  onClick={() => setShowSavedTemplate(false)}
+                >
+                  <Check className="h-4 w-4" />
+                  Підтверджено скупу
                 </Button>
               </div>
             </div>
