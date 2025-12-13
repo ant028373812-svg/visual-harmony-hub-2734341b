@@ -178,12 +178,22 @@ export function DeliveryModule() {
                 <table className="w-full text-xs">
                   <thead className="bg-muted/30">
                     <tr className="text-left text-muted-foreground border-b border-border">
-                      <th className="px-3 py-2 w-28 border-r border-border">Статус</th>
+                      <th className="px-3 py-2 w-12 border-r border-border">
+                        <Select defaultValue="">
+                          <SelectTrigger className="h-6 w-full text-[10px] border-0 bg-transparent p-0 shadow-none">
+                            <SelectValue placeholder="Статус" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="sent">Відправлено</SelectItem>
+                            <SelectItem value="waiting">Очікує</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </th>
                       <th className="px-3 py-2 w-24 border-r border-border">Статус посилки</th>
                       <th className="px-3 py-2 border-r border-border">Назва паку</th>
                       <th className="px-3 py-2 w-32 border-r border-border text-center">Інформація замовлення</th>
                       <th className="px-3 py-2 w-24 border-r border-border">Скуп</th>
-                      <th className="px-3 py-2 w-28">Бухгалтерія пак</th>
+                      <th className="px-3 py-2 w-20 text-center">Бухгалтерія пак</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -192,23 +202,12 @@ export function DeliveryModule() {
                         key={pack.id}
                         className="border-b border-border hover:bg-muted/20"
                       >
-                        <td className="px-3 py-2 border-r border-border">
-                          <div className="flex flex-col gap-1">
-                            <label className="flex items-center gap-1.5 cursor-pointer">
-                              <Checkbox
-                                checked={pack.status === 'Відправлено'}
-                                className="h-3 w-3"
-                              />
-                              <span className="text-[10px]">Відправлено</span>
-                            </label>
-                            <label className="flex items-center gap-1.5 cursor-pointer">
-                              <Checkbox
-                                checked={pack.status === 'Очікує'}
-                                className="h-3 w-3"
-                              />
-                              <span className="text-[10px]">Очікує</span>
-                            </label>
-                          </div>
+                        <td className="px-3 py-2 border-r border-border text-center">
+                          <Checkbox
+                            checked={selectedPacks[pack.id] || false}
+                            onCheckedChange={() => togglePackSelection(pack.id)}
+                            className="h-3.5 w-3.5"
+                          />
                         </td>
                         <td className="px-3 py-2 border-r border-border text-muted-foreground">
                           {pack.status}
@@ -224,8 +223,10 @@ export function DeliveryModule() {
                         <td className="px-3 py-2 border-r border-border">
                           {pack.skupName}
                         </td>
-                        <td className="px-3 py-2">
-                          {pack.accounting}
+                        <td className="px-3 py-2 text-center">
+                          <Button variant="ghost" size="icon" className="h-6 w-6">
+                            <Info className="h-3.5 w-3.5" />
+                          </Button>
                         </td>
                       </tr>
                     ))}
