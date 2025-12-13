@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ChevronDown, ChevronRight, Plus, Info, Euro, X, Check, Search } from 'lucide-react';
+import { ChevronDown, ChevronRight, Plus, Info, Euro, X, Check, Search, MessageCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import {
@@ -20,9 +20,16 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { cn } from '@/lib/utils';
+import { OrderInfoModal } from '@/components/orders/modals/OrderInfoModal';
+import { PackAccountingModal } from '@/components/orders/modals/PackAccountingModal';
 
 interface DeliveryPack {
   id: string;
@@ -144,6 +151,10 @@ export function DeliveryModule() {
   // Search state
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+
+  // Modal states
+  const [isOrderInfoOpen, setIsOrderInfoOpen] = useState(false);
+  const [isPackAccountingOpen, setIsPackAccountingOpen] = useState(false);
 
   const openEuroPanel = (dropId: string, e: React.MouseEvent) => {
     e.stopPropagation();
@@ -394,17 +405,43 @@ export function DeliveryModule() {
                           {pack.packName}
                         </td>
                         <td className="px-3 py-2 border-r border-border text-center">
-                          <Button variant="ghost" size="icon" className="h-6 w-6">
-                            <Info className="h-3.5 w-3.5" />
-                          </Button>
+                          <div className="flex items-center justify-center gap-1">
+                            <Tooltip>
+                              <TooltipTrigger asChild>
+                                <Button 
+                                  variant="ghost" 
+                                  size="icon" 
+                                  className="h-6 w-6 text-info hover:bg-muted cursor-pointer"
+                                  onClick={() => setIsOrderInfoOpen(true)}
+                                >
+                                  <Info className="h-3.5 w-3.5" />
+                                </Button>
+                              </TooltipTrigger>
+                              <TooltipContent>Інформація замовлення</TooltipContent>
+                            </Tooltip>
+                            <MessageCircle className="h-3.5 w-3.5 text-muted-foreground" />
+                          </div>
                         </td>
                         <td className="px-3 py-2 border-r border-border">
                           {pack.skupName}
                         </td>
                         <td className="px-3 py-2 text-center">
-                          <Button variant="ghost" size="icon" className="h-6 w-6">
-                            <Info className="h-3.5 w-3.5" />
-                          </Button>
+                          <div className="flex items-center justify-center gap-1">
+                            <Tooltip>
+                              <TooltipTrigger asChild>
+                                <Button 
+                                  variant="ghost" 
+                                  size="icon" 
+                                  className="h-6 w-6 text-info hover:bg-muted cursor-pointer"
+                                  onClick={() => setIsPackAccountingOpen(true)}
+                                >
+                                  <Info className="h-3.5 w-3.5" />
+                                </Button>
+                              </TooltipTrigger>
+                              <TooltipContent>Бухгалтерія паку</TooltipContent>
+                            </Tooltip>
+                            <MessageCircle className="h-3.5 w-3.5 text-muted-foreground" />
+                          </div>
                         </td>
                       </tr>
                     ))}
@@ -786,6 +823,10 @@ export function DeliveryModule() {
           </div>
         </SheetContent>
       </Sheet>
+
+      {/* Modals */}
+      <OrderInfoModal open={isOrderInfoOpen} onOpenChange={setIsOrderInfoOpen} />
+      <PackAccountingModal open={isPackAccountingOpen} onOpenChange={setIsPackAccountingOpen} />
     </div>
   );
 }
