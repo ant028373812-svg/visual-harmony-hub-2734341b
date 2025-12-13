@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Search, ChevronDown, ChevronUp, Info, MessageCircle, Trash2, Copy, Plus } from 'lucide-react';
+import { Search, ChevronDown, ChevronUp, Info, MessageCircle, Trash2, Copy, Plus, CalendarPlus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { StatusBadge } from '@/components/ui/status-badge';
@@ -15,6 +15,11 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover';
 import { useTheme } from 'next-themes';
 import { demoRefProcesses } from '@/lib/demo-data';
 import { cn } from '@/lib/utils';
@@ -69,7 +74,7 @@ export function RefProcesModule() {
   return (
     <div className="h-full flex flex-col bg-background">
       {/* Filters bar */}
-      <div className="border-b border-border bg-card">
+      <div className="border-b border-border bg-card/80">
         <div className="px-4 py-2 flex items-center gap-2 flex-wrap">
           {filters.map((filter, index) => (
             <Button
@@ -104,6 +109,52 @@ export function RefProcesModule() {
             >
               {isFiltersOpen ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
             </Button>
+            
+            {/* Date Settings Popover */}
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button variant="outline" size="sm" className="h-8 text-xs gap-1.5">
+                  <CalendarPlus className="h-3.5 w-3.5" />
+                  Дата +
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-auto p-3" align="end">
+                <div className="flex items-center gap-2">
+                  <Select>
+                    <SelectTrigger className="h-8 w-[140px] text-xs">
+                      <SelectValue placeholder="Обрати магазин" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="zara">Zara</SelectItem>
+                      <SelectItem value="hm">H&M</SelectItem>
+                      <SelectItem value="mango">Mango</SelectItem>
+                      <SelectItem value="about_you">About You</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <Select>
+                    <SelectTrigger className="h-8 w-[120px] text-xs">
+                      <SelectValue placeholder="Обрати метод" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="ftid">FTID</SelectItem>
+                      <SelectItem value="dna">DNA</SelectItem>
+                      <SelectItem value="eb">EB</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <Select>
+                    <SelectTrigger className="h-8 w-[80px] text-xs">
+                      <SelectValue placeholder="День" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {Array.from({ length: 31 }, (_, i) => (
+                        <SelectItem key={i + 1} value={String(i + 1)}>{i + 1}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+              </PopoverContent>
+            </Popover>
+
             <div className="relative">
               <Search className="absolute left-2 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input
@@ -118,9 +169,9 @@ export function RefProcesModule() {
       </div>
 
       {/* Table */}
-      <div className="flex-1 overflow-auto">
+      <div className="flex-1 overflow-auto bg-muted/20">
         <table className="w-full text-sm table-fixed">
-          <thead className="bg-muted/50 sticky top-0">
+          <thead className="bg-muted/60 sticky top-0">
             <tr className="text-left text-xs text-muted-foreground">
               <th className="px-3 py-2" style={{ width: '10%' }}>Статус</th>
               <th className="px-3 py-2" style={{ width: '18%' }}>Назва паку</th>
@@ -134,8 +185,14 @@ export function RefProcesModule() {
             </tr>
           </thead>
           <tbody>
-            {demoRefProcesses.map(ref => (
-              <tr key={ref.id} className="border-b border-border hover:bg-muted/30 transition-colors">
+            {demoRefProcesses.map((ref, index) => (
+              <tr 
+                key={ref.id} 
+                className={cn(
+                  "border-b border-border/50 hover:bg-muted/40 transition-colors",
+                  index % 2 === 0 ? "bg-card/40" : "bg-background/60"
+                )}
+              >
                 <td className="px-3 py-1.5">
                   <Select defaultValue={ref.status}>
                     <SelectTrigger className="h-7 text-xs w-full max-w-[90px]">
