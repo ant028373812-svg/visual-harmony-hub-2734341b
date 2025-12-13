@@ -23,8 +23,10 @@ interface RefStatusModalProps {
 
 export function RefStatusModal({ open, onOpenChange }: RefStatusModalProps) {
   const [shipmentNumber, setShipmentNumber] = useState('REF-001234');
-  const [deliveryMethod, setDeliveryMethod] = useState('DHL');
+  const [status, setStatus] = useState('working');
+  const [refMethod, setRefMethod] = useState('ftid-dhl');
   const [deliveryDate, setDeliveryDate] = useState('2025-01-20');
+  const [writeDate, setWriteDate] = useState('2025-01-15');
 
   const handleSave = () => {
     onOpenChange(false);
@@ -32,46 +34,72 @@ export function RefStatusModal({ open, onOpenChange }: RefStatusModalProps) {
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-md">
+      <DialogContent className="sm:max-w-sm">
         <DialogHeader>
           <DialogTitle>Реф статус</DialogTitle>
         </DialogHeader>
-        <div className="space-y-4 py-4">
-          <div className="space-y-2">
-            <Label>Номер відправлення</Label>
-            <Input
-              value={shipmentNumber}
-              onChange={(e) => setShipmentNumber(e.target.value)}
-            />
+        <div className="space-y-3 py-4">
+          <div className="space-y-1.5">
+            <Label className="text-xs">Номер відправки</Label>
+            <div className="flex gap-2">
+              <Input
+                value={shipmentNumber}
+                onChange={(e) => setShipmentNumber(e.target.value)}
+                className="flex-1 h-8"
+              />
+              <Select value={status} onValueChange={setStatus}>
+                <SelectTrigger className="w-28 h-8">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="working">В роботі</SelectItem>
+                  <SelectItem value="waiting">Очікує</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
           </div>
-          <div className="space-y-2">
-            <Label>Метод відправлення</Label>
-            <Select value={deliveryMethod} onValueChange={setDeliveryMethod}>
-              <SelectTrigger>
+          <div className="space-y-1.5">
+            <Label className="text-xs">Служба / метод рефу</Label>
+            <Select value={refMethod} onValueChange={setRefMethod}>
+              <SelectTrigger className="h-8">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="DHL">DHL</SelectItem>
-                <SelectItem value="DPD">DPD</SelectItem>
-                <SelectItem value="UPS">UPS</SelectItem>
-                <SelectItem value="FedEx">FedEx</SelectItem>
-                <SelectItem value="GLS">GLS</SelectItem>
+                <SelectItem value="ftid-dhl">Ftid DHL</SelectItem>
+                <SelectItem value="ftid-dpd">Ftid DPD</SelectItem>
+                <SelectItem value="ftid-ups">Ftid UPS</SelectItem>
+                <SelectItem value="ftid-fedex">Ftid FedEx</SelectItem>
+                <SelectItem value="ftid-gls">Ftid GLS</SelectItem>
+                <SelectItem value="dna-dhl">DNA DHL</SelectItem>
+                <SelectItem value="dna-dpd">DNA DPD</SelectItem>
               </SelectContent>
             </Select>
           </div>
-          <div className="space-y-2">
-            <Label>Дата доставки</Label>
-            <Input
-              type="date"
-              value={deliveryDate}
-              onChange={(e) => setDeliveryDate(e.target.value)}
-            />
+          <div className="grid grid-cols-2 gap-3">
+            <div className="space-y-1.5">
+              <Label className="text-xs">Дата доставки</Label>
+              <Input
+                type="date"
+                value={deliveryDate}
+                onChange={(e) => setDeliveryDate(e.target.value)}
+                className="h-8 text-xs"
+              />
+            </div>
+            <div className="space-y-1.5">
+              <Label className="text-xs">Дата написання</Label>
+              <Input
+                type="date"
+                value={writeDate}
+                onChange={(e) => setWriteDate(e.target.value)}
+                className="h-8 text-xs"
+              />
+            </div>
           </div>
-          <div className="flex justify-end gap-2 pt-2">
-            <Button variant="outline" onClick={() => onOpenChange(false)}>
+          <div className="flex justify-end gap-2 pt-3">
+            <Button variant="outline" size="sm" onClick={() => onOpenChange(false)}>
               Скасувати
             </Button>
-            <Button onClick={handleSave}>Зберегти</Button>
+            <Button size="sm" onClick={handleSave}>Зберегти</Button>
           </div>
         </div>
       </DialogContent>
