@@ -125,6 +125,28 @@ export function DeliveryModule() {
   const [addingCarrierToAddress, setAddingCarrierToAddress] = useState<string | null>(null);
   const [newGeoName, setNewGeoName] = useState('');
   const [newCarrierName, setNewCarrierName] = useState('');
+  
+  // Euro panel state
+  const [isEuroPanelOpen, setIsEuroPanelOpen] = useState(false);
+  const [selectedDropForEuro, setSelectedDropForEuro] = useState<string | null>(null);
+  const [showExtraCarrierCard, setShowExtraCarrierCard] = useState(false);
+  const [euroFormData, setEuroFormData] = useState({
+    vitrataDrop: '',
+    kurs: '',
+    dodatVitDrop: '',
+    vitrataPereviznik: '',
+    karta: '',
+    sumaGrn: '',
+    vitrataPereviznikKarta: '',
+    sumaGrnExtra: '',
+  });
+
+  const openEuroPanel = (dropId: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+    setSelectedDropForEuro(dropId);
+    setIsEuroPanelOpen(true);
+    setShowExtraCarrierCard(false);
+  };
 
   const toggleDrop = (dropId: string) => {
     setExpandedDrops(prev => ({ ...prev, [dropId]: !prev[dropId] }));
@@ -276,7 +298,12 @@ export function DeliveryModule() {
                   <ChevronRight className="h-4 w-4" />
                 )}
                 <span className="font-medium">{drop.name}</span>
-                <Euro className="h-4 w-4 text-muted-foreground" />
+                <button 
+                  onClick={(e) => openEuroPanel(drop.id, e)}
+                  className="p-1 rounded hover:bg-muted/50"
+                >
+                  <Euro className="h-4 w-4 text-muted-foreground hover:text-foreground" />
+                </button>
               </div>
               <div className="flex items-center gap-4 text-xs text-muted-foreground">
                 <span>Загалом паків: <span className="text-foreground font-medium">{drop.totalPacks}</span></span>
@@ -598,6 +625,127 @@ export function DeliveryModule() {
                 </div>
               ))}
             </div>
+          </div>
+        </SheetContent>
+      </Sheet>
+
+      {/* Euro Details Panel */}
+      <Sheet open={isEuroPanelOpen} onOpenChange={setIsEuroPanelOpen}>
+        <SheetContent className="w-[400px] overflow-y-auto bg-background" side="right">
+          <SheetHeader className="flex flex-row items-center justify-between pb-4 border-b border-border">
+            <SheetTitle className="text-sm font-medium">Деталі витрат</SheetTitle>
+          </SheetHeader>
+
+          <div className="py-4 space-y-4">
+            {/* Top section - Витрата Дроп & Курс */}
+            <div className="flex gap-3">
+              <div className="flex-1">
+                <Label className="text-xs text-muted-foreground block mb-1">Витрата Дроп</Label>
+                <Input
+                  value={euroFormData.vitrataDrop}
+                  onChange={e => setEuroFormData(prev => ({ ...prev, vitrataDrop: e.target.value }))}
+                  placeholder="0.00"
+                  className="h-8 text-xs"
+                />
+              </div>
+              <div className="w-24">
+                <Label className="text-xs text-muted-foreground block mb-1">Курс</Label>
+                <Input
+                  value={euroFormData.kurs}
+                  onChange={e => setEuroFormData(prev => ({ ...prev, kurs: e.target.value }))}
+                  placeholder="0.00"
+                  className="h-8 text-xs"
+                />
+              </div>
+            </div>
+
+            {/* Middle section - stacked fields */}
+            <div className="space-y-3">
+              <div>
+                <Label className="text-xs text-muted-foreground block mb-1">Додат. Вит. Дроп</Label>
+                <Input
+                  value={euroFormData.dodatVitDrop}
+                  onChange={e => setEuroFormData(prev => ({ ...prev, dodatVitDrop: e.target.value }))}
+                  placeholder="0.00"
+                  className="h-8 text-xs"
+                />
+              </div>
+              <div>
+                <Label className="text-xs text-muted-foreground block mb-1">Витрата Перевізник</Label>
+                <Input
+                  value={euroFormData.vitrataPereviznik}
+                  onChange={e => setEuroFormData(prev => ({ ...prev, vitrataPereviznik: e.target.value }))}
+                  placeholder="0.00"
+                  className="h-8 text-xs"
+                />
+              </div>
+            </div>
+
+            {/* Card section */}
+            <div className="flex gap-3">
+              <div className="flex-1">
+                <Label className="text-xs text-muted-foreground block mb-1">Карта</Label>
+                <Input
+                  value={euroFormData.karta}
+                  onChange={e => setEuroFormData(prev => ({ ...prev, karta: e.target.value }))}
+                  placeholder="Номер карти..."
+                  className="h-8 text-xs"
+                />
+              </div>
+              <div className="w-28">
+                <Label className="text-xs text-muted-foreground block mb-1">Сума грн</Label>
+                <Input
+                  value={euroFormData.sumaGrn}
+                  onChange={e => setEuroFormData(prev => ({ ...prev, sumaGrn: e.target.value }))}
+                  placeholder="0.00"
+                  className="h-8 text-xs"
+                />
+              </div>
+            </div>
+
+            {/* Expandable section */}
+            {!showExtraCarrierCard ? (
+              <Button
+                variant="ghost"
+                size="sm"
+                className="h-7 text-xs text-muted-foreground"
+                onClick={() => setShowExtraCarrierCard(true)}
+              >
+                <Plus className="h-3 w-3 mr-1" />
+                Додати картку перевізника
+              </Button>
+            ) : (
+              <div className="flex gap-3 p-3 bg-muted/20 rounded border border-border">
+                <div className="flex-1">
+                  <Label className="text-xs text-muted-foreground block mb-1">Витрата Перевізник карта</Label>
+                  <Input
+                    value={euroFormData.vitrataPereviznikKarta}
+                    onChange={e => setEuroFormData(prev => ({ ...prev, vitrataPereviznikKarta: e.target.value }))}
+                    placeholder="Номер карти..."
+                    className="h-8 text-xs"
+                  />
+                </div>
+                <div className="w-28">
+                  <Label className="text-xs text-muted-foreground block mb-1">Сума грн</Label>
+                  <Input
+                    value={euroFormData.sumaGrnExtra}
+                    onChange={e => setEuroFormData(prev => ({ ...prev, sumaGrnExtra: e.target.value }))}
+                    placeholder="0.00"
+                    className="h-8 text-xs"
+                  />
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Bottom actions */}
+          <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-border bg-background flex justify-between">
+            <Button variant="outline" size="sm" className="text-xs">
+              Редагувати
+            </Button>
+            <Button size="sm" className="text-xs">
+              Надіслати
+            </Button>
           </div>
         </SheetContent>
       </Sheet>
