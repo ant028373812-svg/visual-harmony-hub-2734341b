@@ -30,6 +30,7 @@ import { Label } from '@/components/ui/label';
 import { cn } from '@/lib/utils';
 import { OrderInfoModal } from '@/components/orders/modals/OrderInfoModal';
 import { PackAccountingModal } from '@/components/orders/modals/PackAccountingModal';
+import { CommentModal } from '@/components/ui/comment-modal';
 
 interface DeliveryPack {
   id: string;
@@ -155,6 +156,7 @@ export function DeliveryModule() {
   // Modal states
   const [isOrderInfoOpen, setIsOrderInfoOpen] = useState(false);
   const [isPackAccountingOpen, setIsPackAccountingOpen] = useState(false);
+  const [isCommentOpen, setIsCommentOpen] = useState(false);
 
   const openEuroPanel = (dropId: string, e: React.MouseEvent) => {
     e.stopPropagation();
@@ -419,7 +421,19 @@ export function DeliveryModule() {
                               </TooltipTrigger>
                               <TooltipContent>Інформація замовлення</TooltipContent>
                             </Tooltip>
-                            <MessageCircle className="h-3.5 w-3.5 text-muted-foreground" />
+                            <Tooltip>
+                              <TooltipTrigger asChild>
+                                <Button 
+                                  variant="ghost" 
+                                  size="icon" 
+                                  className="h-5 w-5 text-muted-foreground hover:text-foreground cursor-pointer"
+                                  onClick={() => setIsCommentOpen(true)}
+                                >
+                                  <MessageCircle className="h-3.5 w-3.5" />
+                                </Button>
+                              </TooltipTrigger>
+                              <TooltipContent>Коментар</TooltipContent>
+                            </Tooltip>
                           </div>
                         </td>
                         <td className="px-3 py-2 border-r border-border">
@@ -440,7 +454,19 @@ export function DeliveryModule() {
                               </TooltipTrigger>
                               <TooltipContent>Бухгалтерія паку</TooltipContent>
                             </Tooltip>
-                            <MessageCircle className="h-3.5 w-3.5 text-muted-foreground" />
+                            <Tooltip>
+                              <TooltipTrigger asChild>
+                                <Button 
+                                  variant="ghost" 
+                                  size="icon" 
+                                  className="h-5 w-5 text-muted-foreground hover:text-foreground cursor-pointer"
+                                  onClick={() => setIsCommentOpen(true)}
+                                >
+                                  <MessageCircle className="h-3.5 w-3.5" />
+                                </Button>
+                              </TooltipTrigger>
+                              <TooltipContent>Коментар</TooltipContent>
+                            </Tooltip>
                           </div>
                         </td>
                       </tr>
@@ -827,6 +853,7 @@ export function DeliveryModule() {
       {/* Modals */}
       <OrderInfoModal open={isOrderInfoOpen} onOpenChange={setIsOrderInfoOpen} />
       <PackAccountingModal open={isPackAccountingOpen} onOpenChange={setIsPackAccountingOpen} />
+      <CommentModal open={isCommentOpen} onOpenChange={setIsCommentOpen} />
     </div>
   );
 }

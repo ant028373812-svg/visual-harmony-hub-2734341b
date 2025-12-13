@@ -16,6 +16,7 @@ import { RefStatusModal } from './modals/RefStatusModal';
 import { PackAccountingModal } from './modals/PackAccountingModal';
 import { PackInfoModal } from './modals/PackInfoModal';
 import { CreatePackModal } from './modals/CreatePackModal';
+import { CommentModal } from '@/components/ui/comment-modal';
 import { AddressPanel } from './AddressPanel';
 import { DeliveryModule } from '@/components/delivery/DeliveryModule';
 
@@ -35,6 +36,7 @@ export function OrdersModule() {
   const [isRefStatusOpen, setIsRefStatusOpen] = useState(false);
   const [isPackAccountingOpen, setIsPackAccountingOpen] = useState(false);
   const [isCreatePackOpen, setIsCreatePackOpen] = useState(false);
+  const [isCommentOpen, setIsCommentOpen] = useState(false);
 
   const getStatusType = (status: string) => {
     switch (status) {
@@ -195,9 +197,19 @@ export function OrdersModule() {
                         </TooltipTrigger>
                         <TooltipContent>Інформація паку</TooltipContent>
                       </Tooltip>
-                      <Button variant="ghost" size="icon" className="h-5 w-5">
-                        <MessageCircle className="h-3 w-3" />
-                      </Button>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Button 
+                            variant="ghost" 
+                            size="icon" 
+                            className="h-5 w-5 text-muted-foreground hover:text-foreground cursor-pointer"
+                            onClick={() => setIsCommentOpen(true)}
+                          >
+                            <MessageCircle className="h-3 w-3" />
+                          </Button>
+                        </TooltipTrigger>
+                        <TooltipContent>Коментар</TooltipContent>
+                      </Tooltip>
                     </div>
                   </td>
                   <td className="px-3 py-2">
@@ -219,7 +231,19 @@ export function OrdersModule() {
                       >
                         <Info className="h-3.5 w-3.5" />
                       </Button>
-                      <MessageCircle className="h-3.5 w-3.5 text-muted-foreground" />
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Button 
+                            variant="ghost" 
+                            size="icon" 
+                            className="h-5 w-5 text-muted-foreground hover:text-foreground cursor-pointer"
+                            onClick={() => setIsCommentOpen(true)}
+                          >
+                            <MessageCircle className="h-3.5 w-3.5" />
+                          </Button>
+                        </TooltipTrigger>
+                        <TooltipContent>Коментар</TooltipContent>
+                      </Tooltip>
                     </div>
                   </td>
                   <td className="px-3 py-2 text-center">
@@ -232,7 +256,19 @@ export function OrdersModule() {
                       >
                         <Info className="h-3.5 w-3.5" />
                       </Button>
-                      <MessageCircle className="h-3.5 w-3.5 text-muted-foreground" />
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Button 
+                            variant="ghost" 
+                            size="icon" 
+                            className="h-5 w-5 text-muted-foreground hover:text-foreground cursor-pointer"
+                            onClick={() => setIsCommentOpen(true)}
+                          >
+                            <MessageCircle className="h-3.5 w-3.5" />
+                          </Button>
+                        </TooltipTrigger>
+                        <TooltipContent>Коментар</TooltipContent>
+                      </Tooltip>
                     </div>
                   </td>
                   <td className="px-3 py-2 text-center">
@@ -245,7 +281,19 @@ export function OrdersModule() {
                       >
                         <Info className="h-3.5 w-3.5" />
                       </Button>
-                      <MessageCircle className="h-3.5 w-3.5 text-muted-foreground" />
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Button 
+                            variant="ghost" 
+                            size="icon" 
+                            className="h-5 w-5 text-muted-foreground hover:text-foreground cursor-pointer"
+                            onClick={() => setIsCommentOpen(true)}
+                          >
+                            <MessageCircle className="h-3.5 w-3.5" />
+                          </Button>
+                        </TooltipTrigger>
+                        <TooltipContent>Коментар</TooltipContent>
+                      </Tooltip>
                     </div>
                   </td>
                   <td className="px-3 py-2">
@@ -294,6 +342,7 @@ export function OrdersModule() {
       <RefStatusModal open={isRefStatusOpen} onOpenChange={setIsRefStatusOpen} />
       <PackAccountingModal open={isPackAccountingOpen} onOpenChange={setIsPackAccountingOpen} />
       <CreatePackModal open={isCreatePackOpen} onOpenChange={setIsCreatePackOpen} />
+      <CommentModal open={isCommentOpen} onOpenChange={setIsCommentOpen} />
       <AddressPanel open={isAddressPanelOpen} onOpenChange={setIsAddressPanelOpen} />
     </div>
   );

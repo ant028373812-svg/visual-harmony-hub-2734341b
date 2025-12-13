@@ -20,6 +20,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip
 import { OrderInfoModal } from './OrderInfoModal';
 import { RefStatusModal } from './RefStatusModal';
 import { PackAccountingModal } from './PackAccountingModal';
+import { CommentModal } from '@/components/ui/comment-modal';
 
 interface CreatePackModalProps {
   open: boolean;
@@ -47,6 +48,7 @@ export function CreatePackModal({ open, onOpenChange }: CreatePackModalProps) {
   const [isOrderInfoOpen, setIsOrderInfoOpen] = useState(false);
   const [isRefStatusOpen, setIsRefStatusOpen] = useState(false);
   const [isPackAccountingOpen, setIsPackAccountingOpen] = useState(false);
+  const [isCommentOpen, setIsCommentOpen] = useState(false);
 
   const handleCreate = () => {
     // Create logic here
@@ -243,7 +245,19 @@ export function CreatePackModal({ open, onOpenChange }: CreatePackModalProps) {
                   </TooltipTrigger>
                   <TooltipContent>Інформація замовлення</TooltipContent>
                 </Tooltip>
-                <MessageCircle className="h-4 w-4 text-muted-foreground" />
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button 
+                      variant="ghost" 
+                      size="icon" 
+                      className="h-5 w-5 text-muted-foreground hover:text-foreground cursor-pointer"
+                      onClick={() => setIsCommentOpen(true)}
+                    >
+                      <MessageCircle className="h-4 w-4" />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>Коментар</TooltipContent>
+                </Tooltip>
               </div>
             </div>
             <div className="flex flex-col items-center gap-1">
@@ -262,7 +276,19 @@ export function CreatePackModal({ open, onOpenChange }: CreatePackModalProps) {
                   </TooltipTrigger>
                   <TooltipContent>Реф статус</TooltipContent>
                 </Tooltip>
-                <MessageCircle className="h-4 w-4 text-muted-foreground" />
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button 
+                      variant="ghost" 
+                      size="icon" 
+                      className="h-5 w-5 text-muted-foreground hover:text-foreground cursor-pointer"
+                      onClick={() => setIsCommentOpen(true)}
+                    >
+                      <MessageCircle className="h-4 w-4" />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>Коментар</TooltipContent>
+                </Tooltip>
               </div>
             </div>
             <div className="flex flex-col items-center gap-1">
@@ -281,7 +307,19 @@ export function CreatePackModal({ open, onOpenChange }: CreatePackModalProps) {
                   </TooltipTrigger>
                   <TooltipContent>Бухгалтерія паку</TooltipContent>
                 </Tooltip>
-                <MessageCircle className="h-4 w-4 text-muted-foreground" />
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button 
+                      variant="ghost" 
+                      size="icon" 
+                      className="h-5 w-5 text-muted-foreground hover:text-foreground cursor-pointer"
+                      onClick={() => setIsCommentOpen(true)}
+                    >
+                      <MessageCircle className="h-4 w-4" />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>Коментар</TooltipContent>
+                </Tooltip>
               </div>
             </div>
           </div>
@@ -291,6 +329,7 @@ export function CreatePackModal({ open, onOpenChange }: CreatePackModalProps) {
         <OrderInfoModal open={isOrderInfoOpen} onOpenChange={setIsOrderInfoOpen} />
         <RefStatusModal open={isRefStatusOpen} onOpenChange={setIsRefStatusOpen} />
         <PackAccountingModal open={isPackAccountingOpen} onOpenChange={setIsPackAccountingOpen} />
+        <CommentModal open={isCommentOpen} onOpenChange={setIsCommentOpen} />
       </DialogContent>
     </Dialog>
   );
