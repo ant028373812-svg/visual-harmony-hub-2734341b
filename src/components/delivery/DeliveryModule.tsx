@@ -354,7 +354,7 @@ export function DeliveryModule() {
 
       {/* Drop/Address Panel - Sliding side panel */}
       <Sheet open={isDropPanelOpen} onOpenChange={setIsDropPanelOpen}>
-        <SheetContent className="w-[75vw] max-w-5xl overflow-y-auto" side="right">
+        <SheetContent className="w-[80vw] max-w-none overflow-y-auto" side="right">
           <SheetHeader className="flex flex-row items-center justify-between pb-4 border-b border-border">
             <SheetTitle className="text-sm font-medium">Дроп/Адрес</SheetTitle>
           </SheetHeader>
