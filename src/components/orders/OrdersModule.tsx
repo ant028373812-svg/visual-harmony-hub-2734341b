@@ -14,6 +14,7 @@ import { demoPacks, demoDrops } from '@/lib/demo-data';
 import { OrderInfoModal } from './modals/OrderInfoModal';
 import { RefStatusModal } from './modals/RefStatusModal';
 import { PackAccountingModal } from './modals/PackAccountingModal';
+import { PackInfoModal } from './modals/PackInfoModal';
 import { CreatePackModal } from './modals/CreatePackModal';
 import { AddressPanel } from './AddressPanel';
 import { DeliveryModule } from '@/components/delivery/DeliveryModule';
@@ -29,6 +30,7 @@ export function OrdersModule() {
   
   // Modal states
   const [selectedPack, setSelectedPack] = useState<string | null>(null);
+  const [isPackInfoOpen, setIsPackInfoOpen] = useState(false);
   const [isOrderInfoOpen, setIsOrderInfoOpen] = useState(false);
   const [isRefStatusOpen, setIsRefStatusOpen] = useState(false);
   const [isPackAccountingOpen, setIsPackAccountingOpen] = useState(false);
@@ -182,18 +184,16 @@ export function OrdersModule() {
                       <span className="font-medium">{pack.packId} {pack.storeName}</span>
                       <Tooltip>
                         <TooltipTrigger asChild>
-                          <Button variant="ghost" size="icon" className="h-5 w-5 text-info">
+                          <Button 
+                            variant="ghost" 
+                            size="icon" 
+                            className="h-5 w-5 text-info"
+                            onClick={() => { setSelectedPack(pack.id); setIsPackInfoOpen(true); }}
+                          >
                             <Info className="h-3 w-3" />
                           </Button>
                         </TooltipTrigger>
-                        <TooltipContent className="bg-popover text-popover-foreground p-3 max-w-xs">
-                          <div className="space-y-1 text-xs">
-                            <p><strong>Card:</strong> •••• {pack.card}</p>
-                            <p><strong>Сума:</strong> €{pack.amount}</p>
-                            <p><strong>Сума без знижки:</strong> €{pack.amountWithoutDiscount}</p>
-                            <p><strong>Email:</strong> {pack.email}</p>
-                          </div>
-                        </TooltipContent>
+                        <TooltipContent>Інформація паку</TooltipContent>
                       </Tooltip>
                       <Button variant="ghost" size="icon" className="h-5 w-5">
                         <MessageCircle className="h-3 w-3" />
@@ -289,6 +289,7 @@ export function OrdersModule() {
       </div>
 
       {/* Modals */}
+      <PackInfoModal open={isPackInfoOpen} onOpenChange={setIsPackInfoOpen} />
       <OrderInfoModal open={isOrderInfoOpen} onOpenChange={setIsOrderInfoOpen} />
       <RefStatusModal open={isRefStatusOpen} onOpenChange={setIsRefStatusOpen} />
       <PackAccountingModal open={isPackAccountingOpen} onOpenChange={setIsPackAccountingOpen} />
