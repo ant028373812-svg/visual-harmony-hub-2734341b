@@ -27,7 +27,6 @@ export function RefStatusModal({ open, onOpenChange }: RefStatusModalProps) {
   const [deliveryDate, setDeliveryDate] = useState('2025-01-20');
 
   const handleSave = () => {
-    // Save logic here
     onOpenChange(false);
   };
 
@@ -46,7 +45,7 @@ export function RefStatusModal({ open, onOpenChange }: RefStatusModalProps) {
             />
           </div>
           <div className="space-y-2">
-            <Label>Метод Відправлення</Label>
+            <Label>Метод відправлення</Label>
             <Select value={deliveryMethod} onValueChange={setDeliveryMethod}>
               <SelectTrigger>
                 <SelectValue />
@@ -61,14 +60,14 @@ export function RefStatusModal({ open, onOpenChange }: RefStatusModalProps) {
             </Select>
           </div>
           <div className="space-y-2">
-            <Label>Дата Доставки</Label>
+            <Label>Дата доставки</Label>
             <Input
               type="date"
               value={deliveryDate}
               onChange={(e) => setDeliveryDate(e.target.value)}
             />
           </div>
-          <div className="flex justify-end gap-2">
+          <div className="flex justify-end gap-2 pt-2">
             <Button variant="outline" onClick={() => onOpenChange(false)}>
               Скасувати
             </Button>
