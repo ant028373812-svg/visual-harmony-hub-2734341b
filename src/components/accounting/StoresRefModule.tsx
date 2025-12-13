@@ -1,9 +1,14 @@
 import { useState } from 'react';
-import { ChevronLeft, ChevronRight, Info, DollarSign, TrendingUp } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Info, DollarSign, TrendingUp, MessageCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { StatusBadge } from '@/components/ui/status-badge';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
+import { PackInfoModal } from '@/components/orders/modals/PackInfoModal';
+import { OrderInfoModal } from '@/components/orders/modals/OrderInfoModal';
+import { RefStatusModal } from '@/components/orders/modals/RefStatusModal';
+import { PackAccountingModal } from '@/components/orders/modals/PackAccountingModal';
 
 const storesData = [
   { id: '1', name: 'Zara', refunds: 2, total: 187.50, average: 93.75 },
@@ -27,6 +32,12 @@ const zaraRefunds: RefundRecord[] = [
 export function StoresRefModule() {
   const [activeTab, setActiveTab] = useState('statistics');
   const [selectedStore, setSelectedStore] = useState<string | null>(null);
+  
+  // Modal states
+  const [isPackInfoOpen, setIsPackInfoOpen] = useState(false);
+  const [isOrderInfoOpen, setIsOrderInfoOpen] = useState(false);
+  const [isRefStatusOpen, setIsRefStatusOpen] = useState(false);
+  const [isPackAccountingOpen, setIsPackAccountingOpen] = useState(false);
 
   if (selectedStore) {
     const store = storesData.find(s => s.id === selectedStore);
@@ -101,25 +112,81 @@ export function StoresRefModule() {
               <tbody>
                 {zaraRefunds.map(refund => (
                   <tr key={refund.id} className="border-b border-border hover:bg-muted/30">
-                    <td className="px-4 py-3 font-medium">{refund.packId}</td>
+                    <td className="px-4 py-3">
+                      <div className="flex items-center gap-2">
+                        <span className="font-medium">{refund.packId}</span>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <Button 
+                              variant="ghost" 
+                              size="icon" 
+                              className="h-5 w-5 text-info hover:bg-muted cursor-pointer"
+                              onClick={() => setIsPackInfoOpen(true)}
+                            >
+                              <Info className="h-3 w-3" />
+                            </Button>
+                          </TooltipTrigger>
+                          <TooltipContent>Інформація паку</TooltipContent>
+                        </Tooltip>
+                      </div>
+                    </td>
                     <td className="px-4 py-3">{refund.date}</td>
                     <td className="px-4 py-3">
                       <StatusBadge status={refund.status} type="completed" />
                     </td>
                     <td className="px-4 py-3 text-center">
-                      <Button variant="ghost" size="icon" className="h-6 w-6">
-                        <Info className="h-3.5 w-3.5" />
-                      </Button>
+                      <div className="flex items-center justify-center gap-1">
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <Button 
+                              variant="ghost" 
+                              size="icon" 
+                              className="h-6 w-6 text-info hover:bg-muted cursor-pointer"
+                              onClick={() => setIsOrderInfoOpen(true)}
+                            >
+                              <Info className="h-3.5 w-3.5" />
+                            </Button>
+                          </TooltipTrigger>
+                          <TooltipContent>Інформація замовлення</TooltipContent>
+                        </Tooltip>
+                        <MessageCircle className="h-3.5 w-3.5 text-muted-foreground" />
+                      </div>
                     </td>
                     <td className="px-4 py-3 text-center">
-                      <Button variant="ghost" size="icon" className="h-6 w-6">
-                        <Info className="h-3.5 w-3.5" />
-                      </Button>
+                      <div className="flex items-center justify-center gap-1">
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <Button 
+                              variant="ghost" 
+                              size="icon" 
+                              className="h-6 w-6 text-info hover:bg-muted cursor-pointer"
+                              onClick={() => setIsRefStatusOpen(true)}
+                            >
+                              <Info className="h-3.5 w-3.5" />
+                            </Button>
+                          </TooltipTrigger>
+                          <TooltipContent>Реф статус</TooltipContent>
+                        </Tooltip>
+                        <MessageCircle className="h-3.5 w-3.5 text-muted-foreground" />
+                      </div>
                     </td>
                     <td className="px-4 py-3 text-center">
-                      <Button variant="ghost" size="icon" className="h-6 w-6">
-                        <Info className="h-3.5 w-3.5" />
-                      </Button>
+                      <div className="flex items-center justify-center gap-1">
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <Button 
+                              variant="ghost" 
+                              size="icon" 
+                              className="h-6 w-6 text-info hover:bg-muted cursor-pointer"
+                              onClick={() => setIsPackAccountingOpen(true)}
+                            >
+                              <Info className="h-3.5 w-3.5" />
+                            </Button>
+                          </TooltipTrigger>
+                          <TooltipContent>Бухгалтерія паку</TooltipContent>
+                        </Tooltip>
+                        <MessageCircle className="h-3.5 w-3.5 text-muted-foreground" />
+                      </div>
                     </td>
                   </tr>
                 ))}
@@ -132,6 +199,12 @@ export function StoresRefModule() {
             </div>
           </CardContent>
         </Card>
+
+        {/* Modals */}
+        <PackInfoModal open={isPackInfoOpen} onOpenChange={setIsPackInfoOpen} />
+        <OrderInfoModal open={isOrderInfoOpen} onOpenChange={setIsOrderInfoOpen} />
+        <RefStatusModal open={isRefStatusOpen} onOpenChange={setIsRefStatusOpen} />
+        <PackAccountingModal open={isPackAccountingOpen} onOpenChange={setIsPackAccountingOpen} />
       </div>
     );
   }
