@@ -20,10 +20,8 @@ export function PackAccountingModal({ open, onOpenChange }: PackAccountingModalP
   const [carrierExpense, setCarrierExpense] = useState(27);
   const [additionalDropExpense, setAdditionalDropExpense] = useState(5);
   const [additionalExpense, setAdditionalExpense] = useState(3);
-  const [refExpense, setRefExpense] = useState(10);
-  const [boxerExpense, setBoxerExpense] = useState(15);
 
-  const netProfit = skupPayment - dropExpense - carrierExpense - additionalDropExpense - additionalExpense - refExpense - boxerExpense;
+  const netProfit = skupPayment - dropExpense - carrierExpense - additionalDropExpense - additionalExpense;
 
   const handleSave = () => {
     onOpenChange(false);
@@ -33,7 +31,7 @@ export function PackAccountingModal({ open, onOpenChange }: PackAccountingModalP
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>Бухгалтерія пак</DialogTitle>
+          <DialogTitle>Бухгалтерія паку</DialogTitle>
         </DialogHeader>
         <div className="space-y-4 py-4">
           <div className="space-y-2">
@@ -76,22 +74,6 @@ export function PackAccountingModal({ open, onOpenChange }: PackAccountingModalP
               onChange={(e) => setAdditionalExpense(Number(e.target.value))}
             />
           </div>
-          <div className="space-y-2">
-            <Label>Витрати Реф</Label>
-            <Input
-              type="number"
-              value={refExpense}
-              onChange={(e) => setRefExpense(Number(e.target.value))}
-            />
-          </div>
-          <div className="space-y-2">
-            <Label>Боксер витрата</Label>
-            <Input
-              type="number"
-              value={boxerExpense}
-              onChange={(e) => setBoxerExpense(Number(e.target.value))}
-            />
-          </div>
           <div className="pt-2 border-t border-border">
             <div className="flex justify-between items-center">
               <Label className="text-lg font-semibold">Чистий профіт</Label>
@@ -100,7 +82,7 @@ export function PackAccountingModal({ open, onOpenChange }: PackAccountingModalP
               </span>
             </div>
           </div>
-          <div className="flex justify-end gap-2">
+          <div className="flex justify-end gap-2 pt-2">
             <Button variant="outline" onClick={() => onOpenChange(false)}>
               Скасувати
             </Button>
