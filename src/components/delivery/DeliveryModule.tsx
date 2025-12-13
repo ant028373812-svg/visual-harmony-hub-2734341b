@@ -349,7 +349,7 @@ export function DeliveryModule() {
 
       {/* Drop/Address Panel - Sliding side panel */}
       <Sheet open={isDropPanelOpen} onOpenChange={setIsDropPanelOpen}>
-        <SheetContent className="w-96 overflow-y-auto">
+        <SheetContent className="w-[65vw] max-w-4xl overflow-y-auto" side="right">
           <SheetHeader className="flex flex-row items-center justify-between pb-4 border-b border-border">
             <SheetTitle className="text-sm font-medium">Дроп/Адрес</SheetTitle>
           </SheetHeader>
@@ -414,9 +414,9 @@ export function DeliveryModule() {
                   {drop.expanded && (
                     <div className="border-t border-border p-3 space-y-3">
                       {drop.addresses.map(addr => (
-                        <div key={addr.id} className="space-y-2 p-2 bg-muted/20 rounded">
+                        <div key={addr.id} className="flex items-start gap-4 p-3 bg-muted/20 rounded border border-border/50">
                           {/* Geo checklist */}
-                          <div className="space-y-1">
+                          <div className="space-y-1 min-w-[140px]">
                             <span className="text-[10px] text-muted-foreground uppercase">Гео</span>
                             <div className="space-y-1">
                               {geoOptions.map(geo => (
@@ -458,7 +458,7 @@ export function DeliveryModule() {
                           </div>
 
                           {/* Carrier checklist */}
-                          <div className="space-y-1 pt-2 border-t border-border/50">
+                          <div className="space-y-1 min-w-[140px] border-l border-border/50 pl-4">
                             <span className="text-[10px] text-muted-foreground uppercase">Служба доставки</span>
                             <div className="space-y-1">
                               {carrierOptions.map(carrier => (
@@ -500,7 +500,7 @@ export function DeliveryModule() {
                           </div>
 
                           {/* Address input */}
-                          <div className="space-y-1 pt-2 border-t border-border/50">
+                          <div className="space-y-1 flex-1 border-l border-border/50 pl-4">
                             <span className="text-[10px] text-muted-foreground uppercase">Адреса</span>
                             <Input
                               value={addr.address}
