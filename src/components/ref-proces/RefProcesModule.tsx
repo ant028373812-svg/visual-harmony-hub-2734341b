@@ -21,6 +21,7 @@ import { cn } from '@/lib/utils';
 import { OrderInfoModal } from '@/components/orders/modals/OrderInfoModal';
 import { RefStatusModal } from '@/components/orders/modals/RefStatusModal';
 import { PackAccountingModal } from '@/components/orders/modals/PackAccountingModal';
+import { PackInfoModal } from '@/components/orders/modals/PackInfoModal';
 
 // Demo date entries
 interface DateEntry {
@@ -56,6 +57,7 @@ export function RefProcesModule() {
   const [dateEntries, setDateEntries] = useState<DateEntry[]>(initialDateEntries);
   
   // Modal states
+  const [isPackInfoOpen, setIsPackInfoOpen] = useState(false);
   const [isOrderInfoOpen, setIsOrderInfoOpen] = useState(false);
   const [isRefStatusOpen, setIsRefStatusOpen] = useState(false);
   const [isPackAccountingOpen, setIsPackAccountingOpen] = useState(false);
@@ -338,7 +340,7 @@ export function RefProcesModule() {
                             variant="ghost" 
                             size="icon" 
                             className="h-5 w-5 hover:bg-muted text-info"
-                            onClick={() => setIsOrderInfoOpen(true)}
+                            onClick={() => setIsPackInfoOpen(true)}
                           >
                             <Info className="h-3 w-3" />
                           </Button>
@@ -469,6 +471,7 @@ export function RefProcesModule() {
       </div>
 
       {/* Modals */}
+      <PackInfoModal open={isPackInfoOpen} onOpenChange={setIsPackInfoOpen} />
       <OrderInfoModal open={isOrderInfoOpen} onOpenChange={setIsOrderInfoOpen} />
       <RefStatusModal open={isRefStatusOpen} onOpenChange={setIsRefStatusOpen} />
       <PackAccountingModal open={isPackAccountingOpen} onOpenChange={setIsPackAccountingOpen} />

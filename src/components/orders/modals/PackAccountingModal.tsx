@@ -19,9 +19,11 @@ export function PackAccountingModal({ open, onOpenChange }: PackAccountingModalP
   const [dropExpense, setDropExpense] = useState(50);
   const [carrierExpense, setCarrierExpense] = useState(27);
   const [additionalDropExpense, setAdditionalDropExpense] = useState(5);
+  const [boxerExpense, setBoxerExpense] = useState(15);
+  const [orderExpense, setOrderExpense] = useState(10);
   const [additionalExpense, setAdditionalExpense] = useState(3);
 
-  const netProfit = skupPayment - dropExpense - carrierExpense - additionalDropExpense - additionalExpense;
+  const netProfit = skupPayment - dropExpense - carrierExpense - additionalDropExpense - boxerExpense - orderExpense - additionalExpense;
 
   const handleSave = () => {
     onOpenChange(false);
@@ -29,64 +31,87 @@ export function PackAccountingModal({ open, onOpenChange }: PackAccountingModalP
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-md">
+      <DialogContent className="sm:max-w-sm">
         <DialogHeader>
           <DialogTitle>Бухгалтерія паку</DialogTitle>
         </DialogHeader>
-        <div className="space-y-4 py-4">
-          <div className="space-y-2">
-            <Label>Виплата від Скуп</Label>
+        <div className="space-y-3 py-4">
+          <div className="space-y-1.5">
+            <Label className="text-xs">Виплата від Скуп</Label>
             <Input
               type="number"
               value={skupPayment}
               onChange={(e) => setSkupPayment(Number(e.target.value))}
+              className="h-8"
             />
           </div>
-          <div className="space-y-2">
-            <Label>Витрата Дроп</Label>
+          <div className="space-y-1.5">
+            <Label className="text-xs">Витрата Дроп</Label>
             <Input
               type="number"
               value={dropExpense}
               onChange={(e) => setDropExpense(Number(e.target.value))}
+              className="h-8"
             />
           </div>
-          <div className="space-y-2">
-            <Label>Витрати перевізника</Label>
+          <div className="space-y-1.5">
+            <Label className="text-xs">Витрати перевізника</Label>
             <Input
               type="number"
               value={carrierExpense}
               onChange={(e) => setCarrierExpense(Number(e.target.value))}
+              className="h-8"
             />
           </div>
-          <div className="space-y-2">
-            <Label>Додаткові витрати Дроп</Label>
+          <div className="space-y-1.5">
+            <Label className="text-xs">Додаткові витрати Дроп</Label>
             <Input
               type="number"
               value={additionalDropExpense}
               onChange={(e) => setAdditionalDropExpense(Number(e.target.value))}
+              className="h-8"
             />
           </div>
-          <div className="space-y-2">
-            <Label>Додаткові витрати</Label>
+          <div className="space-y-1.5">
+            <Label className="text-xs">Витрата Boxer</Label>
+            <Input
+              type="number"
+              value={boxerExpense}
+              onChange={(e) => setBoxerExpense(Number(e.target.value))}
+              className="h-8"
+            />
+          </div>
+          <div className="space-y-1.5">
+            <Label className="text-xs">Додаткові вит. Замовлення</Label>
+            <Input
+              type="number"
+              value={orderExpense}
+              onChange={(e) => setOrderExpense(Number(e.target.value))}
+              className="h-8"
+            />
+          </div>
+          <div className="space-y-1.5">
+            <Label className="text-xs">Додаткові витрати</Label>
             <Input
               type="number"
               value={additionalExpense}
               onChange={(e) => setAdditionalExpense(Number(e.target.value))}
+              className="h-8"
             />
           </div>
           <div className="pt-2 border-t border-border">
             <div className="flex justify-between items-center">
-              <Label className="text-lg font-semibold">Чистий профіт</Label>
-              <span className={`text-lg font-bold ${netProfit >= 0 ? 'text-success' : 'text-destructive'}`}>
+              <Label className="text-sm font-semibold">Чистий профіт</Label>
+              <span className={`text-sm font-bold ${netProfit >= 0 ? 'text-success' : 'text-destructive'}`}>
                 €{netProfit.toFixed(2)}
               </span>
             </div>
           </div>
           <div className="flex justify-end gap-2 pt-2">
-            <Button variant="outline" onClick={() => onOpenChange(false)}>
+            <Button variant="outline" size="sm" onClick={() => onOpenChange(false)}>
               Скасувати
             </Button>
-            <Button onClick={handleSave}>Зберегти</Button>
+            <Button size="sm" onClick={handleSave}>Зберегти</Button>
           </div>
         </div>
       </DialogContent>
