@@ -15,14 +15,22 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/components/ui/popover';
 import { useTheme } from 'next-themes';
 import { demoRefProcesses } from '@/lib/demo-data';
 import { cn } from '@/lib/utils';
+
+// Demo date entries
+interface DateEntry {
+  id: string;
+  store: string;
+  method: string;
+  day: string;
+}
+
+const initialDateEntries: DateEntry[] = [
+  { id: '1', store: 'Zara', method: 'FTID', day: '14' },
+  { id: '2', store: 'H&M', method: 'DNA', day: '7' },
+];
 
 const filters = [
   { label: 'Писать', hasNotification: true },
@@ -41,6 +49,22 @@ export function RefProcesModule() {
   const { theme, setTheme } = useTheme();
   const [isFiltersOpen, setIsFiltersOpen] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
+  const [showDateInput, setShowDateInput] = useState(false);
+  const [dateEntries, setDateEntries] = useState<DateEntry[]>(initialDateEntries);
+
+  const handleAddDateEntry = () => {
+    const newEntry: DateEntry = {
+      id: String(Date.now()),
+      store: 'Zara',
+      method: 'FTID',
+      day: '7',
+    };
+    setDateEntries(prev => [...prev, newEntry]);
+  };
+
+  const handleRemoveDateEntry = (id: string) => {
+    setDateEntries(prev => prev.filter(entry => entry.id !== id));
+  };
 
   const getDateColor = (date?: Date) => {
     if (!date) return '';
@@ -110,50 +134,16 @@ export function RefProcesModule() {
               {isFiltersOpen ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
             </Button>
             
-            {/* Date Settings Popover */}
-            <Popover>
-              <PopoverTrigger asChild>
-                <Button variant="outline" size="sm" className="h-8 text-xs gap-1.5">
-                  <CalendarPlus className="h-3.5 w-3.5" />
-                  Дата +
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-auto p-3" align="end">
-                <div className="flex items-center gap-2">
-                  <Select>
-                    <SelectTrigger className="h-8 w-[140px] text-xs">
-                      <SelectValue placeholder="Обрати магазин" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="zara">Zara</SelectItem>
-                      <SelectItem value="hm">H&M</SelectItem>
-                      <SelectItem value="mango">Mango</SelectItem>
-                      <SelectItem value="about_you">About You</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <Select>
-                    <SelectTrigger className="h-8 w-[120px] text-xs">
-                      <SelectValue placeholder="Обрати метод" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="ftid">FTID</SelectItem>
-                      <SelectItem value="dna">DNA</SelectItem>
-                      <SelectItem value="eb">EB</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <Select>
-                    <SelectTrigger className="h-8 w-[80px] text-xs">
-                      <SelectValue placeholder="День" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {Array.from({ length: 31 }, (_, i) => (
-                        <SelectItem key={i + 1} value={String(i + 1)}>{i + 1}</SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-              </PopoverContent>
-            </Popover>
+            {/* Date Toggle Button */}
+            <Button 
+              variant="outline" 
+              size="sm" 
+              className="h-8 text-xs gap-1.5"
+              onClick={() => setShowDateInput(!showDateInput)}
+            >
+              <CalendarPlus className="h-3.5 w-3.5" />
+              Дата +
+            </Button>
 
             <div className="relative">
               <Search className="absolute left-2 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -167,6 +157,104 @@ export function RefProcesModule() {
           </div>
         </div>
       </div>
+
+      {/* Date Input Section */}
+      {showDateInput && (
+        <div className="border-b border-border bg-card/60 px-4 py-3 space-y-3">
+          {/* Input Row */}
+          <div className="flex items-center gap-2">
+            <Select>
+              <SelectTrigger className="h-8 w-[160px] text-xs">
+                <SelectValue placeholder="Обрати магазин" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="zara">Zara</SelectItem>
+                <SelectItem value="hm">H&M</SelectItem>
+                <SelectItem value="mango">Mango</SelectItem>
+                <SelectItem value="about_you">About You</SelectItem>
+              </SelectContent>
+            </Select>
+            <Select>
+              <SelectTrigger className="h-8 w-[130px] text-xs">
+                <SelectValue placeholder="Обрати метод" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="ftid">FTID</SelectItem>
+                <SelectItem value="dna">DNA</SelectItem>
+                <SelectItem value="eb">EB</SelectItem>
+              </SelectContent>
+            </Select>
+            <Select>
+              <SelectTrigger className="h-8 w-[90px] text-xs">
+                <SelectValue placeholder="День" />
+              </SelectTrigger>
+              <SelectContent>
+                {Array.from({ length: 31 }, (_, i) => (
+                  <SelectItem key={i + 1} value={String(i + 1)}>{i + 1}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <Button 
+              variant="secondary" 
+              size="sm" 
+              className="h-8 text-xs"
+              onClick={handleAddDateEntry}
+            >
+              Додати
+            </Button>
+          </div>
+
+          {/* Date Entries Table */}
+          {dateEntries.length > 0 && (
+            <div className="rounded-md border border-border overflow-hidden">
+              <table className="w-full text-sm">
+                <thead className="bg-muted/50">
+                  <tr className="text-left text-xs text-muted-foreground">
+                    <th className="px-3 py-2 font-medium">Магазин</th>
+                    <th className="px-3 py-2 font-medium">Метод</th>
+                    <th className="px-3 py-2 font-medium">День</th>
+                    <th className="px-3 py-2 font-medium w-12 text-center">Дія</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {dateEntries.map((entry, index) => (
+                    <tr 
+                      key={entry.id} 
+                      className={cn(
+                        "border-t border-border/50 hover:bg-muted/30 transition-colors",
+                        index % 2 === 0 ? "bg-card/30" : "bg-background/40"
+                      )}
+                    >
+                      <td className="px-3 py-1.5 text-xs">{entry.store}</td>
+                      <td className="px-3 py-1.5 text-xs">
+                        <span className={cn(
+                          'inline-flex items-center px-2 py-0.5 rounded text-[10px] font-medium border',
+                          entry.method === 'DNA' ? 'bg-purple-500/20 text-purple-400 border-purple-500/30' :
+                          entry.method === 'FTID' ? 'bg-blue-500/20 text-blue-400 border-blue-500/30' :
+                          'bg-emerald-500/20 text-emerald-400 border-emerald-500/30'
+                        )}>
+                          {entry.method}
+                        </span>
+                      </td>
+                      <td className="px-3 py-1.5 text-xs">{entry.day}</td>
+                      <td className="px-3 py-1.5 text-center">
+                        <Button 
+                          variant="ghost" 
+                          size="icon" 
+                          className="h-5 w-5 text-muted-foreground hover:text-destructive hover:bg-destructive/10"
+                          onClick={() => handleRemoveDateEntry(entry.id)}
+                        >
+                          <Trash2 className="h-3 w-3" />
+                        </Button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </div>
+      )}
 
       {/* Table */}
       <div className="flex-1 overflow-auto bg-muted/20">
