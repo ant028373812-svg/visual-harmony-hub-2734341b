@@ -141,6 +141,10 @@ export function DeliveryModule() {
     sumaGrnExtra: '',
   });
 
+  // Search state
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+
   const openEuroPanel = (dropId: string, e: React.MouseEvent) => {
     e.stopPropagation();
     setSelectedDropForEuro(dropId);
@@ -270,15 +274,39 @@ export function DeliveryModule() {
             </Select>
           </div>
 
-          {/* Right side - Search icon and Drop/Address button */}
+          {/* Right side - Search and Drop/Address button */}
           <div className="flex items-center gap-2">
-            <Button
-              variant="ghost"
-              size="icon"
-              className="h-8 w-8 text-muted-foreground hover:text-foreground"
-            >
-              <Search className="h-4 w-4" />
-            </Button>
+            {isSearchOpen ? (
+              <div className="flex items-center gap-2">
+                <Input
+                  value={searchQuery}
+                  onChange={e => setSearchQuery(e.target.value)}
+                  placeholder="Пошук..."
+                  className="h-8 w-48 text-xs"
+                  autoFocus
+                />
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="h-8 w-8 text-muted-foreground hover:text-foreground"
+                  onClick={() => {
+                    setIsSearchOpen(false);
+                    setSearchQuery('');
+                  }}
+                >
+                  <X className="h-4 w-4" />
+                </Button>
+              </div>
+            ) : (
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-8 w-8 text-muted-foreground hover:text-foreground"
+                onClick={() => setIsSearchOpen(true)}
+              >
+                <Search className="h-4 w-4" />
+              </Button>
+            )}
             <Button
               variant="outline"
               size="sm"
