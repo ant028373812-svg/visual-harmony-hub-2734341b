@@ -37,11 +37,18 @@ interface DeliveryDrop {
   remaining: number;
 }
 
-interface AddressBlock {
+interface AddressItem {
   id: string;
-  geo: string;
-  carrier: string;
+  geoList: string[];
+  carrierList: string[];
   address: string;
+}
+
+interface DropConfig {
+  id: string;
+  name: string;
+  expanded: boolean;
+  addresses: AddressItem[];
 }
 
 const demoDeliveryDrops: DeliveryDrop[] = [
@@ -74,17 +81,45 @@ const demoDeliveryDrops: DeliveryDrop[] = [
 
 const stores = ['Всі магазини', 'Zara', 'H&M', 'Mango', 'Bershka', 'PullBear'];
 
+const defaultGeoOptions = ['Germany', 'Italy', 'France', 'Spain'];
+const defaultCarrierOptions = ['DPD', 'DHL', 'GLS', 'UPS'];
+
 export function DeliveryModule() {
   const [expandedDrops, setExpandedDrops] = useState<Record<string, boolean>>({
     '1': true,
     '2': true,
   });
   const [selectedPacks, setSelectedPacks] = useState<Record<string, boolean>>({});
-  const [isAddressPanelOpen, setIsAddressPanelOpen] = useState(false);
+  const [isDropPanelOpen, setIsDropPanelOpen] = useState(false);
   const [selectedStore, setSelectedStore] = useState('Всі магазини');
-  const [addresses, setAddresses] = useState<AddressBlock[]>([
-    { id: '1', geo: 'Німеччина', carrier: 'DHL', address: 'Musterstraße 123, Berlin' },
+  
+  // Drop/Address panel state
+  const [dropConfigs, setDropConfigs] = useState<DropConfig[]>([
+    {
+      id: '1',
+      name: 'Олег',
+      expanded: true,
+      addresses: [
+        { id: 'a1', geoList: ['Germany'], carrierList: ['DHL'], address: 'Musterstraße 123, Berlin' },
+      ],
+    },
+    {
+      id: '2',
+      name: 'Максим',
+      expanded: false,
+      addresses: [
+        { id: 'a2', geoList: ['Italy'], carrierList: ['DPD'], address: 'Via Roma 45, Milano' },
+      ],
+    },
   ]);
+  const [isAddingDrop, setIsAddingDrop] = useState(false);
+  const [newDropName, setNewDropName] = useState('');
+  const [geoOptions, setGeoOptions] = useState(defaultGeoOptions);
+  const [carrierOptions, setCarrierOptions] = useState(defaultCarrierOptions);
+  const [addingGeoToAddress, setAddingGeoToAddress] = useState<string | null>(null);
+  const [addingCarrierToAddress, setAddingCarrierToAddress] = useState<string | null>(null);
+  const [newGeoName, setNewGeoName] = useState('');
+  const [newCarrierName, setNewCarrierName] = useState('');
 
   const toggleDrop = (dropId: string) => {
     setExpandedDrops(prev => ({ ...prev, [dropId]: !prev[dropId] }));
@@ -94,17 +129,91 @@ export function DeliveryModule() {
     setSelectedPacks(prev => ({ ...prev, [packId]: !prev[packId] }));
   };
 
-  const addAddress = () => {
-    setAddresses(prev => [
-      ...prev,
-      { id: crypto.randomUUID(), geo: '', carrier: '', address: '' },
-    ]);
+  const toggleDropConfig = (dropId: string) => {
+    setDropConfigs(prev =>
+      prev.map(d => (d.id === dropId ? { ...d, expanded: !d.expanded } : d))
+    );
   };
 
-  const updateAddress = (id: string, field: keyof AddressBlock, value: string) => {
-    setAddresses(prev =>
-      prev.map(addr => (addr.id === id ? { ...addr, [field]: value } : addr))
+  const addNewDrop = () => {
+    if (newDropName.trim()) {
+      setDropConfigs(prev => [
+        ...prev,
+        { id: crypto.randomUUID(), name: newDropName.trim(), expanded: false, addresses: [] },
+      ]);
+      setNewDropName('');
+      setIsAddingDrop(false);
+    }
+  };
+
+  const addAddressToDrop = (dropId: string) => {
+    setDropConfigs(prev =>
+      prev.map(d =>
+        d.id === dropId
+          ? { ...d, addresses: [...d.addresses, { id: crypto.randomUUID(), geoList: [], carrierList: [], address: '' }] }
+          : d
+      )
     );
+  };
+
+  const toggleGeoInAddress = (dropId: string, addressId: string, geo: string) => {
+    setDropConfigs(prev =>
+      prev.map(d =>
+        d.id === dropId
+          ? {
+              ...d,
+              addresses: d.addresses.map(a =>
+                a.id === addressId
+                  ? { ...a, geoList: a.geoList.includes(geo) ? a.geoList.filter(g => g !== geo) : [...a.geoList, geo] }
+                  : a
+              ),
+            }
+          : d
+      )
+    );
+  };
+
+  const toggleCarrierInAddress = (dropId: string, addressId: string, carrier: string) => {
+    setDropConfigs(prev =>
+      prev.map(d =>
+        d.id === dropId
+          ? {
+              ...d,
+              addresses: d.addresses.map(a =>
+                a.id === addressId
+                  ? { ...a, carrierList: a.carrierList.includes(carrier) ? a.carrierList.filter(c => c !== carrier) : [...a.carrierList, carrier] }
+                  : a
+              ),
+            }
+          : d
+      )
+    );
+  };
+
+  const updateAddressText = (dropId: string, addressId: string, text: string) => {
+    setDropConfigs(prev =>
+      prev.map(d =>
+        d.id === dropId
+          ? { ...d, addresses: d.addresses.map(a => (a.id === addressId ? { ...a, address: text } : a)) }
+          : d
+      )
+    );
+  };
+
+  const addNewGeoOption = () => {
+    if (newGeoName.trim() && !geoOptions.includes(newGeoName.trim())) {
+      setGeoOptions(prev => [...prev, newGeoName.trim()]);
+    }
+    setNewGeoName('');
+    setAddingGeoToAddress(null);
+  };
+
+  const addNewCarrierOption = () => {
+    if (newCarrierName.trim() && !carrierOptions.includes(newCarrierName.trim())) {
+      setCarrierOptions(prev => [...prev, newCarrierName.trim()]);
+    }
+    setNewCarrierName('');
+    setAddingCarrierToAddress(null);
   };
 
   return (
@@ -134,14 +243,14 @@ export function DeliveryModule() {
             </Select>
           </div>
 
-          {/* Right side - Address button */}
+          {/* Right side - Drop/Address button */}
           <Button
             variant="outline"
             size="sm"
-            onClick={() => setIsAddressPanelOpen(true)}
+            onClick={() => setIsDropPanelOpen(true)}
           >
             <Plus className="h-4 w-4 mr-1" />
-            Адреси
+            Дроп/Адрес
           </Button>
         </div>
       </div>
@@ -238,87 +347,186 @@ export function DeliveryModule() {
         ))}
       </div>
 
-      {/* Address Panel - Sliding side panel */}
-      <Sheet open={isAddressPanelOpen} onOpenChange={setIsAddressPanelOpen}>
-        <SheetContent className="w-80">
-          <SheetHeader className="flex flex-row items-center justify-between">
-            <SheetTitle>Адреси</SheetTitle>
+      {/* Drop/Address Panel - Sliding side panel */}
+      <Sheet open={isDropPanelOpen} onOpenChange={setIsDropPanelOpen}>
+        <SheetContent className="w-96 overflow-y-auto">
+          <SheetHeader className="flex flex-row items-center justify-between pb-4 border-b border-border">
+            <SheetTitle className="text-sm font-medium">Дроп/Адрес</SheetTitle>
           </SheetHeader>
 
-          <div className="space-y-4 py-4">
-            {addresses.map(addr => (
-              <div
-                key={addr.id}
-                className="space-y-3 p-3 border border-border rounded-lg"
+          <div className="py-4 space-y-4">
+            {/* Drop selector header */}
+            <div className="flex items-center justify-between">
+              <span className="text-xs text-muted-foreground">Дроп</span>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-6 w-6"
+                onClick={() => setIsAddingDrop(true)}
               >
-                {/* Geo */}
-                <div className="space-y-1.5">
-                  <Label className="text-xs flex items-center gap-2">
-                    <Checkbox checked={!!addr.geo} />
-                    Гео
-                  </Label>
-                  <Select
-                    value={addr.geo}
-                    onValueChange={val => updateAddress(addr.id, 'geo', val)}
-                  >
-                    <SelectTrigger className="h-8 text-xs">
-                      <SelectValue placeholder="Оберіть гео..." />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="Німеччина">Німеччина</SelectItem>
-                      <SelectItem value="Італія">Італія</SelectItem>
-                      <SelectItem value="Франція">Франція</SelectItem>
-                      <SelectItem value="Іспанія">Іспанія</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
+                <Plus className="h-3.5 w-3.5" />
+              </Button>
+            </div>
 
-                {/* Carrier */}
-                <div className="space-y-1.5">
-                  <Label className="text-xs flex items-center gap-2">
-                    <Checkbox checked={!!addr.carrier} />
-                    Служба доставки
-                  </Label>
-                  <Select
-                    value={addr.carrier}
-                    onValueChange={val => updateAddress(addr.id, 'carrier', val)}
-                  >
-                    <SelectTrigger className="h-8 text-xs">
-                      <SelectValue placeholder="Оберіть..." />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="DHL">DHL</SelectItem>
-                      <SelectItem value="DPD">DPD</SelectItem>
-                      <SelectItem value="GLS">GLS</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                {/* Address input */}
-                <div className="space-y-1.5">
-                  <Label className="text-xs flex items-center gap-2">
-                    <Checkbox checked={!!addr.address} />
-                    Адреса
-                  </Label>
-                  <Input
-                    value={addr.address}
-                    onChange={e => updateAddress(addr.id, 'address', e.target.value)}
-                    placeholder="Введіть адресу..."
-                    className="h-8 text-xs"
-                  />
-                </div>
+            {/* Add new drop input */}
+            {isAddingDrop && (
+              <div className="flex items-center gap-2 p-2 border border-border rounded">
+                <Input
+                  value={newDropName}
+                  onChange={e => setNewDropName(e.target.value)}
+                  placeholder="Назва дропа..."
+                  className="h-7 text-xs flex-1"
+                  autoFocus
+                  onKeyDown={e => e.key === 'Enter' && addNewDrop()}
+                />
+                <Button size="sm" className="h-7 text-xs" onClick={addNewDrop}>
+                  Додати
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="h-6 w-6"
+                  onClick={() => { setIsAddingDrop(false); setNewDropName(''); }}
+                >
+                  <X className="h-3 w-3" />
+                </Button>
               </div>
-            ))}
+            )}
 
-            <Button
-              variant="outline"
-              className="w-full text-xs"
-              size="sm"
-              onClick={addAddress}
-            >
-              <Plus className="h-3 w-3 mr-1" />
-              Додати адресу
-            </Button>
+            {/* Drops list */}
+            <div className="space-y-2">
+              {dropConfigs.map(drop => (
+                <div key={drop.id} className="border border-border rounded">
+                  {/* Drop header */}
+                  <div
+                    className="flex items-center justify-between px-3 py-2 cursor-pointer hover:bg-muted/30"
+                    onClick={() => toggleDropConfig(drop.id)}
+                  >
+                    <span className="text-xs font-medium">{drop.name}</span>
+                    {drop.expanded ? (
+                      <ChevronDown className="h-3.5 w-3.5 text-muted-foreground" />
+                    ) : (
+                      <ChevronRight className="h-3.5 w-3.5 text-muted-foreground" />
+                    )}
+                  </div>
+
+                  {/* Expanded content - Addresses */}
+                  {drop.expanded && (
+                    <div className="border-t border-border p-3 space-y-3">
+                      {drop.addresses.map(addr => (
+                        <div key={addr.id} className="space-y-2 p-2 bg-muted/20 rounded">
+                          {/* Geo checklist */}
+                          <div className="space-y-1">
+                            <span className="text-[10px] text-muted-foreground uppercase">Гео</span>
+                            <div className="space-y-1">
+                              {geoOptions.map(geo => (
+                                <label key={geo} className="flex items-center gap-2 cursor-pointer">
+                                  <Checkbox
+                                    checked={addr.geoList.includes(geo)}
+                                    onCheckedChange={() => toggleGeoInAddress(drop.id, addr.id, geo)}
+                                    className="h-3 w-3"
+                                  />
+                                  <span className="text-xs">{geo}</span>
+                                </label>
+                              ))}
+                            </div>
+                            {addingGeoToAddress === addr.id ? (
+                              <div className="flex items-center gap-1 mt-1">
+                                <Input
+                                  value={newGeoName}
+                                  onChange={e => setNewGeoName(e.target.value)}
+                                  placeholder="Нове гео..."
+                                  className="h-6 text-[10px] flex-1"
+                                  autoFocus
+                                  onKeyDown={e => e.key === 'Enter' && addNewGeoOption()}
+                                />
+                                <Button size="sm" className="h-6 text-[10px] px-2" onClick={addNewGeoOption}>
+                                  OK
+                                </Button>
+                              </div>
+                            ) : (
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                className="h-6 text-[10px] text-muted-foreground p-0"
+                                onClick={() => setAddingGeoToAddress(addr.id)}
+                              >
+                                <Plus className="h-2.5 w-2.5 mr-1" />
+                                Додати
+                              </Button>
+                            )}
+                          </div>
+
+                          {/* Carrier checklist */}
+                          <div className="space-y-1 pt-2 border-t border-border/50">
+                            <span className="text-[10px] text-muted-foreground uppercase">Служба доставки</span>
+                            <div className="space-y-1">
+                              {carrierOptions.map(carrier => (
+                                <label key={carrier} className="flex items-center gap-2 cursor-pointer">
+                                  <Checkbox
+                                    checked={addr.carrierList.includes(carrier)}
+                                    onCheckedChange={() => toggleCarrierInAddress(drop.id, addr.id, carrier)}
+                                    className="h-3 w-3"
+                                  />
+                                  <span className="text-xs">{carrier}</span>
+                                </label>
+                              ))}
+                            </div>
+                            {addingCarrierToAddress === addr.id ? (
+                              <div className="flex items-center gap-1 mt-1">
+                                <Input
+                                  value={newCarrierName}
+                                  onChange={e => setNewCarrierName(e.target.value)}
+                                  placeholder="Нова служба..."
+                                  className="h-6 text-[10px] flex-1"
+                                  autoFocus
+                                  onKeyDown={e => e.key === 'Enter' && addNewCarrierOption()}
+                                />
+                                <Button size="sm" className="h-6 text-[10px] px-2" onClick={addNewCarrierOption}>
+                                  OK
+                                </Button>
+                              </div>
+                            ) : (
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                className="h-6 text-[10px] text-muted-foreground p-0"
+                                onClick={() => setAddingCarrierToAddress(addr.id)}
+                              >
+                                <Plus className="h-2.5 w-2.5 mr-1" />
+                                Додати
+                              </Button>
+                            )}
+                          </div>
+
+                          {/* Address input */}
+                          <div className="space-y-1 pt-2 border-t border-border/50">
+                            <span className="text-[10px] text-muted-foreground uppercase">Адреса</span>
+                            <Input
+                              value={addr.address}
+                              onChange={e => updateAddressText(drop.id, addr.id, e.target.value)}
+                              placeholder="Введіть адресу..."
+                              className="h-7 text-xs"
+                            />
+                          </div>
+                        </div>
+                      ))}
+
+                      {/* Add address button */}
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="w-full h-7 text-xs text-muted-foreground justify-start"
+                        onClick={() => addAddressToDrop(drop.id)}
+                      >
+                        <Plus className="h-3 w-3 mr-1" />
+                        Додати адресу
+                      </Button>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
           </div>
         </SheetContent>
       </Sheet>
