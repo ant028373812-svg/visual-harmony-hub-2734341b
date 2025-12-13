@@ -22,17 +22,19 @@ import { cn } from '@/lib/utils';
 interface DeliveryPack {
   id: string;
   packName: string;
-  ordersCount: number;
-  date: string;
-  expenses: number;
-  profit: number;
-  trackingNumber: string;
+  status: string;
+  skupName: string;
+  accounting: string;
 }
 
 interface DeliveryDrop {
   id: string;
   name: string;
   packs: DeliveryPack[];
+  totalPacks: number;
+  ordered: number;
+  delivering: number;
+  remaining: number;
 }
 
 interface AddressBlock {
@@ -46,18 +48,26 @@ const demoDeliveryDrops: DeliveryDrop[] = [
   {
     id: '1',
     name: 'Олег',
+    totalPacks: 3,
+    ordered: 2,
+    delivering: 1,
+    remaining: 0,
     packs: [
-      { id: '1', packName: '1V15 Zara', ordersCount: 5, date: '12.01.2025', expenses: 150, profit: 420, trackingNumber: 'DE123456789' },
-      { id: '2', packName: '1V16 H&M', ordersCount: 3, date: '11.01.2025', expenses: 85, profit: 280, trackingNumber: 'DE987654321' },
-      { id: '3', packName: '1V17 Mango', ordersCount: 4, date: '10.01.2025', expenses: 120, profit: 350, trackingNumber: 'DE456789123' },
+      { id: '1', packName: '1V15 Zara', status: 'Відправлено', skupName: 'Скуп А', accounting: '€150' },
+      { id: '2', packName: '1V16 H&M', status: 'Очікує', skupName: 'Скуп Б', accounting: '€85' },
+      { id: '3', packName: '1V17 Mango', status: 'Відправлено', skupName: 'Скуп А', accounting: '€120' },
     ],
   },
   {
     id: '2',
     name: 'Максим',
+    totalPacks: 2,
+    ordered: 1,
+    delivering: 1,
+    remaining: 0,
     packs: [
-      { id: '4', packName: '2M08 Bershka', ordersCount: 6, date: '12.01.2025', expenses: 200, profit: 580, trackingNumber: 'IT123456789' },
-      { id: '5', packName: '2M09 PullBear', ordersCount: 2, date: '09.01.2025', expenses: 65, profit: 190, trackingNumber: 'IT987654321' },
+      { id: '4', packName: '2M08 Bershka', status: 'Очікує', skupName: 'Скуп В', accounting: '€200' },
+      { id: '5', packName: '2M09 PullBear', status: 'Відправлено', skupName: 'Скуп Б', accounting: '€65' },
     ],
   },
 ];
@@ -152,6 +162,13 @@ export function DeliveryModule() {
                   <ChevronRight className="h-4 w-4" />
                 )}
                 <span className="font-medium">{drop.name}</span>
+                <Euro className="h-4 w-4 text-muted-foreground" />
+              </div>
+              <div className="flex items-center gap-4 text-xs text-muted-foreground">
+                <span>Загалом паків: <span className="text-foreground font-medium">{drop.totalPacks}</span></span>
+                <span>Замовлено: <span className="text-foreground font-medium">{drop.ordered}</span></span>
+                <span>Доставляється: <span className="text-foreground font-medium">{drop.delivering}</span></span>
+                <span>Залишається: <span className="text-foreground font-medium">{drop.remaining}</span></span>
               </div>
             </div>
 
@@ -161,16 +178,12 @@ export function DeliveryModule() {
                 <table className="w-full text-xs">
                   <thead className="bg-muted/30">
                     <tr className="text-left text-muted-foreground border-b border-border">
-                      <th className="px-3 py-2 w-10 border-r border-border">Статус</th>
-                      <th className="px-3 py-2 border-r border-border">Пак</th>
-                      <th className="px-3 py-2 w-24 border-r border-border">Замовлення</th>
-                      <th className="px-3 py-2 w-24 border-r border-border">Дата</th>
-                      <th className="px-3 py-2 w-20 border-r border-border">Витрати</th>
-                      <th className="px-3 py-2 w-20 border-r border-border">Профіт</th>
-                      <th className="px-3 py-2 w-32 border-r border-border">ТТН</th>
-                      <th className="px-3 py-2 w-16 border-r border-border text-center">Оплачено</th>
-                      <th className="px-3 py-2 w-16 border-r border-border text-center">Виплата</th>
-                      <th className="px-3 py-2 w-10 text-center">€</th>
+                      <th className="px-3 py-2 w-28 border-r border-border">Статус</th>
+                      <th className="px-3 py-2 w-24 border-r border-border">Статус посилки</th>
+                      <th className="px-3 py-2 border-r border-border">Назва паку</th>
+                      <th className="px-3 py-2 w-32 border-r border-border text-center">Інформація замовлення</th>
+                      <th className="px-3 py-2 w-24 border-r border-border">Скуп</th>
+                      <th className="px-3 py-2 w-28">Бухгалтерія пак</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -180,43 +193,39 @@ export function DeliveryModule() {
                         className="border-b border-border hover:bg-muted/20"
                       >
                         <td className="px-3 py-2 border-r border-border">
-                          <Checkbox
-                            checked={selectedPacks[pack.id] || false}
-                            onCheckedChange={() => togglePackSelection(pack.id)}
-                          />
+                          <div className="flex flex-col gap-1">
+                            <label className="flex items-center gap-1.5 cursor-pointer">
+                              <Checkbox
+                                checked={pack.status === 'Відправлено'}
+                                className="h-3 w-3"
+                              />
+                              <span className="text-[10px]">Відправлено</span>
+                            </label>
+                            <label className="flex items-center gap-1.5 cursor-pointer">
+                              <Checkbox
+                                checked={pack.status === 'Очікує'}
+                                className="h-3 w-3"
+                              />
+                              <span className="text-[10px]">Очікує</span>
+                            </label>
+                          </div>
+                        </td>
+                        <td className="px-3 py-2 border-r border-border text-muted-foreground">
+                          {pack.status}
                         </td>
                         <td className="px-3 py-2 border-r border-border font-medium">
                           {pack.packName}
                         </td>
                         <td className="px-3 py-2 border-r border-border text-center">
-                          {pack.ordersCount}
-                        </td>
-                        <td className="px-3 py-2 border-r border-border">
-                          {pack.date}
-                        </td>
-                        <td className="px-3 py-2 border-r border-border">
-                          €{pack.expenses}
-                        </td>
-                        <td className="px-3 py-2 border-r border-border text-success">
-                          €{pack.profit}
-                        </td>
-                        <td className="px-3 py-2 border-r border-border font-mono text-[10px]">
-                          {pack.trackingNumber}
-                        </td>
-                        <td className="px-3 py-2 border-r border-border text-center">
                           <Button variant="ghost" size="icon" className="h-6 w-6">
                             <Info className="h-3.5 w-3.5" />
                           </Button>
                         </td>
-                        <td className="px-3 py-2 border-r border-border text-center">
-                          <Button variant="ghost" size="icon" className="h-6 w-6">
-                            <Info className="h-3.5 w-3.5" />
-                          </Button>
+                        <td className="px-3 py-2 border-r border-border">
+                          {pack.skupName}
                         </td>
-                        <td className="px-3 py-2 text-center">
-                          <Button variant="ghost" size="icon" className="h-6 w-6">
-                            <Euro className="h-3.5 w-3.5" />
-                          </Button>
+                        <td className="px-3 py-2">
+                          {pack.accounting}
                         </td>
                       </tr>
                     ))}
