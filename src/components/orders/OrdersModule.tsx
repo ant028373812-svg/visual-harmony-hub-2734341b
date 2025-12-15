@@ -16,7 +16,7 @@ import { PackAccountingModal } from './modals/PackAccountingModal';
 import { PackInfoModal } from './modals/PackInfoModal';
 import { CreatePackModal } from './modals/CreatePackModal';
 import { CommentModal } from '@/components/ui/comment-modal';
-import { AddressPanel } from './AddressPanel';
+
 import { DeliveryModule } from '@/components/delivery/DeliveryModule';
 import { FilterDropdown } from '@/components/ui/filter-dropdown';
 import { StatusDropdown } from '@/components/ui/status-dropdown';
@@ -73,7 +73,7 @@ export function OrdersModule() {
   const { theme, setTheme } = useTheme();
   const [isFiltersOpen, setIsFiltersOpen] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
-  const [isAddressPanelOpen, setIsAddressPanelOpen] = useState(false);
+  
   const [activeTab, setActiveTab] = useState('orders');
   
   // Modal states
@@ -162,9 +162,6 @@ export function OrdersModule() {
                 className="pl-8 h-8 w-48"
               />
             </div>
-            <Button variant="outline" size="sm" onClick={() => setIsAddressPanelOpen(true)}>
-              Дропи/Адреси
-            </Button>
           </div>
         </div>
         
@@ -380,7 +377,7 @@ export function OrdersModule() {
       <PackAccountingModal open={isPackAccountingOpen} onOpenChange={setIsPackAccountingOpen} />
       <CreatePackModal open={isCreatePackOpen} onOpenChange={setIsCreatePackOpen} />
       <CommentModal open={isCommentOpen} onOpenChange={setIsCommentOpen} />
-      <AddressPanel open={isAddressPanelOpen} onOpenChange={setIsAddressPanelOpen} />
+      
     </div>
   );
 }
