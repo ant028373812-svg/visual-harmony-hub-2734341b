@@ -179,16 +179,9 @@ export function CreatePackModal({ open, onOpenChange }: CreatePackModalProps) {
             </div>
             <div className="space-y-2">
               <Label>Адреса</Label>
-              <Select value={formData.address} onValueChange={(v) => setFormData(prev => ({ ...prev, address: v }))}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Оберіть адресу" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="kyiv">Kyiv</SelectItem>
-                  <SelectItem value="lviv">Lviv</SelectItem>
-                  <SelectItem value="odesa">Odesa</SelectItem>
-                </SelectContent>
-              </Select>
+              <p className="text-sm text-foreground py-2 px-3 bg-muted/50 rounded-md">
+                DHL — Musterstraße 123, 10115 Berlin
+              </p>
             </div>
           </div>
 

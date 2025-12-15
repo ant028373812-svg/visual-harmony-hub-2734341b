@@ -50,16 +50,7 @@ export function OrderInfoModal({ open, onOpenChange }: OrderInfoModalProps) {
           </div>
           <div className="space-y-1.5">
             <Label className="text-xs">Адреса</Label>
-            <Select defaultValue="kyiv">
-              <SelectTrigger className="h-8">
-                <SelectValue placeholder="Оберіть адресу" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="kyiv">Kyiv</SelectItem>
-                <SelectItem value="lviv">Lviv</SelectItem>
-                <SelectItem value="odesa">Odesa</SelectItem>
-              </SelectContent>
-            </Select>
+            <p className="text-sm text-foreground py-1">DHL — Musterstraße 123, 10115 Berlin</p>
           </div>
           <div className="space-y-1.5">
             <Label className="text-xs">Тип товару</Label>
