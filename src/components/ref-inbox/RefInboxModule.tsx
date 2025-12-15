@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { cn } from '@/lib/utils';
-import { Badge } from '@/components/ui/badge';
+import { StatusBadge } from '@/components/ui/status-badge';
 import { Loader2 } from 'lucide-react';
 
 interface RefInboxItem {
@@ -12,19 +12,6 @@ interface RefInboxItem {
   store_id: string | null;
   drop_id: string | null;
 }
-
-const getStatusBadgeClass = (status: string) => {
-  switch (status) {
-    case 'new':
-      return 'bg-blue-500/20 text-blue-400 border-blue-500/30';
-    case 'checked':
-      return 'bg-yellow-500/20 text-yellow-400 border-yellow-500/30';
-    case 'sent_to_ref':
-      return 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30';
-    default:
-      return 'bg-muted text-muted-foreground';
-  }
-};
 
 const getStatusLabel = (status: string) => {
   switch (status) {
@@ -38,6 +25,7 @@ const getStatusLabel = (status: string) => {
       return status;
   }
 };
+
 
 export function RefInboxModule() {
   const [items, setItems] = useState<RefInboxItem[]>([]);
@@ -137,12 +125,7 @@ export function RefInboxModule() {
                     {formatDate(item.created_at)}
                   </td>
                   <td className="px-4 py-2.5">
-                    <span className={cn(
-                      'inline-flex items-center px-2.5 py-1 rounded text-xs font-medium border',
-                      getStatusBadgeClass(item.status)
-                    )}>
-                      {getStatusLabel(item.status)}
-                    </span>
+                    <StatusBadge status={getStatusLabel(item.status)} />
                   </td>
                   <td className="px-4 py-2.5 font-mono text-xs text-muted-foreground">
                     {item.order_id || '—'}

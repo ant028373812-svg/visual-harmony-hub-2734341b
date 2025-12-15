@@ -15,6 +15,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { cn } from '@/lib/utils';
+import { getStatusStyle } from '@/components/ui/status-badge';
 
 interface DeliveredTableProps {
   onOpenPackInfo: () => void;
@@ -26,10 +27,10 @@ interface DeliveredTableProps {
 
 const getRefMethodColor = (method: string) => {
   switch (method) {
-    case 'DNA': return 'bg-purple-500/20 text-purple-400 border-purple-500/30';
-    case 'FTID': return 'bg-blue-500/20 text-blue-400 border-blue-500/30';
-    case 'EB': return 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30';
-    default: return 'bg-muted text-muted-foreground';
+    case 'DNA': return 'bg-violet-500/15 text-violet-600 dark:text-violet-400 border-violet-500/25';
+    case 'FTID': return 'bg-sky-500/15 text-sky-600 dark:text-sky-400 border-sky-500/25';
+    case 'EB': return 'bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border-emerald-500/25';
+    default: return 'bg-muted/60 text-muted-foreground border-border';
   }
 };
 
@@ -118,7 +119,10 @@ export function DeliveredTable({
             <td className="px-3 py-1.5">
               <Select value={selectedStatus} onValueChange={setSelectedStatus}>
                 <SelectTrigger 
-                  className="h-7 text-xs w-[110px] cursor-pointer hover:bg-muted/50 transition-colors bg-amber-500/20 text-amber-400 border-amber-500/30"
+                  className={cn(
+                    "h-8 text-xs w-[120px] cursor-pointer hover:opacity-80 transition-opacity border rounded-md",
+                    getStatusStyle(selectedStatus)
+                  )}
                 >
                   <SelectValue />
                 </SelectTrigger>
@@ -129,7 +133,10 @@ export function DeliveredTable({
                       value={status}
                       className="text-xs cursor-pointer"
                     >
-                      <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-medium bg-amber-500/20 text-amber-400 border border-amber-500/30">
+                      <span className={cn(
+                        "inline-flex items-center justify-center px-2 py-1 rounded-md text-xs font-medium border",
+                        getStatusStyle(status)
+                      )}>
                         {status}
                       </span>
                     </SelectItem>

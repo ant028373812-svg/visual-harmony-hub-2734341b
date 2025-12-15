@@ -106,10 +106,10 @@ export function RefProcesModule() {
 
   const getRefMethodColor = (method: string) => {
     switch (method) {
-      case 'DNA': return 'bg-purple-500/20 text-purple-400 border-purple-500/30';
-      case 'FTID': return 'bg-blue-500/20 text-blue-400 border-blue-500/30';
-      case 'EB': return 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30';
-      default: return 'bg-muted text-muted-foreground';
+      case 'DNA': return 'bg-violet-500/15 text-violet-600 dark:text-violet-400 border-violet-500/25';
+      case 'FTID': return 'bg-sky-500/15 text-sky-600 dark:text-sky-400 border-sky-500/25';
+      case 'EB': return 'bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border-emerald-500/25';
+      default: return 'bg-muted/60 text-muted-foreground border-border';
     }
   };
 
@@ -132,7 +132,7 @@ export function RefProcesModule() {
             <Package className="h-4 w-4 text-muted-foreground" />
             <span className="font-medium">Доставлені</span>
             {deliveredCount > 0 && (
-              <span className="bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 rounded-full px-2 py-0.5 text-xs font-medium">
+              <span className="bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/25 rounded-md px-2 py-1 text-xs font-medium">
                 {deliveredCount}
               </span>
             )}
@@ -173,7 +173,7 @@ export function RefProcesModule() {
             <Package className="h-3.5 w-3.5" />
             Доставлені
             {deliveredCount > 0 && (
-              <span className="absolute -top-1.5 -right-1.5 bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 rounded-full min-w-[18px] h-[18px] flex items-center justify-center text-[10px] font-medium">
+              <span className="absolute -top-1.5 -right-1.5 bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/25 rounded-md min-w-[18px] h-[18px] flex items-center justify-center text-[10px] font-medium">
                 {deliveredCount}
               </span>
             )}
@@ -330,10 +330,10 @@ export function RefProcesModule() {
                       <td className="px-3 py-1.5 text-xs">{entry.store}</td>
                       <td className="px-3 py-1.5 text-xs">
                         <span className={cn(
-                          'inline-flex items-center px-2 py-0.5 rounded text-[10px] font-medium border',
-                          entry.method === 'DNA' ? 'bg-purple-500/20 text-purple-400 border-purple-500/30' :
-                          entry.method === 'FTID' ? 'bg-blue-500/20 text-blue-400 border-blue-500/30' :
-                          'bg-emerald-500/20 text-emerald-400 border-emerald-500/30'
+                          'inline-flex items-center justify-center px-2 py-1 rounded-md text-xs font-medium border',
+                          entry.method === 'DNA' ? 'bg-violet-500/15 text-violet-600 dark:text-violet-400 border-violet-500/25' :
+                          entry.method === 'FTID' ? 'bg-sky-500/15 text-sky-600 dark:text-sky-400 border-sky-500/25' :
+                          'bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border-emerald-500/25'
                         )}>
                           {entry.method}
                         </span>
