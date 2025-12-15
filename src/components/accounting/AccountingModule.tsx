@@ -371,9 +371,9 @@ export function AccountingModule() {
                   </Select>
                   
                   {/* Пройоб */}
-                  <div className="flex items-center gap-1 h-8 px-2 border border-input rounded-md bg-background">
+                  <div className="flex items-center gap-1 h-8 px-2 border border-input rounded-md bg-background hover:bg-muted/50 cursor-pointer transition-colors">
                     <Checkbox id="propiob" className="h-3 w-3" />
-                    <label htmlFor="propiob" className="text-xs">Пройоб</label>
+                    <label htmlFor="propiob" className="text-xs cursor-pointer">Пройоб</label>
                   </div>
                   
                   {/* Хто виконав */}
