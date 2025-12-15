@@ -134,7 +134,7 @@ export function StoresRefModule() {
                     </td>
                     <td className="px-4 py-3">{refund.date}</td>
                     <td className="px-4 py-3">
-                      <StatusBadge status={refund.status} type="completed" />
+                      <StatusBadge status={refund.status} />
                     </td>
                     <td className="px-4 py-3 text-center">
                       <div className="flex items-center justify-center gap-1">

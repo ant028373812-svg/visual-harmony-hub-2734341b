@@ -1,21 +1,13 @@
 import { useState } from 'react';
-import { Info, MessageCircle, Trash2, Copy, Plus } from 'lucide-react';
+import { Info, MessageCircle, Trash2, Copy } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
 import { cn } from '@/lib/utils';
-import { getStatusStyle } from '@/components/ui/status-badge';
+import { StatusDropdown } from '@/components/ui/status-dropdown';
 
 interface DeliveredTableProps {
   onOpenPackInfo: () => void;
@@ -27,10 +19,10 @@ interface DeliveredTableProps {
 
 const getRefMethodColor = (method: string) => {
   switch (method) {
-    case 'DNA': return 'bg-violet-500/15 text-violet-600 dark:text-violet-400 border-violet-500/25';
-    case 'FTID': return 'bg-sky-500/15 text-sky-600 dark:text-sky-400 border-sky-500/25';
-    case 'EB': return 'bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border-emerald-500/25';
-    default: return 'bg-muted/60 text-muted-foreground border-border';
+    case 'DNA': return 'bg-violet-100 text-violet-700 dark:bg-violet-900/40 dark:text-violet-300';
+    case 'FTID': return 'bg-sky-100 text-sky-700 dark:bg-sky-900/40 dark:text-sky-300';
+    case 'EB': return 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300';
+    default: return 'bg-gray-100 text-gray-600 dark:bg-gray-800/60 dark:text-gray-300';
   }
 };
 
@@ -60,7 +52,6 @@ const sampleDeliveredItem = {
   packId: '1V15',
   storeName: 'Zara',
   trackNumber: 'UA1234567890',
-  status: 'Очікує перенести',
   refMethod: 'FTID',
   deliveryDate: new Date(2024, 11, 20),
   writeDate: new Date(2024, 11, 25),
@@ -73,30 +64,7 @@ export function DeliveredTable({
   onOpenPackAccounting,
   onOpenComment,
 }: DeliveredTableProps) {
-  const [statuses, setStatuses] = useState<string[]>(['Перенести']);
   const [selectedStatus, setSelectedStatus] = useState('Перенести');
-  const [isAddingStatus, setIsAddingStatus] = useState(false);
-  const [newStatusName, setNewStatusName] = useState('');
-
-  const handleAddStatus = () => {
-    if (newStatusName.trim() && !statuses.includes(newStatusName.trim())) {
-      setStatuses(prev => [...prev, newStatusName.trim()]);
-      setSelectedStatus(newStatusName.trim());
-      setNewStatusName('');
-      setIsAddingStatus(false);
-    }
-  };
-
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter') {
-      e.preventDefault();
-      handleAddStatus();
-    }
-    if (e.key === 'Escape') {
-      setIsAddingStatus(false);
-      setNewStatusName('');
-    }
-  };
 
   return (
     <div className="flex-1 overflow-auto bg-muted/20">
@@ -117,81 +85,11 @@ export function DeliveredTable({
         <tbody>
           <tr className="border-b border-border/50 hover:bg-muted/40 transition-colors bg-card/40">
             <td className="px-3 py-1.5">
-              <Select value={selectedStatus} onValueChange={setSelectedStatus}>
-                <SelectTrigger 
-                  className={cn(
-                    "h-8 text-xs w-[120px] cursor-pointer hover:opacity-80 transition-opacity border rounded-md",
-                    getStatusStyle(selectedStatus)
-                  )}
-                >
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent className="bg-popover border border-border shadow-lg z-50">
-                  {statuses.map((status) => (
-                    <SelectItem 
-                      key={status} 
-                      value={status}
-                      className="text-xs cursor-pointer"
-                    >
-                      <span className={cn(
-                        "inline-flex items-center justify-center px-2 py-1 rounded-md text-xs font-medium border",
-                        getStatusStyle(status)
-                      )}>
-                        {status}
-                      </span>
-                    </SelectItem>
-                  ))}
-                  
-                  <div className="border-t border-border mt-1 pt-1">
-                    {isAddingStatus ? (
-                      <div className="px-2 py-1.5 space-y-2">
-                        <Input
-                          value={newStatusName}
-                          onChange={(e) => setNewStatusName(e.target.value)}
-                          onKeyDown={handleKeyDown}
-                          placeholder="Назва статусу..."
-                          className="h-7 text-xs"
-                          autoFocus
-                        />
-                        <div className="flex gap-1">
-                          <Button 
-                            size="sm" 
-                            className="h-6 text-xs flex-1"
-                            onClick={handleAddStatus}
-                          >
-                            Додати
-                          </Button>
-                          <Button 
-                            size="sm" 
-                            variant="ghost"
-                            className="h-6 text-xs"
-                            onClick={() => {
-                              setIsAddingStatus(false);
-                              setNewStatusName('');
-                            }}
-                          >
-                            Скасувати
-                          </Button>
-                        </div>
-                      </div>
-                    ) : (
-                      <Button 
-                        variant="ghost" 
-                        size="sm" 
-                        className="w-full h-7 text-xs text-muted-foreground hover:text-foreground gap-1 justify-start cursor-pointer"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          e.stopPropagation();
-                          setIsAddingStatus(true);
-                        }}
-                      >
-                        <Plus className="h-3 w-3" />
-                        Додати
-                      </Button>
-                    )}
-                  </div>
-                </SelectContent>
-              </Select>
+              <StatusDropdown 
+                value={selectedStatus}
+                options={['Перенести']}
+                onChange={setSelectedStatus}
+              />
             </td>
             <td className="px-3 py-1.5">
               <div className="flex items-center gap-1">
@@ -244,7 +142,7 @@ export function DeliveredTable({
             </td>
             <td className="px-3 py-1.5">
               <span className={cn(
-                'inline-flex items-center px-2 py-0.5 rounded text-[10px] font-medium border',
+                'inline-flex items-center px-2 py-1 rounded-md text-xs font-medium',
                 getRefMethodColor(sampleDeliveredItem.refMethod)
               )}>
                 {sampleDeliveredItem.refMethod}

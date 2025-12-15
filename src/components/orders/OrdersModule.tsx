@@ -19,7 +19,7 @@ import { CommentModal } from '@/components/ui/comment-modal';
 import { AddressPanel } from './AddressPanel';
 import { DeliveryModule } from '@/components/delivery/DeliveryModule';
 import { FilterDropdown } from '@/components/ui/filter-dropdown';
-import { StatusSelect } from '@/components/ui/status-select';
+import { StatusDropdown } from '@/components/ui/status-dropdown';
 
 const filterConfigs = [
   { label: 'Дроп', options: [
@@ -212,7 +212,10 @@ export function OrdersModule() {
               return (
                 <tr key={pack.id} className="border-b border-border hover:bg-muted/30 transition-colors">
                   <td className="px-3 py-2">
-                    <StatusSelect defaultValue={pack.status} className="w-[110px]" />
+                    <StatusDropdown 
+                      value={pack.status} 
+                      options={['Замовлено', 'Доставлено', 'Повертається']}
+                    />
                   </td>
                   <td className="px-3 py-2">
                     <div className="flex items-center gap-2">

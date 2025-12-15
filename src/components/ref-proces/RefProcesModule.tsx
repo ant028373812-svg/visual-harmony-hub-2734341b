@@ -1,8 +1,7 @@
 import { useState } from 'react';
-import { Search, ChevronDown, ChevronUp, Info, MessageCircle, Trash2, Copy, Plus, CalendarPlus, ArrowLeft, Package } from 'lucide-react';
+import { Search, ChevronDown, ChevronUp, Info, MessageCircle, Trash2, Copy, CalendarPlus, ArrowLeft, Package } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { StatusBadge } from '@/components/ui/status-badge';
 import {
   Select,
   SelectContent,
@@ -25,6 +24,7 @@ import { PackInfoModal } from '@/components/orders/modals/PackInfoModal';
 import { CommentModal } from '@/components/ui/comment-modal';
 import { DeliveredTable } from './DeliveredTable';
 import { FilterDropdown } from '@/components/ui/filter-dropdown';
+import { StatusDropdown } from '@/components/ui/status-dropdown';
 
 // Demo date entries
 interface DateEntry {
@@ -106,10 +106,10 @@ export function RefProcesModule() {
 
   const getRefMethodColor = (method: string) => {
     switch (method) {
-      case 'DNA': return 'bg-violet-500/15 text-violet-600 dark:text-violet-400 border-violet-500/25';
-      case 'FTID': return 'bg-sky-500/15 text-sky-600 dark:text-sky-400 border-sky-500/25';
-      case 'EB': return 'bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border-emerald-500/25';
-      default: return 'bg-muted/60 text-muted-foreground border-border';
+      case 'DNA': return 'bg-violet-100 text-violet-700 dark:bg-violet-900/40 dark:text-violet-300';
+      case 'FTID': return 'bg-sky-100 text-sky-700 dark:bg-sky-900/40 dark:text-sky-300';
+      case 'EB': return 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300';
+      default: return 'bg-gray-100 text-gray-600 dark:bg-gray-800/60 dark:text-gray-300';
     }
   };
 
@@ -132,7 +132,7 @@ export function RefProcesModule() {
             <Package className="h-4 w-4 text-muted-foreground" />
             <span className="font-medium">Доставлені</span>
             {deliveredCount > 0 && (
-              <span className="bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/25 rounded-md px-2 py-1 text-xs font-medium">
+              <span className="bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300 rounded-md px-2 py-1 text-xs font-medium">
                 {deliveredCount}
               </span>
             )}
@@ -173,7 +173,7 @@ export function RefProcesModule() {
             <Package className="h-3.5 w-3.5" />
             Доставлені
             {deliveredCount > 0 && (
-              <span className="absolute -top-1.5 -right-1.5 bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/25 rounded-md min-w-[18px] h-[18px] flex items-center justify-center text-[10px] font-medium">
+              <span className="absolute -top-1.5 -right-1.5 bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300 rounded-md min-w-[18px] h-[18px] flex items-center justify-center text-[10px] font-medium">
                 {deliveredCount}
               </span>
             )}
@@ -330,10 +330,10 @@ export function RefProcesModule() {
                       <td className="px-3 py-1.5 text-xs">{entry.store}</td>
                       <td className="px-3 py-1.5 text-xs">
                         <span className={cn(
-                          'inline-flex items-center justify-center px-2 py-1 rounded-md text-xs font-medium border',
-                          entry.method === 'DNA' ? 'bg-violet-500/15 text-violet-600 dark:text-violet-400 border-violet-500/25' :
-                          entry.method === 'FTID' ? 'bg-sky-500/15 text-sky-600 dark:text-sky-400 border-sky-500/25' :
-                          'bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border-emerald-500/25'
+                          'inline-flex items-center justify-center px-2 py-1 rounded-md text-xs font-medium',
+                          entry.method === 'DNA' ? 'bg-violet-100 text-violet-700 dark:bg-violet-900/40 dark:text-violet-300' :
+                          entry.method === 'FTID' ? 'bg-sky-100 text-sky-700 dark:bg-sky-900/40 dark:text-sky-300' :
+                          'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300'
                         )}>
                           {entry.method}
                         </span>
@@ -384,27 +384,10 @@ export function RefProcesModule() {
                 )}
               >
                 <td className="px-3 py-1.5">
-                  <Select defaultValue={ref.status}>
-                    <SelectTrigger className="h-7 text-xs w-full max-w-[90px]">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="Актив">Актив</SelectItem>
-                      <SelectItem value="Очіку">Очіку</SelectItem>
-                      <SelectItem value="Чекає">Чекає</SelectItem>
-                      <SelectItem value="Рефнуто">Рефнуто</SelectItem>
-                      <div className="border-t border-border mt-1 pt-1">
-                        <Button 
-                          variant="ghost" 
-                          size="sm" 
-                          className="w-full h-6 text-xs text-muted-foreground hover:text-foreground gap-1 justify-start"
-                        >
-                          <Plus className="h-3 w-3" />
-                          Додати статус
-                        </Button>
-                      </div>
-                    </SelectContent>
-                  </Select>
+                  <StatusDropdown 
+                    value={ref.status}
+                    options={['Актив', 'Очіку', 'Чекає', 'Рефнуто']}
+                  />
                 </td>
                 <td className="px-3 py-1.5">
                   <div className="flex items-center gap-1">

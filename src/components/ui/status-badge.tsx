@@ -1,71 +1,68 @@
 import { cn } from '@/lib/utils';
 
-type StatusType = 'default' | 'active' | 'pending' | 'completed' | 'warning' | 'info';
-
 interface StatusBadgeProps {
   status: string;
-  type?: StatusType;
   className?: string;
+  onClick?: () => void;
 }
 
-// Unified status color mapping - muted, Notion-style colors
-const statusMap: Record<string, StatusType> = {
-  // Active / Ordered states
-  'Активний': 'active',
-  'Актив': 'active',
-  'Замовлено': 'active',
-  'new': 'info',
+// Unified soft, muted color palette - no borders, no outlines
+const getStatusColor = (status: string): string => {
+  const statusLower = status.toLowerCase();
   
-  // Pending / In-progress states
-  'Очікує': 'pending',
-  'Очіку': 'pending',
-  'Товар в дорозі': 'pending',
-  'Чекає': 'pending',
-  'На відділенні': 'pending',
-  'checked': 'pending',
-  'Відправлено': 'pending',
+  // Completed / Success states - soft green
+  if (statusLower.includes('доставлено') || 
+      statusLower.includes('завершено') || 
+      statusLower.includes('рефнуто') || 
+      statusLower.includes('оплачено') ||
+      statusLower.includes('відправлено')) {
+    return 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300';
+  }
   
-  // Completed / Success states
-  'Завершено': 'completed',
-  'Доставлено': 'completed',
-  'Рефнуто': 'completed',
-  'Оплачено': 'completed',
-  'sent_to_ref': 'completed',
+  // Warning / Attention states - soft amber/yellow
+  if (statusLower.includes('повертається') || 
+      statusLower.includes('перенести') || 
+      statusLower.includes('очікує') ||
+      statusLower.includes('чекає') ||
+      statusLower.includes('видав фактуру')) {
+    return 'bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300';
+  }
   
-  // Warning / Attention states
-  'Повертається': 'warning',
-  'Перенести': 'warning',
-  'Очікує перенести': 'warning',
-  'Скасовано': 'warning',
-  'Не оплачено': 'warning',
-  'Видав фактуру': 'warning',
+  // Active / Ordered states - soft blue
+  if (statusLower.includes('замовлено') || 
+      statusLower.includes('актив') ||
+      statusLower.includes('новий')) {
+    return 'bg-sky-100 text-sky-700 dark:bg-sky-900/40 dark:text-sky-300';
+  }
+  
+  // In-progress states - soft slate/gray
+  if (statusLower.includes('в дорозі') || 
+      statusLower.includes('перевірено')) {
+    return 'bg-slate-100 text-slate-600 dark:bg-slate-800/60 dark:text-slate-300';
+  }
+  
+  // Default - neutral gray
+  return 'bg-gray-100 text-gray-600 dark:bg-gray-800/60 dark:text-gray-300';
 };
 
-// Unified muted color palette - works in both light and dark themes
-const styles: Record<StatusType, string> = {
-  default: 'bg-muted/60 text-muted-foreground border-border',
-  active: 'bg-sky-500/15 text-sky-600 dark:text-sky-400 border-sky-500/25',
-  pending: 'bg-slate-500/15 text-slate-600 dark:text-slate-400 border-slate-500/25',
-  completed: 'bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border-emerald-500/25',
-  warning: 'bg-amber-500/15 text-amber-600 dark:text-amber-400 border-amber-500/25',
-  info: 'bg-indigo-500/15 text-indigo-600 dark:text-indigo-400 border-indigo-500/25',
-};
-
-export function StatusBadge({ status, type, className }: StatusBadgeProps) {
-  const statusType = type || statusMap[status] || 'default';
-
+export function StatusBadge({ status, className, onClick }: StatusBadgeProps) {
   return (
     <span
+      onClick={onClick}
       className={cn(
-        // Unified shape: rounded rectangle, compact, centered
+        // Shape: rectangle with slight rounding
         'inline-flex items-center justify-center',
-        'px-2 py-1',
         'rounded-md',
+        // Size: compact, auto-width
+        'px-2 py-1',
         'text-xs font-medium',
-        'border',
-        'cursor-pointer',
-        'hover:opacity-80 transition-opacity',
-        styles[statusType],
+        'whitespace-nowrap',
+        // NO borders, NO outlines, NO focus rings
+        'border-0 outline-none ring-0',
+        // Soft muted colors
+        getStatusColor(status),
+        // Pointer cursor if clickable
+        onClick && 'cursor-pointer hover:opacity-80 transition-opacity',
         className
       )}
     >
@@ -74,10 +71,4 @@ export function StatusBadge({ status, type, className }: StatusBadgeProps) {
   );
 }
 
-// Export the getStatusStyle function for use in other components
-export function getStatusStyle(status: string): string {
-  const statusType = statusMap[status] || 'default';
-  return styles[statusType];
-}
-
-export { styles as statusStyles, statusMap };
+export { getStatusColor };
