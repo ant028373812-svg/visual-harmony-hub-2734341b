@@ -5,15 +5,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
 import { cn } from '@/lib/utils';
-import { demoRefProcesses } from '@/lib/demo-data';
 
 interface DeliveredTableProps {
   onOpenPackInfo: () => void;
@@ -52,8 +44,17 @@ const getDateColor = (date?: Date) => {
   return '';
 };
 
-// Filter only delivered items (status === 'Рефнуто')
-const deliveredItems = demoRefProcesses.filter(ref => ref.status === 'Рефнуто');
+// Sample delivered item for visual placeholder
+const sampleDeliveredItem = {
+  id: 'sample-1',
+  packId: '1V15',
+  storeName: 'Zara',
+  trackNumber: 'UA1234567890',
+  status: 'Очікує перенести',
+  refMethod: 'FTID',
+  deliveryDate: new Date(2024, 11, 20),
+  writeDate: new Date(2024, 11, 25),
+};
 
 export function DeliveredTable({
   onOpenPackInfo,
@@ -79,207 +80,181 @@ export function DeliveredTable({
           </tr>
         </thead>
         <tbody>
-          {deliveredItems.length === 0 ? (
-            <tr>
-              <td colSpan={9} className="px-4 py-8 text-center text-muted-foreground">
-                Немає доставлених замовлень
-              </td>
-            </tr>
-          ) : (
-            deliveredItems.map((ref, index) => (
-              <tr 
-                key={ref.id} 
-                className={cn(
-                  "border-b border-border/50 hover:bg-muted/40 transition-colors",
-                  index % 2 === 0 ? "bg-card/40" : "bg-background/60"
-                )}
-              >
-                <td className="px-3 py-1.5">
-                  <Select defaultValue={ref.status}>
-                    <SelectTrigger className="h-7 text-xs w-full max-w-[90px]">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="Актив">Актив</SelectItem>
-                      <SelectItem value="Очіку">Очіку</SelectItem>
-                      <SelectItem value="Чекає">Чекає</SelectItem>
-                      <SelectItem value="Рефнуто">Рефнуто</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </td>
-                <td className="px-3 py-1.5">
-                  <div className="flex items-center gap-1">
-                    <span className="font-medium truncate">{ref.packId} {ref.storeName}</span>
-                    <div className="flex items-center gap-0.5 shrink-0">
-                      <Tooltip>
-                        <TooltipTrigger asChild>
-                          <Button variant="ghost" size="icon" className="h-5 w-5 hover:bg-muted">
-                            <Copy className="h-3 w-3" />
-                          </Button>
-                        </TooltipTrigger>
-                        <TooltipContent>Копіювати</TooltipContent>
-                      </Tooltip>
-                      <Tooltip>
-                        <TooltipTrigger asChild>
-                          <Button 
-                            variant="ghost" 
-                            size="icon" 
-                            className="h-5 w-5 hover:bg-muted text-muted-foreground hover:text-foreground cursor-pointer"
-                            onClick={onOpenComment}
-                          >
-                            <MessageCircle className="h-3 w-3" />
-                          </Button>
-                        </TooltipTrigger>
-                        <TooltipContent>Коментар</TooltipContent>
-                      </Tooltip>
-                      <Tooltip>
-                        <TooltipTrigger asChild>
-                          <Button 
-                            variant="ghost" 
-                            size="icon" 
-                            className="h-5 w-5 hover:bg-muted text-info"
-                            onClick={onOpenPackInfo}
-                          >
-                            <Info className="h-3 w-3" />
-                          </Button>
-                        </TooltipTrigger>
-                        <TooltipContent>Інформація паку</TooltipContent>
-                      </Tooltip>
-                    </div>
-                  </div>
-                </td>
-                <td className="px-3 py-1.5">
-                  <div className="flex items-center gap-1">
-                    <span className="font-mono text-[10px] text-info truncate">{ref.trackNumber}</span>
-                    <Button variant="ghost" size="icon" className="h-4 w-4 hover:bg-muted shrink-0">
-                      <Copy className="h-2.5 w-2.5" />
+          <tr className="border-b border-border/50 hover:bg-muted/40 transition-colors bg-card/40">
+            <td className="px-3 py-1.5">
+              <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-amber-500/20 text-amber-400 border border-amber-500/30">
+                {sampleDeliveredItem.status}
+              </span>
+            </td>
+            <td className="px-3 py-1.5">
+              <div className="flex items-center gap-1">
+                <span className="font-medium truncate">{sampleDeliveredItem.packId} {sampleDeliveredItem.storeName}</span>
+                <div className="flex items-center gap-0.5 shrink-0">
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button variant="ghost" size="icon" className="h-5 w-5 hover:bg-muted">
+                        <Copy className="h-3 w-3" />
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>Копіювати</TooltipContent>
+                  </Tooltip>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button 
+                        variant="ghost" 
+                        size="icon" 
+                        className="h-5 w-5 hover:bg-muted text-muted-foreground hover:text-foreground cursor-pointer"
+                        onClick={onOpenComment}
+                      >
+                        <MessageCircle className="h-3 w-3" />
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>Коментар</TooltipContent>
+                  </Tooltip>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button 
+                        variant="ghost" 
+                        size="icon" 
+                        className="h-5 w-5 hover:bg-muted text-info"
+                        onClick={onOpenPackInfo}
+                      >
+                        <Info className="h-3 w-3" />
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>Інформація паку</TooltipContent>
+                  </Tooltip>
+                </div>
+              </div>
+            </td>
+            <td className="px-3 py-1.5">
+              <div className="flex items-center gap-1">
+                <span className="font-mono text-[10px] text-info truncate">{sampleDeliveredItem.trackNumber}</span>
+                <Button variant="ghost" size="icon" className="h-4 w-4 hover:bg-muted shrink-0">
+                  <Copy className="h-2.5 w-2.5" />
+                </Button>
+              </div>
+            </td>
+            <td className="px-3 py-1.5">
+              <span className={cn(
+                'inline-flex items-center px-2 py-0.5 rounded text-[10px] font-medium border',
+                getRefMethodColor(sampleDeliveredItem.refMethod)
+              )}>
+                {sampleDeliveredItem.refMethod}
+              </span>
+            </td>
+            <td className="px-3 py-1.5">
+              <div className="space-y-0.5">
+                <div className="flex items-center gap-1">
+                  <span className="text-muted-foreground text-xs">📅</span>
+                  <span className={cn('text-sm font-medium', getDateColor(sampleDeliveredItem.deliveryDate))}>
+                    Дост: {formatDate(sampleDeliveredItem.deliveryDate)}
+                  </span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <span className="text-muted-foreground text-xs">⏰</span>
+                  <span className={cn('text-sm font-semibold', getDateColor(sampleDeliveredItem.writeDate))}>
+                    Нагад: {formatDate(sampleDeliveredItem.writeDate)}
+                  </span>
+                </div>
+              </div>
+            </td>
+            <td className="px-2 py-1.5 text-center">
+              <div className="flex items-center justify-center gap-1">
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button 
+                      variant="ghost" 
+                      size="icon" 
+                      className="h-5 w-5 text-info hover:bg-muted"
+                      onClick={onOpenOrderInfo}
+                    >
+                      <Info className="h-3 w-3" />
                     </Button>
-                  </div>
-                </td>
-                <td className="px-3 py-1.5">
-                  {ref.refMethod && (
-                    <span className={cn(
-                      'inline-flex items-center px-2 py-0.5 rounded text-[10px] font-medium border',
-                      getRefMethodColor(ref.refMethod)
-                    )}>
-                      {ref.refMethod}
-                    </span>
-                  )}
-                </td>
-                <td className="px-3 py-1.5">
-                  <div className="space-y-0.5">
-                    <div className="flex items-center gap-1">
-                      <span className="text-muted-foreground text-xs">📅</span>
-                      <span className={cn('text-sm font-medium', getDateColor(ref.deliveryDate))}>
-                        Дост: {formatDate(ref.deliveryDate)}
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-1">
-                      <span className="text-muted-foreground text-xs">⏰</span>
-                      <span className={cn('text-sm font-semibold', getDateColor(ref.writeDate))}>
-                        Нагад: {formatDate(ref.writeDate)}
-                      </span>
-                    </div>
-                  </div>
-                </td>
-                <td className="px-2 py-1.5 text-center">
-                  <div className="flex items-center justify-center gap-1">
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <Button 
-                          variant="ghost" 
-                          size="icon" 
-                          className="h-5 w-5 text-info hover:bg-muted"
-                          onClick={onOpenOrderInfo}
-                        >
-                          <Info className="h-3 w-3" />
-                        </Button>
-                      </TooltipTrigger>
-                      <TooltipContent>Інформація замовлення</TooltipContent>
-                    </Tooltip>
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <Button 
-                          variant="ghost" 
-                          size="icon" 
-                          className="h-5 w-5 hover:bg-muted text-muted-foreground hover:text-foreground cursor-pointer"
-                          onClick={onOpenComment}
-                        >
-                          <MessageCircle className="h-3 w-3" />
-                        </Button>
-                      </TooltipTrigger>
-                      <TooltipContent>Коментар</TooltipContent>
-                    </Tooltip>
-                  </div>
-                </td>
-                <td className="px-2 py-1.5 text-center">
-                  <div className="flex items-center justify-center gap-1">
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <Button 
-                          variant="ghost" 
-                          size="icon" 
-                          className="h-5 w-5 text-info hover:bg-muted"
-                          onClick={onOpenRefStatus}
-                        >
-                          <Info className="h-3 w-3" />
-                        </Button>
-                      </TooltipTrigger>
-                      <TooltipContent>Реф статус</TooltipContent>
-                    </Tooltip>
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <Button 
-                          variant="ghost" 
-                          size="icon" 
-                          className="h-5 w-5 hover:bg-muted text-muted-foreground hover:text-foreground cursor-pointer"
-                          onClick={onOpenComment}
-                        >
-                          <MessageCircle className="h-3 w-3" />
-                        </Button>
-                      </TooltipTrigger>
-                      <TooltipContent>Коментар</TooltipContent>
-                    </Tooltip>
-                  </div>
-                </td>
-                <td className="px-2 py-1.5 text-center">
-                  <div className="flex items-center justify-center gap-1">
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <Button 
-                          variant="ghost" 
-                          size="icon" 
-                          className="h-5 w-5 text-info hover:bg-muted"
-                          onClick={onOpenPackAccounting}
-                        >
-                          <Info className="h-3 w-3" />
-                        </Button>
-                      </TooltipTrigger>
-                      <TooltipContent>Бухгалтерія паку</TooltipContent>
-                    </Tooltip>
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <Button 
-                          variant="ghost" 
-                          size="icon" 
-                          className="h-5 w-5 hover:bg-muted text-muted-foreground hover:text-foreground cursor-pointer"
-                          onClick={onOpenComment}
-                        >
-                          <MessageCircle className="h-3 w-3" />
-                        </Button>
-                      </TooltipTrigger>
-                      <TooltipContent>Коментар</TooltipContent>
-                    </Tooltip>
-                  </div>
-                </td>
-                <td className="px-1 py-1.5">
-                  <Button variant="ghost" size="icon" className="h-5 w-5 text-destructive hover:bg-destructive/10">
-                    <Trash2 className="h-3 w-3" />
-                  </Button>
-                </td>
-              </tr>
-            ))
-          )}
+                  </TooltipTrigger>
+                  <TooltipContent>Інформація замовлення</TooltipContent>
+                </Tooltip>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button 
+                      variant="ghost" 
+                      size="icon" 
+                      className="h-5 w-5 hover:bg-muted text-muted-foreground hover:text-foreground cursor-pointer"
+                      onClick={onOpenComment}
+                    >
+                      <MessageCircle className="h-3 w-3" />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>Коментар</TooltipContent>
+                </Tooltip>
+              </div>
+            </td>
+            <td className="px-2 py-1.5 text-center">
+              <div className="flex items-center justify-center gap-1">
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button 
+                      variant="ghost" 
+                      size="icon" 
+                      className="h-5 w-5 text-info hover:bg-muted"
+                      onClick={onOpenRefStatus}
+                    >
+                      <Info className="h-3 w-3" />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>Реф статус</TooltipContent>
+                </Tooltip>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button 
+                      variant="ghost" 
+                      size="icon" 
+                      className="h-5 w-5 hover:bg-muted text-muted-foreground hover:text-foreground cursor-pointer"
+                      onClick={onOpenComment}
+                    >
+                      <MessageCircle className="h-3 w-3" />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>Коментар</TooltipContent>
+                </Tooltip>
+              </div>
+            </td>
+            <td className="px-2 py-1.5 text-center">
+              <div className="flex items-center justify-center gap-1">
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button 
+                      variant="ghost" 
+                      size="icon" 
+                      className="h-5 w-5 text-info hover:bg-muted"
+                      onClick={onOpenPackAccounting}
+                    >
+                      <Info className="h-3 w-3" />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>Бухгалтерія паку</TooltipContent>
+                </Tooltip>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button 
+                      variant="ghost" 
+                      size="icon" 
+                      className="h-5 w-5 hover:bg-muted text-muted-foreground hover:text-foreground cursor-pointer"
+                      onClick={onOpenComment}
+                    >
+                      <MessageCircle className="h-3 w-3" />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>Коментар</TooltipContent>
+                </Tooltip>
+              </div>
+            </td>
+            <td className="px-1 py-1.5">
+              <Button variant="ghost" size="icon" className="h-5 w-5 text-destructive hover:bg-destructive/10">
+                <Trash2 className="h-3 w-3" />
+              </Button>
+            </td>
+          </tr>
         </tbody>
       </table>
     </div>
