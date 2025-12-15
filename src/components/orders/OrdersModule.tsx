@@ -3,11 +3,7 @@ import { Search, Sun, Moon, ChevronDown, ChevronUp, Plus, Info, MessageCircle, T
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from '@/components/ui/tooltip';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { useTheme } from 'next-themes';
 import { demoPacks, demoDrops } from '@/lib/demo-data';
 import { OrderInfoModal } from './modals/OrderInfoModal';
@@ -16,66 +12,130 @@ import { PackAccountingModal } from './modals/PackAccountingModal';
 import { PackInfoModal } from './modals/PackInfoModal';
 import { CreatePackModal } from './modals/CreatePackModal';
 import { CommentModal } from '@/components/ui/comment-modal';
-
 import { DeliveryModule } from '@/components/delivery/DeliveryModule';
 import { FilterDropdown } from '@/components/ui/filter-dropdown';
 import { StatusDropdown } from '@/components/ui/status-dropdown';
-
-const filterConfigs = [
-  { label: 'Дроп', options: [
-    { value: 'all', label: 'Всі' },
-    { value: 'oleg', label: 'Олег' },
-    { value: 'maksim', label: 'Максим' },
-    { value: 'svitlana', label: 'Світлана' },
-  ]},
-  { label: 'Гео', options: [
-    { value: 'all', label: 'Всі' },
-    { value: 'de', label: 'Germany' },
-    { value: 'it', label: 'Italy' },
-    { value: 'fr', label: 'France' },
-  ]},
-  { label: 'Сума', options: [
-    { value: 'all', label: 'Всі' },
-    { value: '0-100', label: '0-100€' },
-    { value: '100-500', label: '100-500€' },
-    { value: '500+', label: '500€+' },
-  ]},
-  { label: 'Адреса', options: [
-    { value: 'all', label: 'Всі' },
-    { value: 'berlin', label: 'Berlin' },
-    { value: 'milan', label: 'Milano' },
-  ]},
-  { label: 'Білінг', options: [
-    { value: 'all', label: 'Всі' },
-    { value: 'paid', label: 'Оплачено' },
-    { value: 'pending', label: 'Очікує' },
-  ]},
-  { label: 'Статус', options: [
-    { value: 'all', label: 'Всі' },
-    { value: 'ordered', label: 'Замовлено' },
-    { value: 'shipping', label: 'Товар в дорозі' },
-    { value: 'delivered', label: 'Доставлено' },
-  ]},
-  { label: 'Скуп', options: [
-    { value: 'all', label: 'Всі' },
-    { value: 'skup-a', label: 'Скуп А' },
-    { value: 'skup-b', label: 'Скуп Б' },
-  ]},
-  { label: 'Магазин', options: [
-    { value: 'all', label: 'Всі' },
-    { value: 'zara', label: 'Zara' },
-    { value: 'hm', label: 'H&M' },
-    { value: 'mango', label: 'Mango' },
-  ]},
-];
-
+const filterConfigs = [{
+  label: 'Дроп',
+  options: [{
+    value: 'all',
+    label: 'Всі'
+  }, {
+    value: 'oleg',
+    label: 'Олег'
+  }, {
+    value: 'maksim',
+    label: 'Максим'
+  }, {
+    value: 'svitlana',
+    label: 'Світлана'
+  }]
+}, {
+  label: 'Гео',
+  options: [{
+    value: 'all',
+    label: 'Всі'
+  }, {
+    value: 'de',
+    label: 'Germany'
+  }, {
+    value: 'it',
+    label: 'Italy'
+  }, {
+    value: 'fr',
+    label: 'France'
+  }]
+}, {
+  label: 'Сума',
+  options: [{
+    value: 'all',
+    label: 'Всі'
+  }, {
+    value: '0-100',
+    label: '0-100€'
+  }, {
+    value: '100-500',
+    label: '100-500€'
+  }, {
+    value: '500+',
+    label: '500€+'
+  }]
+}, {
+  label: 'Адреса',
+  options: [{
+    value: 'all',
+    label: 'Всі'
+  }, {
+    value: 'berlin',
+    label: 'Berlin'
+  }, {
+    value: 'milan',
+    label: 'Milano'
+  }]
+}, {
+  label: 'Білінг',
+  options: [{
+    value: 'all',
+    label: 'Всі'
+  }, {
+    value: 'paid',
+    label: 'Оплачено'
+  }, {
+    value: 'pending',
+    label: 'Очікує'
+  }]
+}, {
+  label: 'Статус',
+  options: [{
+    value: 'all',
+    label: 'Всі'
+  }, {
+    value: 'ordered',
+    label: 'Замовлено'
+  }, {
+    value: 'shipping',
+    label: 'Товар в дорозі'
+  }, {
+    value: 'delivered',
+    label: 'Доставлено'
+  }]
+}, {
+  label: 'Скуп',
+  options: [{
+    value: 'all',
+    label: 'Всі'
+  }, {
+    value: 'skup-a',
+    label: 'Скуп А'
+  }, {
+    value: 'skup-b',
+    label: 'Скуп Б'
+  }]
+}, {
+  label: 'Магазин',
+  options: [{
+    value: 'all',
+    label: 'Всі'
+  }, {
+    value: 'zara',
+    label: 'Zara'
+  }, {
+    value: 'hm',
+    label: 'H&M'
+  }, {
+    value: 'mango',
+    label: 'Mango'
+  }]
+}];
 export function OrdersModule() {
-  const { theme, setTheme } = useTheme();
+  const {
+    theme,
+    setTheme
+  } = useTheme();
   const [isFiltersOpen, setIsFiltersOpen] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
-  
   const [activeTab, setActiveTab] = useState('orders');
-  
+
   // Modal states
   const [selectedPack, setSelectedPack] = useState<string | null>(null);
   const [isPackInfoOpen, setIsPackInfoOpen] = useState(false);
@@ -87,8 +147,7 @@ export function OrdersModule() {
 
   // If delivery tab is active, show DeliveryModule
   if (activeTab === 'delivery') {
-    return (
-      <div className="h-full flex flex-col">
+    return <div className="h-full flex flex-col">
         {/* Top tabs */}
         <div className="border-b border-border bg-card">
           <div className="flex items-center justify-between px-4 py-2">
@@ -103,12 +162,7 @@ export function OrdersModule() {
               </TabsList>
             </Tabs>
             
-            <Button
-              variant="ghost"
-              size="icon"
-              className="h-8 w-8"
-              onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-            >
+            <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}>
               {theme === 'dark' ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
             </Button>
           </div>
@@ -118,12 +172,9 @@ export function OrdersModule() {
         <div className="flex-1 overflow-hidden">
           <DeliveryModule />
         </div>
-      </div>
-    );
+      </div>;
   }
-
-  return (
-    <div className="h-full flex flex-col">
+  return <div className="h-full flex flex-col">
       {/* Top tabs and controls */}
       <div className="border-b border-border bg-card">
         <div className="flex items-center justify-between px-4 py-2">
@@ -137,54 +188,27 @@ export function OrdersModule() {
           </Tabs>
           
           <div className="flex items-center gap-2">
-            <Button
-              variant="ghost"
-              size="icon"
-              className="h-8 w-8"
-              onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-            >
+            <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}>
               {theme === 'dark' ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
             </Button>
-            <Button
-              variant="ghost"
-              size="icon"
-              className="h-8 w-8"
-              onClick={() => setIsFiltersOpen(!isFiltersOpen)}
-            >
+            <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => setIsFiltersOpen(!isFiltersOpen)}>
               {isFiltersOpen ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
             </Button>
             <div className="relative">
               <Search className="absolute left-2 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-              <Input
-                placeholder="Пошук..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-8 h-8 w-48"
-              />
+              <Input placeholder="Пошук..." value={searchQuery} onChange={e => setSearchQuery(e.target.value)} className="pl-8 h-8 w-48" />
             </div>
           </div>
         </div>
         
         {/* Filters */}
-        {isFiltersOpen && (
-          <div className="px-4 py-2 border-t border-border flex items-center gap-2 flex-wrap">
-            {filterConfigs.map((filter, index) => (
-              <FilterDropdown
-                key={`${filter.label}-${index}`}
-                label={filter.label}
-                options={filter.options}
-              />
-            ))}
-            <Button 
-              size="sm" 
-              className="h-7 text-xs ml-auto"
-              onClick={() => setIsCreatePackOpen(true)}
-            >
+        {isFiltersOpen && <div className="px-4 py-2 border-t border-border flex items-center gap-2 flex-wrap">
+            {filterConfigs.map((filter, index) => <FilterDropdown key={`${filter.label}-${index}`} label={filter.label} options={filter.options} />)}
+            <Button size="sm" className="h-7 text-xs ml-auto" onClick={() => setIsCreatePackOpen(true)}>
               <Plus className="h-3 w-3 mr-1" />
               Додати
             </Button>
-          </div>
-        )}
+          </div>}
       </div>
 
       {/* Table */}
@@ -205,14 +229,10 @@ export function OrdersModule() {
           </thead>
           <tbody>
             {demoPacks.map(pack => {
-              const drop = demoDrops.find(d => d.id === pack.dropId);
-              return (
-                <tr key={pack.id} className="border-b border-border hover:bg-muted/30 transition-colors">
+            const drop = demoDrops.find(d => d.id === pack.dropId);
+            return <tr key={pack.id} className="border-b border-border hover:bg-muted/30 transition-colors">
                   <td className="px-3 py-2">
-                    <StatusDropdown 
-                      value={pack.status} 
-                      options={['Замовлено', 'Доставлено', 'Повертається']}
-                    />
+                    <StatusDropdown value={pack.status} options={['Замовлено', 'Доставлено', 'Повертається']} />
                   </td>
                   <td className="px-3 py-2">
                     <div className="flex items-center gap-2">
@@ -220,12 +240,10 @@ export function OrdersModule() {
                       <span className="font-medium">{pack.packId} {pack.storeName}</span>
                       <Tooltip>
                         <TooltipTrigger asChild>
-                          <Button 
-                            variant="ghost" 
-                            size="icon" 
-                            className="h-5 w-5 text-info"
-                            onClick={() => { setSelectedPack(pack.id); setIsPackInfoOpen(true); }}
-                          >
+                          <Button variant="ghost" size="icon" className="h-5 w-5 text-info" onClick={() => {
+                        setSelectedPack(pack.id);
+                        setIsPackInfoOpen(true);
+                      }}>
                             <Info className="h-3 w-3" />
                           </Button>
                         </TooltipTrigger>
@@ -233,12 +251,7 @@ export function OrdersModule() {
                       </Tooltip>
                       <Tooltip>
                         <TooltipTrigger asChild>
-                          <Button 
-                            variant="ghost" 
-                            size="icon" 
-                            className="h-5 w-5 text-muted-foreground hover:text-foreground cursor-pointer"
-                            onClick={() => setIsCommentOpen(true)}
-                          >
+                          <Button variant="ghost" size="icon" className="h-5 w-5 text-muted-foreground hover:text-foreground cursor-pointer" onClick={() => setIsCommentOpen(true)}>
                             <MessageCircle className="h-3 w-3" />
                           </Button>
                         </TooltipTrigger>
@@ -248,31 +261,22 @@ export function OrdersModule() {
                   </td>
                   <td className="px-3 py-2">
                     <div className="space-y-0.5">
-                      {pack.trackNumbers.map((track, i) => (
-                        <p key={i} className="font-mono text-xs text-info">{track}</p>
-                      ))}
+                      {pack.trackNumbers.map((track, i) => <p key={i} className="font-mono text-xs text-info">{track}</p>)}
                     </div>
                   </td>
                   <td className="px-3 py-2 text-sm">{drop?.name}</td>
                   <td className="px-3 py-2 text-sm">Kyiv</td>
                   <td className="px-3 py-2 text-center">
                     <div className="flex items-center justify-center gap-1">
-                      <Button 
-                        variant="ghost" 
-                        size="icon" 
-                        className="h-6 w-6 text-info"
-                        onClick={() => { setSelectedPack(pack.id); setIsOrderInfoOpen(true); }}
-                      >
+                      <Button variant="ghost" size="icon" className="h-6 w-6 text-info" onClick={() => {
+                    setSelectedPack(pack.id);
+                    setIsOrderInfoOpen(true);
+                  }}>
                         <Info className="h-3.5 w-3.5" />
                       </Button>
                       <Tooltip>
                         <TooltipTrigger asChild>
-                          <Button 
-                            variant="ghost" 
-                            size="icon" 
-                            className="h-5 w-5 text-muted-foreground hover:text-foreground cursor-pointer"
-                            onClick={() => setIsCommentOpen(true)}
-                          >
+                          <Button variant="ghost" size="icon" className="h-5 w-5 text-muted-foreground hover:text-foreground cursor-pointer" onClick={() => setIsCommentOpen(true)}>
                             <MessageCircle className="h-3.5 w-3.5" />
                           </Button>
                         </TooltipTrigger>
@@ -282,22 +286,15 @@ export function OrdersModule() {
                   </td>
                   <td className="px-3 py-2 text-center">
                     <div className="flex items-center justify-center gap-1">
-                      <Button 
-                        variant="ghost" 
-                        size="icon" 
-                        className="h-6 w-6 text-info"
-                        onClick={() => { setSelectedPack(pack.id); setIsRefStatusOpen(true); }}
-                      >
+                      <Button variant="ghost" size="icon" className="h-6 w-6 text-info" onClick={() => {
+                    setSelectedPack(pack.id);
+                    setIsRefStatusOpen(true);
+                  }}>
                         <Info className="h-3.5 w-3.5" />
                       </Button>
                       <Tooltip>
                         <TooltipTrigger asChild>
-                          <Button 
-                            variant="ghost" 
-                            size="icon" 
-                            className="h-5 w-5 text-muted-foreground hover:text-foreground cursor-pointer"
-                            onClick={() => setIsCommentOpen(true)}
-                          >
+                          <Button variant="ghost" size="icon" className="h-5 w-5 text-muted-foreground hover:text-foreground cursor-pointer" onClick={() => setIsCommentOpen(true)}>
                             <MessageCircle className="h-3.5 w-3.5" />
                           </Button>
                         </TooltipTrigger>
@@ -307,22 +304,15 @@ export function OrdersModule() {
                   </td>
                   <td className="px-3 py-2 text-center">
                     <div className="flex items-center justify-center gap-1">
-                      <Button 
-                        variant="ghost" 
-                        size="icon" 
-                        className="h-6 w-6 text-info"
-                        onClick={() => { setSelectedPack(pack.id); setIsPackAccountingOpen(true); }}
-                      >
+                      <Button variant="ghost" size="icon" className="h-6 w-6 text-info" onClick={() => {
+                    setSelectedPack(pack.id);
+                    setIsPackAccountingOpen(true);
+                  }}>
                         <Info className="h-3.5 w-3.5" />
                       </Button>
                       <Tooltip>
                         <TooltipTrigger asChild>
-                          <Button 
-                            variant="ghost" 
-                            size="icon" 
-                            className="h-5 w-5 text-muted-foreground hover:text-foreground cursor-pointer"
-                            onClick={() => setIsCommentOpen(true)}
-                          >
+                          <Button variant="ghost" size="icon" className="h-5 w-5 text-muted-foreground hover:text-foreground cursor-pointer" onClick={() => setIsCommentOpen(true)}>
                             <MessageCircle className="h-3.5 w-3.5" />
                           </Button>
                         </TooltipTrigger>
@@ -335,40 +325,14 @@ export function OrdersModule() {
                       <Trash2 className="h-3.5 w-3.5" />
                     </Button>
                   </td>
-                </tr>
-              );
-            })}
+                </tr>;
+          })}
           </tbody>
         </table>
       </div>
 
       {/* Bottom info buttons */}
-      <div className="border-t border-border bg-card px-4 py-2 flex items-center gap-2">
-        <Button 
-          variant="outline" 
-          size="icon" 
-          className="h-8 w-8 rounded-full"
-          onClick={() => setIsOrderInfoOpen(true)}
-        >
-          <Info className="h-4 w-4" />
-        </Button>
-        <Button 
-          variant="outline" 
-          size="icon" 
-          className="h-8 w-8 rounded-full"
-          onClick={() => setIsRefStatusOpen(true)}
-        >
-          <Info className="h-4 w-4" />
-        </Button>
-        <Button 
-          variant="outline" 
-          size="icon" 
-          className="h-8 w-8 rounded-full"
-          onClick={() => setIsPackAccountingOpen(true)}
-        >
-          <Info className="h-4 w-4" />
-        </Button>
-      </div>
+      
 
       {/* Modals */}
       <PackInfoModal open={isPackInfoOpen} onOpenChange={setIsPackInfoOpen} />
@@ -378,6 +342,5 @@ export function OrdersModule() {
       <CreatePackModal open={isCreatePackOpen} onOpenChange={setIsCreatePackOpen} />
       <CommentModal open={isCommentOpen} onOpenChange={setIsCommentOpen} />
       
-    </div>
-  );
+    </div>;
 }
