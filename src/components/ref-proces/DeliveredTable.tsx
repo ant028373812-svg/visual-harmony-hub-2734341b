@@ -1,10 +1,19 @@
-import { Info, MessageCircle, Trash2, Copy } from 'lucide-react';
+import { useState } from 'react';
+import { Info, MessageCircle, Trash2, Copy, Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import { cn } from '@/lib/utils';
 
 interface DeliveredTableProps {
@@ -63,6 +72,31 @@ export function DeliveredTable({
   onOpenPackAccounting,
   onOpenComment,
 }: DeliveredTableProps) {
+  const [statuses, setStatuses] = useState<string[]>(['Перенести']);
+  const [selectedStatus, setSelectedStatus] = useState('Перенести');
+  const [isAddingStatus, setIsAddingStatus] = useState(false);
+  const [newStatusName, setNewStatusName] = useState('');
+
+  const handleAddStatus = () => {
+    if (newStatusName.trim() && !statuses.includes(newStatusName.trim())) {
+      setStatuses(prev => [...prev, newStatusName.trim()]);
+      setSelectedStatus(newStatusName.trim());
+      setNewStatusName('');
+      setIsAddingStatus(false);
+    }
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      handleAddStatus();
+    }
+    if (e.key === 'Escape') {
+      setIsAddingStatus(false);
+      setNewStatusName('');
+    }
+  };
+
   return (
     <div className="flex-1 overflow-auto bg-muted/20">
       <table className="w-full text-sm table-fixed">
@@ -82,9 +116,75 @@ export function DeliveredTable({
         <tbody>
           <tr className="border-b border-border/50 hover:bg-muted/40 transition-colors bg-card/40">
             <td className="px-3 py-1.5">
-              <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-amber-500/20 text-amber-400 border border-amber-500/30">
-                {sampleDeliveredItem.status}
-              </span>
+              <Select value={selectedStatus} onValueChange={setSelectedStatus}>
+                <SelectTrigger 
+                  className="h-7 text-xs w-[110px] cursor-pointer hover:bg-muted/50 transition-colors bg-amber-500/20 text-amber-400 border-amber-500/30"
+                >
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent className="bg-popover border border-border shadow-lg z-50">
+                  {statuses.map((status) => (
+                    <SelectItem 
+                      key={status} 
+                      value={status}
+                      className="text-xs cursor-pointer"
+                    >
+                      <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-medium bg-amber-500/20 text-amber-400 border border-amber-500/30">
+                        {status}
+                      </span>
+                    </SelectItem>
+                  ))}
+                  
+                  <div className="border-t border-border mt-1 pt-1">
+                    {isAddingStatus ? (
+                      <div className="px-2 py-1.5 space-y-2">
+                        <Input
+                          value={newStatusName}
+                          onChange={(e) => setNewStatusName(e.target.value)}
+                          onKeyDown={handleKeyDown}
+                          placeholder="Назва статусу..."
+                          className="h-7 text-xs"
+                          autoFocus
+                        />
+                        <div className="flex gap-1">
+                          <Button 
+                            size="sm" 
+                            className="h-6 text-xs flex-1"
+                            onClick={handleAddStatus}
+                          >
+                            Додати
+                          </Button>
+                          <Button 
+                            size="sm" 
+                            variant="ghost"
+                            className="h-6 text-xs"
+                            onClick={() => {
+                              setIsAddingStatus(false);
+                              setNewStatusName('');
+                            }}
+                          >
+                            Скасувати
+                          </Button>
+                        </div>
+                      </div>
+                    ) : (
+                      <Button 
+                        variant="ghost" 
+                        size="sm" 
+                        className="w-full h-7 text-xs text-muted-foreground hover:text-foreground gap-1 justify-start cursor-pointer"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          setIsAddingStatus(true);
+                        }}
+                      >
+                        <Plus className="h-3 w-3" />
+                        Додати
+                      </Button>
+                    )}
+                  </div>
+                </SelectContent>
+              </Select>
             </td>
             <td className="px-3 py-1.5">
               <div className="flex items-center gap-1">
