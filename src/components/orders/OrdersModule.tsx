@@ -19,8 +19,55 @@ import { CreatePackModal } from './modals/CreatePackModal';
 import { CommentModal } from '@/components/ui/comment-modal';
 import { AddressPanel } from './AddressPanel';
 import { DeliveryModule } from '@/components/delivery/DeliveryModule';
+import { FilterDropdown } from '@/components/ui/filter-dropdown';
 
-const filters = ['Дроп', 'Гео', 'Сума', 'Адреса', 'Білінг', 'Статус', 'Статус', 'Скуп', 'Магазин'];
+const filterConfigs = [
+  { label: 'Дроп', options: [
+    { value: 'all', label: 'Всі' },
+    { value: 'oleg', label: 'Олег' },
+    { value: 'maksim', label: 'Максим' },
+    { value: 'svitlana', label: 'Світлана' },
+  ]},
+  { label: 'Гео', options: [
+    { value: 'all', label: 'Всі' },
+    { value: 'de', label: 'Germany' },
+    { value: 'it', label: 'Italy' },
+    { value: 'fr', label: 'France' },
+  ]},
+  { label: 'Сума', options: [
+    { value: 'all', label: 'Всі' },
+    { value: '0-100', label: '0-100€' },
+    { value: '100-500', label: '100-500€' },
+    { value: '500+', label: '500€+' },
+  ]},
+  { label: 'Адреса', options: [
+    { value: 'all', label: 'Всі' },
+    { value: 'berlin', label: 'Berlin' },
+    { value: 'milan', label: 'Milano' },
+  ]},
+  { label: 'Білінг', options: [
+    { value: 'all', label: 'Всі' },
+    { value: 'paid', label: 'Оплачено' },
+    { value: 'pending', label: 'Очікує' },
+  ]},
+  { label: 'Статус', options: [
+    { value: 'all', label: 'Всі' },
+    { value: 'ordered', label: 'Замовлено' },
+    { value: 'shipping', label: 'Товар в дорозі' },
+    { value: 'delivered', label: 'Доставлено' },
+  ]},
+  { label: 'Скуп', options: [
+    { value: 'all', label: 'Всі' },
+    { value: 'skup-a', label: 'Скуп А' },
+    { value: 'skup-b', label: 'Скуп Б' },
+  ]},
+  { label: 'Магазин', options: [
+    { value: 'all', label: 'Всі' },
+    { value: 'zara', label: 'Zara' },
+    { value: 'hm', label: 'H&M' },
+    { value: 'mango', label: 'Mango' },
+  ]},
+];
 
 export function OrdersModule() {
   const { theme, setTheme } = useTheme();
@@ -134,15 +181,12 @@ export function OrdersModule() {
         {/* Filters */}
         {isFiltersOpen && (
           <div className="px-4 py-2 border-t border-border flex items-center gap-2 flex-wrap">
-            {filters.map((filter, index) => (
-              <Button
-                key={`${filter}-${index}`}
-                variant="secondary"
-                size="sm"
-                className="h-7 text-xs"
-              >
-                {filter}
-              </Button>
+            {filterConfigs.map((filter, index) => (
+              <FilterDropdown
+                key={`${filter.label}-${index}`}
+                label={filter.label}
+                options={filter.options}
+              />
             ))}
             <Button 
               size="sm" 

@@ -24,6 +24,7 @@ import { PackAccountingModal } from '@/components/orders/modals/PackAccountingMo
 import { PackInfoModal } from '@/components/orders/modals/PackInfoModal';
 import { CommentModal } from '@/components/ui/comment-modal';
 import { DeliveredTable } from './DeliveredTable';
+import { FilterDropdown } from '@/components/ui/filter-dropdown';
 
 // Demo date entries
 interface DateEntry {
@@ -179,20 +180,43 @@ export function RefProcesModule() {
           </Button>
 
           {filters.map((filter, index) => (
-            <Button
+            <FilterDropdown
               key={index}
-              variant="outline"
-              size="sm"
-              className="h-7 text-xs gap-1"
-            >
-              {filter.label}
-              {filter.badge && (
-                <span className="ml-1 bg-success text-success-foreground rounded-full px-1.5 py-0.5 text-[10px]">
-                  {filter.badge}
-                </span>
-              )}
-              <ChevronDown className="h-3 w-3 ml-1" />
-            </Button>
+              label={filter.label}
+              badge={filter.badge}
+              hasNotification={filter.hasNotification}
+              options={
+                filter.label === 'Статус' ? [
+                  { value: 'all', label: 'Всі' },
+                  { value: 'aktiv', label: 'Актив' },
+                  { value: 'ochiku', label: 'Очіку' },
+                  { value: 'chekae', label: 'Чекає' },
+                  { value: 'refnuto', label: 'Рефнуто' },
+                ] : filter.label === 'Магазин' ? [
+                  { value: 'all', label: 'Всі' },
+                  { value: 'zara', label: 'Zara' },
+                  { value: 'hm', label: 'H&M' },
+                  { value: 'mango', label: 'Mango' },
+                  { value: 'aboutyou', label: 'About You' },
+                ] : filter.label === 'Гео' ? [
+                  { value: 'all', label: 'Всі' },
+                  { value: 'de', label: 'Germany' },
+                  { value: 'it', label: 'Italy' },
+                  { value: 'fr', label: 'France' },
+                  { value: 'es', label: 'Spain' },
+                ] : filter.label === 'Дроп' ? [
+                  { value: 'all', label: 'Всі' },
+                  { value: 'oleg', label: 'Олег' },
+                  { value: 'maksim', label: 'Максим' },
+                  { value: 'svitlana', label: 'Світлана' },
+                ] : filter.label === 'Адреса' ? [
+                  { value: 'all', label: 'Всі' },
+                  { value: 'berlin', label: 'Berlin' },
+                  { value: 'milan', label: 'Milano' },
+                  { value: 'paris', label: 'Paris' },
+                ] : undefined
+              }
+            />
           ))}
           <div className="ml-auto flex items-center gap-2">
             <Button
