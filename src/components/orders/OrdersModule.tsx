@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { Search, Sun, Moon, ChevronDown, ChevronUp, Plus, Info, MessageCircle, Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { StatusBadge } from '@/components/ui/status-badge';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import {
   Tooltip,
@@ -20,6 +19,7 @@ import { CommentModal } from '@/components/ui/comment-modal';
 import { AddressPanel } from './AddressPanel';
 import { DeliveryModule } from '@/components/delivery/DeliveryModule';
 import { FilterDropdown } from '@/components/ui/filter-dropdown';
+import { StatusSelect } from '@/components/ui/status-select';
 
 const filterConfigs = [
   { label: 'Дроп', options: [
@@ -84,16 +84,6 @@ export function OrdersModule() {
   const [isPackAccountingOpen, setIsPackAccountingOpen] = useState(false);
   const [isCreatePackOpen, setIsCreatePackOpen] = useState(false);
   const [isCommentOpen, setIsCommentOpen] = useState(false);
-
-  const getStatusType = (status: string) => {
-    switch (status) {
-      case 'Замовлено': return 'active';
-      case 'Товар в дорозі': return 'pending';
-      case 'На відділенні': return 'waiting';
-      case 'Доставлено': return 'completed';
-      default: return 'pending';
-    }
-  };
 
   // If delivery tab is active, show DeliveryModule
   if (activeTab === 'delivery') {
@@ -222,7 +212,7 @@ export function OrdersModule() {
               return (
                 <tr key={pack.id} className="border-b border-border hover:bg-muted/30 transition-colors">
                   <td className="px-3 py-2">
-                    <StatusBadge status={pack.status} type={getStatusType(pack.status) as any} />
+                    <StatusSelect defaultValue={pack.status} className="w-[110px]" />
                   </td>
                   <td className="px-3 py-2">
                     <div className="flex items-center gap-2">
