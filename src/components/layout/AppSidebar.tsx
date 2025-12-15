@@ -25,6 +25,7 @@ const sidebarGroups: SidebarGroup[] = [
     title: 'WorkPlace Admin',
     items: [
       { id: 'ref-proces', label: 'Ref Proces' },
+      { id: 'ref-inbox', label: 'Ref Inbox' },
       { id: 'accounting-admin', label: 'Бухгалтерія' },
     ],
   },
