@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Search, ChevronDown, ChevronUp, Info, MessageCircle, Trash2, Copy, Plus, CalendarPlus } from 'lucide-react';
+import { Search, ChevronDown, ChevronUp, Info, MessageCircle, Trash2, Copy, Plus, CalendarPlus, ArrowLeft, Package } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { StatusBadge } from '@/components/ui/status-badge';
@@ -23,6 +23,7 @@ import { RefStatusModal } from '@/components/orders/modals/RefStatusModal';
 import { PackAccountingModal } from '@/components/orders/modals/PackAccountingModal';
 import { PackInfoModal } from '@/components/orders/modals/PackInfoModal';
 import { CommentModal } from '@/components/ui/comment-modal';
+import { DeliveredTable } from './DeliveredTable';
 
 // Demo date entries
 interface DateEntry {
@@ -50,12 +51,16 @@ const filters = [
 
 const refMethods = ['DNA', 'FTID', 'EB'];
 
+// Count delivered items
+const deliveredCount = demoRefProcesses.filter(ref => ref.status === 'Рефнуто').length;
+
 export function RefProcesModule() {
   const { theme, setTheme } = useTheme();
   const [isFiltersOpen, setIsFiltersOpen] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const [showDateInput, setShowDateInput] = useState(false);
   const [dateEntries, setDateEntries] = useState<DateEntry[]>(initialDateEntries);
+  const [showDelivered, setShowDelivered] = useState(false);
   
   // Modal states
   const [isPackInfoOpen, setIsPackInfoOpen] = useState(false);
@@ -107,11 +112,72 @@ export function RefProcesModule() {
     }
   };
 
+  // Delivered view
+  if (showDelivered) {
+    return (
+      <div className="h-full flex flex-col bg-background animate-fade-in">
+        {/* Header with back button */}
+        <div className="border-b border-border bg-card/80 px-4 py-2 flex items-center gap-3">
+          <Button
+            variant="ghost"
+            size="sm"
+            className="h-8 gap-1.5"
+            onClick={() => setShowDelivered(false)}
+          >
+            <ArrowLeft className="h-4 w-4" />
+            Назад
+          </Button>
+          <div className="flex items-center gap-2">
+            <Package className="h-4 w-4 text-muted-foreground" />
+            <span className="font-medium">Доставлені</span>
+            {deliveredCount > 0 && (
+              <span className="bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 rounded-full px-2 py-0.5 text-xs font-medium">
+                {deliveredCount}
+              </span>
+            )}
+          </div>
+        </div>
+
+        {/* Delivered Table */}
+        <DeliveredTable
+          onOpenPackInfo={() => setIsPackInfoOpen(true)}
+          onOpenOrderInfo={() => setIsOrderInfoOpen(true)}
+          onOpenRefStatus={() => setIsRefStatusOpen(true)}
+          onOpenPackAccounting={() => setIsPackAccountingOpen(true)}
+          onOpenComment={() => setIsCommentOpen(true)}
+        />
+
+        {/* Modals */}
+        <PackInfoModal open={isPackInfoOpen} onOpenChange={setIsPackInfoOpen} />
+        <OrderInfoModal open={isOrderInfoOpen} onOpenChange={setIsOrderInfoOpen} />
+        <RefStatusModal open={isRefStatusOpen} onOpenChange={setIsRefStatusOpen} />
+        <PackAccountingModal open={isPackAccountingOpen} onOpenChange={setIsPackAccountingOpen} />
+        <CommentModal open={isCommentOpen} onOpenChange={setIsCommentOpen} />
+      </div>
+    );
+  }
+
   return (
     <div className="h-full flex flex-col bg-background">
       {/* Filters bar */}
       <div className="border-b border-border bg-card/80">
         <div className="px-4 py-2 flex items-center gap-2 flex-wrap">
+          {/* Delivered Tab */}
+          <Button
+            variant="outline"
+            size="sm"
+            className="h-7 text-xs gap-1.5 relative"
+            onClick={() => setShowDelivered(true)}
+          >
+            <Package className="h-3.5 w-3.5" />
+            Доставлені
+            {deliveredCount > 0 && (
+              <span className="absolute -top-1.5 -right-1.5 bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 rounded-full min-w-[18px] h-[18px] flex items-center justify-center text-[10px] font-medium">
+                {deliveredCount}
+              </span>
+            )}
+          </Button>
+
           {filters.map((filter, index) => (
             <Button
               key={index}
