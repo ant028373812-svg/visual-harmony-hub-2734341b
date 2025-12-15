@@ -10,6 +10,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { cn } from '@/lib/utils';
+import { getStatusStyle } from '@/components/ui/status-badge';
 
 interface StatusSelectProps {
   defaultValue?: string;
@@ -49,21 +50,12 @@ export function StatusSelect({
     }
   };
 
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'Замовлено': return 'bg-blue-500/20 text-blue-400 border-blue-500/30';
-      case 'Доставлено': return 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30';
-      case 'Повертається': return 'bg-orange-500/20 text-orange-400 border-orange-500/30';
-      default: return 'bg-muted text-muted-foreground border-border';
-    }
-  };
-
   return (
     <Select value={value} onValueChange={setValue}>
       <SelectTrigger 
         className={cn(
-          "h-7 text-xs cursor-pointer hover:bg-muted/50 transition-colors border",
-          getStatusColor(value),
+          "h-8 text-xs cursor-pointer hover:opacity-80 transition-opacity border rounded-md",
+          getStatusStyle(value),
           className
         )}
       >
@@ -77,8 +69,8 @@ export function StatusSelect({
             className="text-xs cursor-pointer"
           >
             <span className={cn(
-              "inline-flex items-center px-2 py-0.5 rounded text-[10px] font-medium border",
-              getStatusColor(status)
+              "inline-flex items-center justify-center px-2 py-1 rounded-md text-xs font-medium border",
+              getStatusStyle(status)
             )}>
               {status}
             </span>

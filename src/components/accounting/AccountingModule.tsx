@@ -409,7 +409,7 @@ export function AccountingModule() {
                       <tr key={tx.id} className="border-b border-border">
                         <td className="py-2 px-2 text-xs">{formatDate(tx.date)}</td>
                         <td className="py-2 px-2">
-                          <StatusBadge status={tx.type} type={tx.type === 'Прихід' ? 'completed' : 'waiting'} />
+                          <StatusBadge status={tx.type} type={tx.type === 'Прихід' ? 'completed' : 'pending'} />
                         </td>
                         <td className="py-2 px-2 text-xs">{tx.skup}</td>
                         <td className={cn('py-2 px-2 text-xs font-medium', tx.type === 'Прихід' ? 'text-success' : 'text-destructive')}>
