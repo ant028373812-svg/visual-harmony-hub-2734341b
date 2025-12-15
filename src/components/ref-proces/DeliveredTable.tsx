@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Info, MessageCircle, Trash2, Copy } from 'lucide-react';
+import { Info, Trash2, Copy } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
   Tooltip,
@@ -8,13 +8,13 @@ import {
 } from '@/components/ui/tooltip';
 import { cn } from '@/lib/utils';
 import { StatusDropdown } from '@/components/ui/status-dropdown';
+import { CommentIcon } from '@/components/ui/comment-icon';
 
 interface DeliveredTableProps {
   onOpenPackInfo: () => void;
   onOpenOrderInfo: () => void;
   onOpenRefStatus: () => void;
   onOpenPackAccounting: () => void;
-  onOpenComment: () => void;
 }
 
 const getRefMethodColor = (method: string) => {
@@ -62,7 +62,6 @@ export function DeliveredTable({
   onOpenOrderInfo,
   onOpenRefStatus,
   onOpenPackAccounting,
-  onOpenComment,
 }: DeliveredTableProps) {
   const [selectedStatus, setSelectedStatus] = useState('Перенести');
 
@@ -103,19 +102,7 @@ export function DeliveredTable({
                     </TooltipTrigger>
                     <TooltipContent>Копіювати</TooltipContent>
                   </Tooltip>
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <Button 
-                        variant="ghost" 
-                        size="icon" 
-                        className="h-5 w-5 hover:bg-muted text-muted-foreground hover:text-foreground cursor-pointer"
-                        onClick={onOpenComment}
-                      >
-                        <MessageCircle className="h-3 w-3" />
-                      </Button>
-                    </TooltipTrigger>
-                    <TooltipContent>Коментар</TooltipContent>
-                  </Tooltip>
+                  <CommentIcon hasComments commentCount={1} />
                   <Tooltip>
                     <TooltipTrigger asChild>
                       <Button 
@@ -179,19 +166,7 @@ export function DeliveredTable({
                   </TooltipTrigger>
                   <TooltipContent>Інформація замовлення</TooltipContent>
                 </Tooltip>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Button 
-                      variant="ghost" 
-                      size="icon" 
-                      className="h-5 w-5 hover:bg-muted text-muted-foreground hover:text-foreground cursor-pointer"
-                      onClick={onOpenComment}
-                    >
-                      <MessageCircle className="h-3 w-3" />
-                    </Button>
-                  </TooltipTrigger>
-                  <TooltipContent>Коментар</TooltipContent>
-                </Tooltip>
+                <CommentIcon />
               </div>
             </td>
             <td className="px-2 py-1.5 text-center">
@@ -209,19 +184,7 @@ export function DeliveredTable({
                   </TooltipTrigger>
                   <TooltipContent>Реф статус</TooltipContent>
                 </Tooltip>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Button 
-                      variant="ghost" 
-                      size="icon" 
-                      className="h-5 w-5 hover:bg-muted text-muted-foreground hover:text-foreground cursor-pointer"
-                      onClick={onOpenComment}
-                    >
-                      <MessageCircle className="h-3 w-3" />
-                    </Button>
-                  </TooltipTrigger>
-                  <TooltipContent>Коментар</TooltipContent>
-                </Tooltip>
+                <CommentIcon />
               </div>
             </td>
             <td className="px-2 py-1.5 text-center">
@@ -239,19 +202,7 @@ export function DeliveredTable({
                   </TooltipTrigger>
                   <TooltipContent>Бухгалтерія паку</TooltipContent>
                 </Tooltip>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Button 
-                      variant="ghost" 
-                      size="icon" 
-                      className="h-5 w-5 hover:bg-muted text-muted-foreground hover:text-foreground cursor-pointer"
-                      onClick={onOpenComment}
-                    >
-                      <MessageCircle className="h-3 w-3" />
-                    </Button>
-                  </TooltipTrigger>
-                  <TooltipContent>Коментар</TooltipContent>
-                </Tooltip>
+                <CommentIcon />
               </div>
             </td>
             <td className="px-1 py-1.5">

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Search, ChevronDown, ChevronUp, Info, MessageCircle, Trash2, Copy, CalendarPlus, ArrowLeft, Package } from 'lucide-react';
+import { Search, ChevronDown, ChevronUp, Info, Trash2, Copy, CalendarPlus, ArrowLeft, Package } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import {
@@ -21,7 +21,7 @@ import { OrderInfoModal } from '@/components/orders/modals/OrderInfoModal';
 import { RefStatusModal } from '@/components/orders/modals/RefStatusModal';
 import { PackAccountingModal } from '@/components/orders/modals/PackAccountingModal';
 import { PackInfoModal } from '@/components/orders/modals/PackInfoModal';
-import { CommentModal } from '@/components/ui/comment-modal';
+import { CommentIcon } from '@/components/ui/comment-icon';
 import { DeliveredTable } from './DeliveredTable';
 import { FilterDropdown } from '@/components/ui/filter-dropdown';
 import { StatusDropdown } from '@/components/ui/status-dropdown';
@@ -68,7 +68,6 @@ export function RefProcesModule() {
   const [isOrderInfoOpen, setIsOrderInfoOpen] = useState(false);
   const [isRefStatusOpen, setIsRefStatusOpen] = useState(false);
   const [isPackAccountingOpen, setIsPackAccountingOpen] = useState(false);
-  const [isCommentOpen, setIsCommentOpen] = useState(false);
 
   const handleAddDateEntry = () => {
     const newEntry: DateEntry = {
@@ -145,7 +144,6 @@ export function RefProcesModule() {
           onOpenOrderInfo={() => setIsOrderInfoOpen(true)}
           onOpenRefStatus={() => setIsRefStatusOpen(true)}
           onOpenPackAccounting={() => setIsPackAccountingOpen(true)}
-          onOpenComment={() => setIsCommentOpen(true)}
         />
 
         {/* Modals */}
@@ -153,7 +151,6 @@ export function RefProcesModule() {
         <OrderInfoModal open={isOrderInfoOpen} onOpenChange={setIsOrderInfoOpen} />
         <RefStatusModal open={isRefStatusOpen} onOpenChange={setIsRefStatusOpen} />
         <PackAccountingModal open={isPackAccountingOpen} onOpenChange={setIsPackAccountingOpen} />
-        <CommentModal open={isCommentOpen} onOpenChange={setIsCommentOpen} />
       </div>
     );
   }
@@ -401,19 +398,7 @@ export function RefProcesModule() {
                         </TooltipTrigger>
                         <TooltipContent>Копіювати</TooltipContent>
                       </Tooltip>
-                      <Tooltip>
-                        <TooltipTrigger asChild>
-                          <Button 
-                            variant="ghost" 
-                            size="icon" 
-                            className="h-5 w-5 hover:bg-muted text-muted-foreground hover:text-foreground cursor-pointer"
-                            onClick={() => setIsCommentOpen(true)}
-                          >
-                            <MessageCircle className="h-3 w-3" />
-                          </Button>
-                        </TooltipTrigger>
-                        <TooltipContent>Коментар</TooltipContent>
-                      </Tooltip>
+                      <CommentIcon hasComments={ref.id === demoRefProcesses[0]?.id} commentCount={1} />
                       <Tooltip>
                         <TooltipTrigger asChild>
                           <Button 
@@ -479,19 +464,7 @@ export function RefProcesModule() {
                       </TooltipTrigger>
                       <TooltipContent>Інформація замовлення</TooltipContent>
                     </Tooltip>
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <Button 
-                          variant="ghost" 
-                          size="icon" 
-                          className="h-5 w-5 hover:bg-muted text-muted-foreground hover:text-foreground cursor-pointer"
-                          onClick={() => setIsCommentOpen(true)}
-                        >
-                          <MessageCircle className="h-3 w-3" />
-                        </Button>
-                      </TooltipTrigger>
-                      <TooltipContent>Коментар</TooltipContent>
-                    </Tooltip>
+                    <CommentIcon />
                   </div>
                 </td>
                 <td className="px-2 py-1.5 text-center">
@@ -509,19 +482,7 @@ export function RefProcesModule() {
                       </TooltipTrigger>
                       <TooltipContent>Реф статус</TooltipContent>
                     </Tooltip>
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <Button 
-                          variant="ghost" 
-                          size="icon" 
-                          className="h-5 w-5 hover:bg-muted text-muted-foreground hover:text-foreground cursor-pointer"
-                          onClick={() => setIsCommentOpen(true)}
-                        >
-                          <MessageCircle className="h-3 w-3" />
-                        </Button>
-                      </TooltipTrigger>
-                      <TooltipContent>Коментар</TooltipContent>
-                    </Tooltip>
+                    <CommentIcon />
                   </div>
                 </td>
                 <td className="px-2 py-1.5 text-center">
@@ -539,19 +500,7 @@ export function RefProcesModule() {
                       </TooltipTrigger>
                       <TooltipContent>Бухгалтерія паку</TooltipContent>
                     </Tooltip>
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <Button 
-                          variant="ghost" 
-                          size="icon" 
-                          className="h-5 w-5 hover:bg-muted text-muted-foreground hover:text-foreground cursor-pointer"
-                          onClick={() => setIsCommentOpen(true)}
-                        >
-                          <MessageCircle className="h-3 w-3" />
-                        </Button>
-                      </TooltipTrigger>
-                      <TooltipContent>Коментар</TooltipContent>
-                    </Tooltip>
+                    <CommentIcon />
                   </div>
                 </td>
                 <td className="px-1 py-1.5">
@@ -570,7 +519,6 @@ export function RefProcesModule() {
       <OrderInfoModal open={isOrderInfoOpen} onOpenChange={setIsOrderInfoOpen} />
       <RefStatusModal open={isRefStatusOpen} onOpenChange={setIsRefStatusOpen} />
       <PackAccountingModal open={isPackAccountingOpen} onOpenChange={setIsPackAccountingOpen} />
-      <CommentModal open={isCommentOpen} onOpenChange={setIsCommentOpen} />
     </div>
   );
 }
