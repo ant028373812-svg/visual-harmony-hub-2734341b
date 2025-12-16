@@ -1,5 +1,11 @@
 import { useState } from 'react';
-import { ChevronLeft, ChevronRight, Info, DollarSign, TrendingUp, MessageCircle } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Info, DollarSign, TrendingUp, MessageCircle, CalendarIcon, Search } from 'lucide-react';
+import { format } from 'date-fns';
+import { uk } from 'date-fns/locale';
+import { Input } from '@/components/ui/input';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Calendar } from '@/components/ui/calendar';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -258,11 +264,11 @@ export function StoresRefModule() {
       <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-1">
         <TabsList className="bg-muted/50 mb-6">
           <TabsTrigger value="statistics">Статистика</TabsTrigger>
-          <TabsTrigger value="transactions">Транзакції</TabsTrigger>
           <TabsTrigger value="stores">Магазини</TabsTrigger>
         </TabsList>
 
-        <TabsContent value="stores" className="mt-0">
+        <TabsContent value="stores" className="mt-0 space-y-6">
+          {/* Top blocks - existing store cards */}
           <div className="grid grid-cols-4 gap-4">
             {storesData.map(store => (
               <Card 
@@ -292,14 +298,109 @@ export function StoresRefModule() {
               </Card>
             ))}
           </div>
+
+          {/* Full list of all stores from Ref Proces */}
+          <Card>
+            <CardHeader className="pb-3">
+              <div className="flex items-center justify-between">
+                <h3 className="text-lg font-semibold">
+                  {format(new Date(), 'LLLL', { locale: uk }).charAt(0).toUpperCase() + format(new Date(), 'LLLL', { locale: uk }).slice(1)}
+                </h3>
+                <div className="flex items-center gap-2">
+                  <Select>
+                    <SelectTrigger className="h-8 w-32 text-xs">
+                      <SelectValue placeholder="Магазин" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="zara">Zara</SelectItem>
+                      <SelectItem value="hm">H&M</SelectItem>
+                      <SelectItem value="mango">Mango</SelectItem>
+                      <SelectItem value="bershka">Bershka</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button variant="outline" size="sm" className="h-8 w-28 justify-start text-left font-normal">
+                        <CalendarIcon className="mr-1 h-3 w-3" />
+                        <span className="text-xs">Дата</span>
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0" align="start">
+                      <Calendar mode="single" className="pointer-events-auto" />
+                    </PopoverContent>
+                  </Popover>
+                  <Select>
+                    <SelectTrigger className="h-8 w-28 text-xs">
+                      <SelectValue placeholder="Скуп" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="oleg">Олег</SelectItem>
+                      <SelectItem value="ivan">Іван</SelectItem>
+                      <SelectItem value="nazar">Назар</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <div className="relative">
+                    <Search className="absolute left-2 top-1/2 -translate-y-1/2 h-3 w-3 text-muted-foreground" />
+                    <Input placeholder="Пошук" className="h-8 w-32 pl-7 text-xs" />
+                  </div>
+                </div>
+              </div>
+            </CardHeader>
+            <CardContent className="pt-0">
+              <table className="w-full text-sm">
+                <thead className="border-b border-border">
+                  <tr className="text-left text-muted-foreground">
+                    <th className="py-2 px-3 font-medium">Магазин</th>
+                    <th className="py-2 px-3 font-medium">ID паку</th>
+                    <th className="py-2 px-3 font-medium">Дата</th>
+                    <th className="py-2 px-3 font-medium">Статус</th>
+                    <th className="py-2 px-3 font-medium">Сума</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr className="border-b border-border hover:bg-muted/30">
+                    <td className="py-2 px-3">Zara</td>
+                    <td className="py-2 px-3 font-medium">1V45</td>
+                    <td className="py-2 px-3">02.01.2025</td>
+                    <td className="py-2 px-3"><StatusBadge status="Рефнуто" /></td>
+                    <td className="py-2 px-3">€93.75</td>
+                  </tr>
+                  <tr className="border-b border-border hover:bg-muted/30">
+                    <td className="py-2 px-3">Zara</td>
+                    <td className="py-2 px-3 font-medium">1V46</td>
+                    <td className="py-2 px-3">28.12.2024</td>
+                    <td className="py-2 px-3"><StatusBadge status="Рефнуто" /></td>
+                    <td className="py-2 px-3">€93.75</td>
+                  </tr>
+                  <tr className="border-b border-border hover:bg-muted/30">
+                    <td className="py-2 px-3">H&M</td>
+                    <td className="py-2 px-3 font-medium">2V12</td>
+                    <td className="py-2 px-3">01.01.2025</td>
+                    <td className="py-2 px-3"><StatusBadge status="Рефнуто" /></td>
+                    <td className="py-2 px-3">€84.60</td>
+                  </tr>
+                  <tr className="border-b border-border hover:bg-muted/30">
+                    <td className="py-2 px-3">Mango</td>
+                    <td className="py-2 px-3 font-medium">3V08</td>
+                    <td className="py-2 px-3">30.12.2024</td>
+                    <td className="py-2 px-3"><StatusBadge status="Рефнуто" /></td>
+                    <td className="py-2 px-3">€85.58</td>
+                  </tr>
+                  <tr className="border-b border-border hover:bg-muted/30">
+                    <td className="py-2 px-3">Bershka</td>
+                    <td className="py-2 px-3 font-medium">4V22</td>
+                    <td className="py-2 px-3">29.12.2024</td>
+                    <td className="py-2 px-3"><StatusBadge status="Рефнуто" /></td>
+                    <td className="py-2 px-3">€78.00</td>
+                  </tr>
+                </tbody>
+              </table>
+            </CardContent>
+          </Card>
         </TabsContent>
 
         <TabsContent value="statistics" className="mt-0">
           <p className="text-muted-foreground">Статистика буде тут...</p>
-        </TabsContent>
-
-        <TabsContent value="transactions" className="mt-0">
-          <p className="text-muted-foreground">Транзакції будуть тут...</p>
         </TabsContent>
       </Tabs>
     </div>
