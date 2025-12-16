@@ -556,6 +556,13 @@ export function StoresRefModule() {
           <p className="text-muted-foreground">Статистика буде тут...</p>
         </TabsContent>
       </Tabs>
+
+      {/* Modals for bottom stores list */}
+      <PackInfoModal open={isPackInfoOpen} onOpenChange={setIsPackInfoOpen} />
+      <OrderInfoModal open={isOrderInfoOpen} onOpenChange={setIsOrderInfoOpen} />
+      <RefStatusModal open={isRefStatusOpen} onOpenChange={setIsRefStatusOpen} />
+      <PackAccountingModal open={isPackAccountingOpen} onOpenChange={setIsPackAccountingOpen} />
+      <CommentModal open={isCommentOpen} onOpenChange={setIsCommentOpen} />
     </div>
   );
 }
