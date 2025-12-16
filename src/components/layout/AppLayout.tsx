@@ -29,7 +29,16 @@ export function AppLayout({ children, currentPage, onNavigate, onGoHome }: AppLa
       <div className="flex-1 flex flex-col min-h-screen">
         <header className="h-12 border-b border-border flex items-center justify-between px-4 bg-card">
           <div className="flex items-center gap-2">
-            <span className="text-sm font-medium text-foreground">{currentPage}</span>
+            <span className="text-sm font-medium text-foreground">CRM System</span>
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={handleGoHome}
+              className="h-8 w-8 hover:bg-muted"
+              title="Головна"
+            >
+              <Home className="h-4 w-4" />
+            </Button>
           </div>
           <div className="flex items-center gap-2">
             <Button
@@ -42,15 +51,6 @@ export function AppLayout({ children, currentPage, onNavigate, onGoHome }: AppLa
               Назад (5 кроків)
             </Button>
             <ThemeToggle />
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={handleGoHome}
-              className="h-8 w-8 hover:bg-muted"
-              title="Головна"
-            >
-              <Home className="h-4 w-4" />
-            </Button>
           </div>
         </header>
         

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { TrendingUp, Truck, Users, BarChart3, ChevronDown, ChevronRight, AlertCircle, Package, CalendarIcon, Check, Copy } from 'lucide-react';
+import { TrendingUp, Truck, Users, BarChart3, ChevronDown, ChevronRight, AlertCircle, Package, CalendarIcon, Check, Copy, Archive } from 'lucide-react';
 import { format } from 'date-fns';
 import { uk } from 'date-fns/locale';
 import { Button } from '@/components/ui/button';
@@ -119,9 +119,12 @@ export function AccountingModule() {
             <h1 className="text-2xl font-bold">БУХГАЛТЕРІЯ</h1>
             <p className="text-sm text-muted-foreground mt-1">Статистика</p>
           </div>
-          <div className="flex gap-2">
+          <div className="flex gap-2 items-center">
             <AddTransactionModal />
             <Button variant="outline">Статистика</Button>
+            <Button variant="ghost" size="icon" className="h-9 w-9" title="Архів">
+              <Archive className="h-5 w-5" />
+            </Button>
           </div>
         </div>
       </div>
