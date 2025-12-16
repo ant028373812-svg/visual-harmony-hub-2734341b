@@ -355,6 +355,9 @@ export function StoresRefModule() {
                     <th className="py-2 px-3 font-medium">Дата</th>
                     <th className="py-2 px-3 font-medium">Статус</th>
                     <th className="py-2 px-3 font-medium">Сума</th>
+                    <th className="py-2 px-3 font-medium text-center">Інфо зам.</th>
+                    <th className="py-2 px-3 font-medium text-center">Реф стат.</th>
+                    <th className="py-2 px-3 font-medium text-center">Бух. пак</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -364,6 +367,36 @@ export function StoresRefModule() {
                     <td className="py-2 px-3">02.01.2025</td>
                     <td className="py-2 px-3"><StatusBadge status="Рефнуто" /></td>
                     <td className="py-2 px-3">€93.75</td>
+                    <td className="py-2 px-3 text-center">
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Button variant="ghost" size="icon" className="h-6 w-6 text-info hover:bg-muted cursor-pointer" onClick={() => setIsOrderInfoOpen(true)}>
+                            <Info className="h-3.5 w-3.5" />
+                          </Button>
+                        </TooltipTrigger>
+                        <TooltipContent>Інформація замовлення</TooltipContent>
+                      </Tooltip>
+                    </td>
+                    <td className="py-2 px-3 text-center">
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Button variant="ghost" size="icon" className="h-6 w-6 text-info hover:bg-muted cursor-pointer" onClick={() => setIsRefStatusOpen(true)}>
+                            <Info className="h-3.5 w-3.5" />
+                          </Button>
+                        </TooltipTrigger>
+                        <TooltipContent>Реф статус</TooltipContent>
+                      </Tooltip>
+                    </td>
+                    <td className="py-2 px-3 text-center">
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Button variant="ghost" size="icon" className="h-6 w-6 text-info hover:bg-muted cursor-pointer" onClick={() => setIsPackAccountingOpen(true)}>
+                            <Info className="h-3.5 w-3.5" />
+                          </Button>
+                        </TooltipTrigger>
+                        <TooltipContent>Бухгалтерія паку</TooltipContent>
+                      </Tooltip>
+                    </td>
                   </tr>
                   <tr className="border-b border-border hover:bg-muted/30">
                     <td className="py-2 px-3">Zara</td>
@@ -371,6 +404,36 @@ export function StoresRefModule() {
                     <td className="py-2 px-3">28.12.2024</td>
                     <td className="py-2 px-3"><StatusBadge status="Рефнуто" /></td>
                     <td className="py-2 px-3">€93.75</td>
+                    <td className="py-2 px-3 text-center">
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Button variant="ghost" size="icon" className="h-6 w-6 text-info hover:bg-muted cursor-pointer" onClick={() => setIsOrderInfoOpen(true)}>
+                            <Info className="h-3.5 w-3.5" />
+                          </Button>
+                        </TooltipTrigger>
+                        <TooltipContent>Інформація замовлення</TooltipContent>
+                      </Tooltip>
+                    </td>
+                    <td className="py-2 px-3 text-center">
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Button variant="ghost" size="icon" className="h-6 w-6 text-info hover:bg-muted cursor-pointer" onClick={() => setIsRefStatusOpen(true)}>
+                            <Info className="h-3.5 w-3.5" />
+                          </Button>
+                        </TooltipTrigger>
+                        <TooltipContent>Реф статус</TooltipContent>
+                      </Tooltip>
+                    </td>
+                    <td className="py-2 px-3 text-center">
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Button variant="ghost" size="icon" className="h-6 w-6 text-info hover:bg-muted cursor-pointer" onClick={() => setIsPackAccountingOpen(true)}>
+                            <Info className="h-3.5 w-3.5" />
+                          </Button>
+                        </TooltipTrigger>
+                        <TooltipContent>Бухгалтерія паку</TooltipContent>
+                      </Tooltip>
+                    </td>
                   </tr>
                   <tr className="border-b border-border hover:bg-muted/30">
                     <td className="py-2 px-3">H&M</td>
@@ -378,6 +441,36 @@ export function StoresRefModule() {
                     <td className="py-2 px-3">01.01.2025</td>
                     <td className="py-2 px-3"><StatusBadge status="Рефнуто" /></td>
                     <td className="py-2 px-3">€84.60</td>
+                    <td className="py-2 px-3 text-center">
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Button variant="ghost" size="icon" className="h-6 w-6 text-info hover:bg-muted cursor-pointer" onClick={() => setIsOrderInfoOpen(true)}>
+                            <Info className="h-3.5 w-3.5" />
+                          </Button>
+                        </TooltipTrigger>
+                        <TooltipContent>Інформація замовлення</TooltipContent>
+                      </Tooltip>
+                    </td>
+                    <td className="py-2 px-3 text-center">
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Button variant="ghost" size="icon" className="h-6 w-6 text-info hover:bg-muted cursor-pointer" onClick={() => setIsRefStatusOpen(true)}>
+                            <Info className="h-3.5 w-3.5" />
+                          </Button>
+                        </TooltipTrigger>
+                        <TooltipContent>Реф статус</TooltipContent>
+                      </Tooltip>
+                    </td>
+                    <td className="py-2 px-3 text-center">
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Button variant="ghost" size="icon" className="h-6 w-6 text-info hover:bg-muted cursor-pointer" onClick={() => setIsPackAccountingOpen(true)}>
+                            <Info className="h-3.5 w-3.5" />
+                          </Button>
+                        </TooltipTrigger>
+                        <TooltipContent>Бухгалтерія паку</TooltipContent>
+                      </Tooltip>
+                    </td>
                   </tr>
                   <tr className="border-b border-border hover:bg-muted/30">
                     <td className="py-2 px-3">Mango</td>
@@ -385,6 +478,36 @@ export function StoresRefModule() {
                     <td className="py-2 px-3">30.12.2024</td>
                     <td className="py-2 px-3"><StatusBadge status="Рефнуто" /></td>
                     <td className="py-2 px-3">€85.58</td>
+                    <td className="py-2 px-3 text-center">
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Button variant="ghost" size="icon" className="h-6 w-6 text-info hover:bg-muted cursor-pointer" onClick={() => setIsOrderInfoOpen(true)}>
+                            <Info className="h-3.5 w-3.5" />
+                          </Button>
+                        </TooltipTrigger>
+                        <TooltipContent>Інформація замовлення</TooltipContent>
+                      </Tooltip>
+                    </td>
+                    <td className="py-2 px-3 text-center">
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Button variant="ghost" size="icon" className="h-6 w-6 text-info hover:bg-muted cursor-pointer" onClick={() => setIsRefStatusOpen(true)}>
+                            <Info className="h-3.5 w-3.5" />
+                          </Button>
+                        </TooltipTrigger>
+                        <TooltipContent>Реф статус</TooltipContent>
+                      </Tooltip>
+                    </td>
+                    <td className="py-2 px-3 text-center">
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Button variant="ghost" size="icon" className="h-6 w-6 text-info hover:bg-muted cursor-pointer" onClick={() => setIsPackAccountingOpen(true)}>
+                            <Info className="h-3.5 w-3.5" />
+                          </Button>
+                        </TooltipTrigger>
+                        <TooltipContent>Бухгалтерія паку</TooltipContent>
+                      </Tooltip>
+                    </td>
                   </tr>
                   <tr className="border-b border-border hover:bg-muted/30">
                     <td className="py-2 px-3">Bershka</td>
@@ -392,6 +515,36 @@ export function StoresRefModule() {
                     <td className="py-2 px-3">29.12.2024</td>
                     <td className="py-2 px-3"><StatusBadge status="Рефнуто" /></td>
                     <td className="py-2 px-3">€78.00</td>
+                    <td className="py-2 px-3 text-center">
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Button variant="ghost" size="icon" className="h-6 w-6 text-info hover:bg-muted cursor-pointer" onClick={() => setIsOrderInfoOpen(true)}>
+                            <Info className="h-3.5 w-3.5" />
+                          </Button>
+                        </TooltipTrigger>
+                        <TooltipContent>Інформація замовлення</TooltipContent>
+                      </Tooltip>
+                    </td>
+                    <td className="py-2 px-3 text-center">
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Button variant="ghost" size="icon" className="h-6 w-6 text-info hover:bg-muted cursor-pointer" onClick={() => setIsRefStatusOpen(true)}>
+                            <Info className="h-3.5 w-3.5" />
+                          </Button>
+                        </TooltipTrigger>
+                        <TooltipContent>Реф статус</TooltipContent>
+                      </Tooltip>
+                    </td>
+                    <td className="py-2 px-3 text-center">
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Button variant="ghost" size="icon" className="h-6 w-6 text-info hover:bg-muted cursor-pointer" onClick={() => setIsPackAccountingOpen(true)}>
+                            <Info className="h-3.5 w-3.5" />
+                          </Button>
+                        </TooltipTrigger>
+                        <TooltipContent>Бухгалтерія паку</TooltipContent>
+                      </Tooltip>
+                    </td>
                   </tr>
                 </tbody>
               </table>
