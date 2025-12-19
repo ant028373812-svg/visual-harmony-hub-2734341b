@@ -24,7 +24,7 @@ const getStatusColor = (status: string): string => {
       statusLower.includes('перенести') || 
       statusLower.includes('очікує') ||
       statusLower.includes('чекає') ||
-      statusLower.includes('видав фактуру')) {
+      statusLower.includes('перезамовить')) {
     return 'bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300';
   }
   
@@ -37,8 +37,15 @@ const getStatusColor = (status: string): string => {
   
   // In-progress states - soft slate/gray
   if (statusLower.includes('в дорозі') || 
-      statusLower.includes('перевірено')) {
+      statusLower.includes('перевірено') ||
+      statusLower.includes('на відділенні')) {
     return 'bg-slate-100 text-slate-600 dark:bg-slate-800/60 dark:text-slate-300';
+  }
+  
+  // Action required states - soft purple
+  if (statusLower.includes('видав виписку') || 
+      statusLower.includes('взяти лейбл')) {
+    return 'bg-violet-100 text-violet-700 dark:bg-violet-900/40 dark:text-violet-300';
   }
   
   // Default - neutral gray
